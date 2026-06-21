@@ -5,6 +5,8 @@ from PySide6.QtGui import QImage, QPainter, QPixmap
 from PySide6.QtSvg import QSvgRenderer
 from PySide6.QtWidgets import QHBoxLayout, QLabel, QListWidget, QPushButton, QVBoxLayout, QWidget
 
+from utils.resources import asset_path
+
 
 class SidebarWidget(QWidget):
     logout_requested = Signal()
@@ -26,8 +28,7 @@ class SidebarWidget(QWidget):
         header = QHBoxLayout()
         header.setContentsMargins(0, 0, 0, 10)
 
-        script_dir = os.path.dirname(os.path.abspath(__file__))
-        logo_path = os.path.join(script_dir, "..", "assets", "logo.svg")
+        logo_path = asset_path("logo.svg")
 
         logo_label = QLabel()
         logo_label.setFixedSize(35, 35)

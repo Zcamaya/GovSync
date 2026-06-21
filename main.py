@@ -7,9 +7,11 @@ from PySide6.QtGui import QImage, QPainter, QPixmap, QFont
 from PySide6.QtSvg import QSvgRenderer
 from PySide6.QtWidgets import QApplication, QMessageBox, QSplashScreen, QLabel
 
+from utils.resources import asset_path
+
 
 def create_splash():
-    logo_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "assets", "logo.svg")
+    logo_path = asset_path("logo.svg")
     if not os.path.exists(logo_path):
         return None
 

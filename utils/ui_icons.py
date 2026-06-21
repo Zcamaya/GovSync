@@ -4,14 +4,7 @@ from PySide6.QtCore import QByteArray, QSize, Qt
 from PySide6.QtGui import QIcon, QPainter, QPixmap
 from PySide6.QtSvg import QSvgRenderer
 
-
-def asset_path(filename):
-    return os.path.join(
-        os.path.dirname(os.path.abspath(__file__)),
-        "..",
-        "assets",
-        filename,
-    )
+from utils.resources import asset_path
 
 
 def svg_icon(filename, color="#f8fafc", size=18):

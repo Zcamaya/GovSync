@@ -28,16 +28,12 @@ from utils.account_store import (
     register_account,
     SUPER_ADMIN_USERNAME,
 )
+from utils.resources import asset_path
 from utils.ui_icons import set_exit_icon
 
 
 def logo_pixmap(size):
-    logo_path = os.path.join(
-        os.path.dirname(os.path.abspath(__file__)),
-        "..",
-        "assets",
-        "logo.svg",
-    )
+    logo_path = asset_path("logo.svg")
     image = QImage(size, size, QImage.Format_ARGB32)
     image.fill(Qt.transparent)
     if os.path.exists(logo_path):
