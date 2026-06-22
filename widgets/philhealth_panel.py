@@ -1,4 +1,3 @@
-import json
 import os
 from datetime import datetime
 
@@ -25,10 +24,13 @@ from PySide6.QtWidgets import (
 )
 
 from constants.styles import AppStyles
+from controllers.philhealth_controller import PhilHealthController
 from widgets.glass_dialog import GlassDialog
 from utils import philhealth_engine
-from utils.account_store import global_json_path
-from utils.dashboard_stats import record_upload
+from repositories.history_repository import HistoryRepository
+from repositories.statistics_repository import StatisticsRepository
+from services.philhealth_service import PhilHealthService
+from utils.account_store import database_path, get_account, get_active_account, set_active_account
 from utils.ui_icons import set_exit_icon
 
 
@@ -360,18 +362,24 @@ class GovSyncMessageBox:
 
 
 class PhilHealthPanel(QWidget):
-    def __init__(self, parent=None):
+    def __init__(self, parent=None, controller=None):
         super().__init__(parent)
         self.current_username = "default"
-        self.global_history_path = global_json_path("philhealth_history.json")
         self.is_processing = False
         self.detail_popups = []
         self.selected_history_record_id = None
         philhealth_engine.QMessageBox = GovSyncMessageBox
-        self.engine = philhealth_engine.PhicExtractorApp()
+        self.controller = controller or PhilHealthController(
+            PhilHealthService(
+                HistoryRepository(database_path()),
+                StatisticsRepository(database_path()),
+            )
+        )
+        self.engine = self.controller.get_engine()
         self.engine.setVisible(False)
         self._connect_reference_callbacks()
         self._setup_ui()
+        self._restore_latest_process_state()
 
     def _connect_reference_callbacks(self):
         self.engine.show_history_detail_popup = self._show_history_detail_popup
@@ -380,8 +388,8 @@ class PhilHealthPanel(QWidget):
         self.engine.delete_history_record = self._delete_history_record
         self.engine.save_history_record = self._save_history_record
         self._hide_redundant_tabs()
-        self.engine.get_history_file_path = lambda: self.global_history_path
         self.engine.load_history()
+        self.controller.engine = self.engine
 
     def _hide_redundant_tabs(self):
         if not hasattr(self.engine, "tab_container"):
@@ -391,11 +399,17 @@ class PhilHealthPanel(QWidget):
             if label in {"Missing Names", "Newly Hired"}:
                 self.engine.tab_container.removeTab(index)
 
-    def set_account(self, username):
-        self.current_username = username or "default"
-        self.engine.get_history_file_path = lambda: self.global_history_path
+    def _resolve_username(self, account_or_username):
+        if isinstance(account_or_username, dict):
+            return str(account_or_username.get("username", "")).strip() or "default"
+        return str(account_or_username or "").strip() or "default"
+
+    def set_account(self, account_or_username):
+        self.current_username = self._resolve_username(account_or_username)
+        account = get_account(self.current_username) or {"username": self.current_username}
+        set_active_account(account)
         self.engine.load_history()
-        self.engine.load_history()
+        self._restore_latest_process_state()
 
     def _show_history_detail_popup(self, record):
         headers = ["Client", "PhilHealth No", "Employee Name", "Birthdate"]
@@ -432,6 +446,81 @@ class PhilHealthPanel(QWidget):
     def _forget_popup(self, popup):
         if popup in self.detail_popups:
             self.detail_popups.remove(popup)
+
+    def _restore_latest_process_state(self):
+        if not hasattr(self, "engine") or not getattr(self.engine, "history_records", None):
+            return
+
+        latest_record = self.engine.history_records[-1]
+        self._apply_record_to_process_view(latest_record)
+
+    def _apply_record_to_process_view(self, record):
+        if not record:
+            return
+
+        month_year = record.get("month_year", "Pending")
+        self.engine.card_month.update_value(month_year)
+        self.engine.card_total.update_value(record.get("total_count", 0))
+        self.engine.card_missing.update_value(record.get("missing_count", 0))
+        self.engine.card_new.update_value(record.get("new_count", 0))
+
+        self.engine.cache_total_active = list(record.get("data_total", []))
+        self.engine.cache_missing = list(record.get("data_missing", []))
+        self.engine.cache_newly_hired = list(record.get("data_new", []))
+
+        missing_by_client = {}
+        for client, ph, name, birthdate in self.engine.cache_missing:
+            missing_by_client.setdefault(client, []).append((ph, birthdate, name))
+
+        added_by_client = {}
+        for client, ph, name, birthdate in self.engine.cache_newly_hired:
+            added_by_client.setdefault(client, []).append((ph, birthdate, name))
+
+        self._populate_process_table(self.engine.missing_table, missing_by_client)
+        self._populate_process_table(self.engine.newly_hired_table, added_by_client)
+        self._populate_summary_table(
+            [
+                ("Total Active Staffs (Current Month)", record.get("total_count", 0)),
+                ("Total Active Staffs (Previous Month Baseline)", record.get("previous_count", 0)),
+                ("Total Missing Headcounts", record.get("missing_count", 0)),
+                ("Total Newly Hired Headcounts", record.get("new_count", 0)),
+            ]
+        )
+        self.progress_note_label.setText(f"Loaded latest upload: {month_year}")
+        self.progress_bar.setRange(0, 100)
+        self.progress_bar.setValue(100)
+        self.progress_percent_label.setText("100%")
+
+    def _populate_process_table(self, table_widget, grouped_data):
+        table_widget.setRowCount(0)
+        row_idx = 0
+        for client in sorted(grouped_data.keys(), key=lambda x: str(x).upper()):
+            for ph, bd, name in grouped_data[client]:
+                table_widget.insertRow(row_idx)
+                items = [
+                    QTableWidgetItem(str(client)),
+                    QTableWidgetItem(str(ph)),
+                    QTableWidgetItem(str(name)),
+                    QTableWidgetItem(str(bd)),
+                ]
+                items[1].setTextAlignment(Qt.AlignCenter)
+                items[3].setTextAlignment(Qt.AlignCenter)
+                for col, item in enumerate(items):
+                    item.setForeground(QColor("#e2e8f0"))
+                    table_widget.setItem(row_idx, col, item)
+                row_idx += 1
+
+    def _populate_summary_table(self, metrics):
+        self.engine.summary_table.setRowCount(0)
+        for row_idx, (label, value) in enumerate(metrics):
+            self.engine.summary_table.insertRow(row_idx)
+            item_lbl = QTableWidgetItem(str(label))
+            item_val = QTableWidgetItem(str(value))
+            item_val.setTextAlignment(Qt.AlignRight | Qt.AlignVCenter)
+            item_lbl.setForeground(QColor("#e2e8f0"))
+            item_val.setForeground(QColor("#3b82f6"))
+            self.engine.summary_table.setItem(row_idx, 0, item_lbl)
+            self.engine.summary_table.setItem(row_idx, 1, item_val)
 
     def _detail_style(self):
         return """
@@ -555,20 +644,18 @@ class PhilHealthPanel(QWidget):
         self.engine.process_btn.clicked.connect(self.start_processing)
         layout.addWidget(self.engine.process_btn)
 
-        self.status_label = QLabel("Ready")
-        self.status_label.setStyleSheet(
-            "color: #94a3b8; font-size: 11px; border: none; background: transparent;"
-        )
-        layout.addWidget(self.status_label)
-
         self.progress_bar = QProgressBar()
-        self.progress_bar.setTextVisible(False)
+        self.progress_bar.setRange(0, 100)
         self.progress_bar.setFixedHeight(24)
+        self.progress_bar.setTextVisible(False)
         self.progress_bar.setStyleSheet("""
             QProgressBar {
                 background: rgba(2, 6, 23, 0.62);
                 border: 1px solid rgba(148, 163, 184, 0.20);
                 border-radius: 8px;
+                color: #f8fafc;
+                text-align: center;
+                padding: 0px;
             }
             QProgressBar::chunk {
                 background: qlineargradient(
@@ -579,8 +666,27 @@ class PhilHealthPanel(QWidget):
                 border-radius: 8px;
             }
         """)
-        self.progress_bar.setValue(0)
-        layout.addWidget(self.progress_bar)
+
+        progress_stack = QGridLayout()
+        progress_stack.setContentsMargins(0, 0, 0, 0)
+        progress_stack.setHorizontalSpacing(0)
+        progress_stack.setVerticalSpacing(0)
+        progress_stack.addWidget(self.progress_bar, 0, 0)
+
+        self.progress_percent_label = QLabel("0%")
+        self.progress_percent_label.setAlignment(Qt.AlignCenter)
+        self.progress_percent_label.setAttribute(Qt.WA_TransparentForMouseEvents, True)
+        self.progress_percent_label.setStyleSheet(
+            "color: #f8fafc; font-size: 12px; font-weight: 700; background: transparent;"
+        )
+        progress_stack.addWidget(self.progress_percent_label, 0, 0)
+        layout.addLayout(progress_stack)
+
+        self.progress_note_label = QLabel("Ready")
+        self.progress_note_label.setStyleSheet(
+            "color: #94a3b8; font-size: 11px; border: none; background: transparent;"
+        )
+        layout.addWidget(self.progress_note_label)
 
         metrics = QHBoxLayout()
         metrics.setSpacing(12)
@@ -612,22 +718,40 @@ class PhilHealthPanel(QWidget):
 
         self.is_processing = True
         self.engine.process_btn.setEnabled(False)
-        self.status_label.setText("Processing PhilHealth records...")
-        self.progress_bar.setRange(0, 0)
+        self.progress_note_label.setText("Starting reconciliation...")
+        self.progress_bar.setRange(0, 100)
+        self.progress_bar.setValue(0)
+        self.progress_percent_label.setText("0%")
         QTimer.singleShot(50, self._run_processing)
 
     def _run_processing(self):
         try:
-            self.engine.process_files()
-            self.status_label.setText("Finished.")
+            self.controller.process(progress_callback=self._update_processing_progress)
         except Exception as exc:
-            self.status_label.setText("Finished with errors.")
+            self.progress_note_label.setText("Finished with errors.")
             GlassDialog(self, "PhilHealth Processing Error", str(exc)).exec()
+        else:
+            self.progress_note_label.setText("Processing complete.")
         finally:
             self.progress_bar.setRange(0, 100)
             self.progress_bar.setValue(100)
+            self.progress_percent_label.setText("100%")
             self.engine.process_btn.setEnabled(True)
             self.is_processing = False
+
+    def _update_processing_progress(self, percent, filename="", message=""):
+        self.progress_bar.setRange(0, 100)
+        value = max(0, min(100, int(percent)))
+        self.progress_bar.setValue(value)
+        self.progress_percent_label.setText(f"{value}%")
+        if message:
+            detail = message
+        elif filename:
+            detail = f"Working on {filename}"
+        else:
+            detail = "Processing PhilHealth records..."
+        self.progress_note_label.setText(detail)
+        QApplication.processEvents()
 
     def _render_history_grid(self):
         if not hasattr(self.engine, "history_grid_layout"):
@@ -653,13 +777,10 @@ class PhilHealthPanel(QWidget):
         record.setdefault("created_at", datetime.now().strftime("%Y-%m-%d %H:%M"))
         self.engine.history_records.append(record)
         try:
-            with open(self.global_history_path, "w", encoding="utf-8") as output_file:
-                json.dump(self.engine.history_records, output_file, indent=4)
+            active_account = get_active_account() or {}
+            username = self.current_username or active_account.get("username") or "default"
+            self.controller.save_history(username, record)
             self._render_history_grid()
-            month_year = record.get("month_year", "")
-            parts = month_year.rsplit(" ", 1)
-            if len(parts) == 2:
-                record_upload("philhealth", record.get("total_count", 0), parts[0], parts[1])
         except Exception as exc:
             GlassDialog(self, "Save Error", f"Could not save history log.\n{exc}").exec()
 
@@ -694,9 +815,9 @@ class PhilHealthPanel(QWidget):
             record for record in self.engine.history_records if record.get("id") != record_id
         ]
         try:
-            with open(self.global_history_path, "w", encoding="utf-8") as output_file:
-                json.dump(self.engine.history_records, output_file, indent=4)
+            self.controller.delete_history(record_id)
             self._render_history_grid()
+            self._restore_latest_process_state()
         except Exception as exc:
             GlassDialog(self, "Delete Error", f"Could not delete history log.\n{exc}").exec()
 

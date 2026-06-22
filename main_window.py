@@ -1,4 +1,5 @@
 from PySide6.QtCore import QPoint, Qt
+from PySide6.QtGui import QIcon
 from PySide6.QtWidgets import (
     QFrame,
     QHBoxLayout,
@@ -22,9 +23,11 @@ from widgets.right_panel import RightPanelWidget
 from widgets.sidebar import SidebarWidget
 from widgets.sss_panel import SSSPanel
 from widgets.workspace import WorkspaceWidget
-from utils.account_store import get_account
+from utils.account_store import get_account, get_active_account, set_active_account
 from utils.dashboard_stats import set_refresh_callback
 from utils.ui_icons import set_exit_icon, set_maximize_icon, set_minimize_icon
+from config import APP_NAME, DEFAULT_WINDOW_HEIGHT, DEFAULT_WINDOW_WIDTH, MIN_WINDOW_HEIGHT, MIN_WINDOW_WIDTH
+from utils.resources import asset_path
 
 
 class GenericPlaceholderPage(QWidget):
@@ -41,13 +44,16 @@ class GenericPlaceholderPage(QWidget):
 
 
 class MainWindow(QMainWindow):
-    def __init__(self):
+    def __init__(self, container=None):
         super().__init__()
+        self.app_container = container
 
+        self.setWindowTitle(APP_NAME)
+        self.setWindowIcon(QIcon(asset_path("icon.ico")))
         self.setWindowFlags(Qt.FramelessWindowHint)
         self.setAttribute(Qt.WA_TranslucentBackground)
-        self.setMinimumSize(1024, 650)
-        self.resize(1280, 750)
+        self.setMinimumSize(MIN_WINDOW_WIDTH, MIN_WINDOW_HEIGHT)
+        self.resize(DEFAULT_WINDOW_WIDTH, DEFAULT_WINDOW_HEIGHT)
 
         self.container = QFrame()
         self.container.setObjectName("MainContainer")
@@ -117,27 +123,15 @@ class MainWindow(QMainWindow):
         main_layout.setSpacing(0)
 
         header_layout = QHBoxLayout()
-        header_layout.setContentsMargins(10, 0, 10, 0)
+        header_layout.setContentsMargins(12, 2, 12, 0)
+        header_layout.setSpacing(6)
         header_layout.addSpacerItem(
             QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
         )
 
-        btn_min = self.create_btn("", "#64748b")
-        btn_max = self.create_btn("", "#64748b")
-        btn_close = self.create_btn("", "rgba(244, 63, 94, 0.16)")
-        btn_min.setStyleSheet("""
-            QPushButton {
-                background: transparent;
-                border: none;
-                padding: 0;
-            }
-            QPushButton:hover {
-                background: rgba(15, 23, 42, 0.55);
-            }
-        """)
-        set_minimize_icon(btn_min, "#94a3b8", 13)
-        set_maximize_icon(btn_max, "#94a3b8", 11)
-        set_exit_icon(btn_close, "#f43f5e", 11)
+        btn_min = self.create_window_btn("minimize.svg", "#94a3b8", 14)
+        btn_max = self.create_window_btn("maximize.svg", "#94a3b8", 12)
+        btn_close = self.create_window_btn("exit.svg", "#f43f5e", 12, hover_color="rgba(244, 63, 94, 0.16)")
 
         btn_min.clicked.connect(self.showMinimized)
         btn_max.clicked.connect(self.toggle_maximized)
@@ -158,8 +152,9 @@ class MainWindow(QMainWindow):
         grip_layout.addWidget(QSizeGrip(self.container))
         main_layout.addLayout(grip_layout)
 
-        self.login_page = LoginPage()
-        self.admin_page = SuperAdminPage()
+        auth_controller = getattr(self.app_container, "auth_controller", None)
+        self.login_page = LoginPage(controller=auth_controller)
+        self.admin_page = SuperAdminPage(controller=auth_controller)
         self.app_page = self._create_app_page()
 
         self.login_page.authenticated.connect(self._on_authenticated)
@@ -168,7 +163,11 @@ class MainWindow(QMainWindow):
         self.page_stack.addWidget(self.login_page)
         self.page_stack.addWidget(self.admin_page)
         self.page_stack.addWidget(self.app_page)
-        self.page_stack.setCurrentWidget(self.login_page)
+        active_account = get_active_account() or {}
+        if active_account.get("username") and active_account.get("username") != "superadmin":
+            self._on_authenticated("user", active_account["username"])
+        else:
+            self.page_stack.setCurrentWidget(self.login_page)
         self.drag_pos = QPoint()
 
     def _create_app_page(self):
@@ -186,18 +185,21 @@ class MainWindow(QMainWindow):
         self.workspace_stack = QStackedWidget()
         self.workspace_widget = WorkspaceWidget()
         self.workspace_stack.addWidget(self.workspace_widget)
-        self.workspace_stack.addWidget(EarningsPanel())
-        self.philhealth_panel = PhilHealthPanel()
+        payroll_controller = getattr(self.app_container, "payroll_controller", None)
+        self.earnings_panel = EarningsPanel(controller=payroll_controller)
+        self.workspace_stack.addWidget(self.earnings_panel)
+        philhealth_controller = getattr(self.app_container, "philhealth_controller", None)
+        self.philhealth_panel = PhilHealthPanel(controller=philhealth_controller)
         self.workspace_stack.addWidget(self.philhealth_panel)
         self.workspace_stack.addWidget(
             GenericPlaceholderPage("HDMF - Contribution Portal (Coming Soon)")
         )
-        self.workspace_stack.addWidget(SSSPanel())
-        self.workspace_stack.addWidget(HDMFLoanPanel())
-        self.workspace_stack.addWidget(GenericPlaceholderPage("SSS Loan Processing"))
-        self.workspace_stack.addWidget(GenericPlaceholderPage("Master Calendar Schedule"))
-
-        self.sss_panel = self.workspace_stack.widget(4)
+        sss_controller = getattr(self.app_container, "sss_controller", None)
+        hdmf_controller = getattr(self.app_container, "hdmf_controller", None)
+        self.sss_panel = SSSPanel(controller=sss_controller)
+        self.hdmf_panel = HDMFLoanPanel(controller=hdmf_controller)
+        self.workspace_stack.addWidget(self.sss_panel)
+        self.workspace_stack.addWidget(self.hdmf_panel)
 
         set_refresh_callback(self.workspace_widget.refresh_stats)
 
@@ -224,13 +226,18 @@ class MainWindow(QMainWindow):
 
         account = get_account(username) or {"username": username}
         self.right_column.set_account(account)
-        self.philhealth_panel.set_account(username)
+        self.philhealth_panel.set_account(account)
         self.workspace_widget.set_account_name(account.get("username", username))
+        if hasattr(self.earnings_panel, "set_account"):
+            self.earnings_panel.set_account(account)
         if hasattr(self.sss_panel, "set_account"):
             self.sss_panel.set_account(account)
+        if hasattr(self.hdmf_panel, "set_account"):
+            self.hdmf_panel.set_account(account)
         self.page_stack.setCurrentWidget(self.app_page)
 
     def _show_login(self):
+        set_active_account(None)
         self.sidebar_column.list_widget.setCurrentRow(0)
         if hasattr(self.login_page, "_reset_messages"):
             self.login_page._reset_messages()
@@ -238,22 +245,30 @@ class MainWindow(QMainWindow):
             self.login_page.stack.setCurrentIndex(0)
         self.page_stack.setCurrentWidget(self.login_page)
 
-    def create_btn(self, text, hover_color):
-        btn = QPushButton(text)
-        btn.setFixedSize(18, 18)
+    def create_window_btn(self, icon_name, color, icon_size, hover_color="rgba(15, 23, 42, 0.55)"):
+        btn = QPushButton()
+        btn.setFixedSize(22, 22)
+        btn.setCursor(Qt.PointingHandCursor)
+        btn.setFlat(True)
         btn.setStyleSheet(f"""
             QPushButton {{
-                background: rgba(15, 23, 42, 0.78);
-                color: #94a3b8;
-                border: 1px solid rgba(148, 163, 184, 0.18);
-                border-radius: 4px;
+                background: transparent;
+                border: none;
                 padding: 0;
+                margin: 0;
             }}
             QPushButton:hover {{
                 background: {hover_color};
-                color: white;
+                border: none;
+                border-radius: 4px;
             }}
         """)
+        if icon_name == "minimize.svg":
+            set_minimize_icon(btn, color, icon_size)
+        elif icon_name == "maximize.svg":
+            set_maximize_icon(btn, color, icon_size)
+        else:
+            set_exit_icon(btn, color, icon_size)
         return btn
 
     def toggle_maximized(self):

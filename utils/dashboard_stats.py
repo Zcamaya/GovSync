@@ -1,13 +1,13 @@
 import calendar
 import datetime
-import json
-import os
 import re
 
-from utils.account_store import global_json_path
+from repositories.history_repository import HistoryRepository
+from repositories.statistics_repository import StatisticsRepository
+from storage.sqlite import initialize_database
+from utils.account_store import database_path, get_active_account
 
 
-STATS_FILENAME = "dashboard_stats.json"
 MODULES = ("philhealth", "sss", "hdmf")
 MONTH_NAMES = {name.lower(): index for index, name in enumerate(calendar.month_name) if name}
 _refresh_callback = None
@@ -23,24 +23,31 @@ def _notify():
         _refresh_callback()
 
 
-def stats_path():
-    return global_json_path(STATS_FILENAME)
+def _account_username():
+    active_account = get_active_account() or {}
+    return active_account.get("username") or "default"
+
+
+def _stats_repository():
+    initialize_database(database_path())
+    return StatisticsRepository(database_path())
+
+
+def _history_repository():
+    initialize_database(database_path())
+    return HistoryRepository(database_path())
 
 
 def load_stats():
-    path = stats_path()
-    if not os.path.exists(path):
-        return {module: {} for module in MODULES}
+    repository = _stats_repository()
+    username = _account_username()
+    data = repository.list_by_account(username)
+    return {module: data.get(module, {}) for module in MODULES}
 
-    try:
-        with open(path, "r", encoding="utf-8") as input_file:
-            data = json.load(input_file)
-    except (OSError, json.JSONDecodeError):
-        return {module: {} for module in MODULES}
 
-    if not isinstance(data, dict):
-        return {module: {} for module in MODULES}
-
+def save_stats(data):
+    repository = _stats_repository()
+    username = _account_username()
     normalized = {module: {} for module in MODULES}
     for module in MODULES:
         module_data = data.get(module, {})
@@ -51,13 +58,7 @@ def load_stats():
                 normalized[module][str(key)] = int(value)
             except (TypeError, ValueError):
                 continue
-    return normalized
-
-
-def save_stats(data):
-    os.makedirs(os.path.dirname(stats_path()), exist_ok=True)
-    with open(stats_path(), "w", encoding="utf-8") as output_file:
-        json.dump(data, output_file, indent=2)
+    repository.replace_many(username, normalized)
     _notify()
 
 
@@ -127,25 +128,13 @@ def get_all_past_month_totals():
 
 
 def _philhealth_total_from_history(period_key):
-    history_path = global_json_path("philhealth_history.json")
-    if not os.path.exists(history_path):
-        return 0
-
-    try:
-        with open(history_path, "r", encoding="utf-8") as input_file:
-            records = json.load(input_file)
-    except (OSError, json.JSONDecodeError):
-        return 0
-
-    if not isinstance(records, list):
-        return 0
-
+    repository = _history_repository()
+    records = repository.list_by_account(_account_username())
     for record in reversed(records):
-        if not isinstance(record, dict):
-            continue
-        if period_key_from_label(record.get("month_year", "")) == period_key:
+        payload = record.extra.get("payload", {}) if record.extra else {}
+        if period_key_from_label(payload.get("month_year", "")) == period_key:
             try:
-                return int(record.get("total_count", 0))
+                return int(payload.get("total_count", 0))
             except (TypeError, ValueError):
                 return 0
     return 0

@@ -1,0 +1,66 @@
+import sqlite3
+import shutil
+from pathlib import Path
+
+from config import DATABASE_PATH, LEGACY_DATABASE_PATH
+
+
+SCHEMA = """
+CREATE TABLE IF NOT EXISTS accounts (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    username TEXT NOT NULL UNIQUE,
+    password_hash TEXT NOT NULL,
+    sss_number TEXT NOT NULL DEFAULT '',
+    philhealth_number TEXT NOT NULL DEFAULT '',
+    hdmf_number TEXT NOT NULL DEFAULT '',
+    created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS history_records (
+    id TEXT PRIMARY KEY,
+    account_username TEXT NOT NULL,
+    module TEXT NOT NULL,
+    period_label TEXT NOT NULL,
+    payload_json TEXT NOT NULL,
+    created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS statistics (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    account_username TEXT NOT NULL,
+    module TEXT NOT NULL,
+    period_key TEXT NOT NULL,
+    total_count INTEGER NOT NULL DEFAULT 0,
+    created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    UNIQUE(account_username, module, period_key)
+);
+"""
+
+
+def database_path() -> Path:
+    return DATABASE_PATH
+
+
+def _migrate_legacy_database(target_path: Path) -> None:
+    if target_path.exists() or not LEGACY_DATABASE_PATH.exists():
+        return
+
+    target_path.parent.mkdir(parents=True, exist_ok=True)
+    shutil.copy2(LEGACY_DATABASE_PATH, target_path)
+
+
+def connect(path: Path | None = None) -> sqlite3.Connection:
+    db_path = Path(path or database_path())
+    db_path.parent.mkdir(parents=True, exist_ok=True)
+    connection = sqlite3.connect(db_path)
+    connection.row_factory = sqlite3.Row
+    return connection
+
+
+def initialize_database(path: Path | None = None) -> None:
+    target_path = Path(path or database_path())
+    _migrate_legacy_database(target_path)
+    with connect(target_path) as connection:
+        connection.executescript(SCHEMA)
+        connection.commit()

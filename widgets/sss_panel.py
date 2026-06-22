@@ -1,3 +1,4 @@
+import json
 import os
 
 from PySide6.QtCore import QThread, Signal, Qt
@@ -7,6 +8,7 @@ from PySide6.QtWidgets import (
     QComboBox,
     QFileDialog,
     QFormLayout,
+    QGridLayout,
     QHeaderView,
     QHBoxLayout,
     QLabel,
@@ -23,15 +25,14 @@ from PySide6.QtWidgets import (
 )
 
 from constants.styles import AppStyles
+from utils.account_store import account_json_path, get_active_account
+from controllers.sss_controller import SSSController
 from utils.sss_engine import (
     TXT_COLUMNS,
     format_employer_id,
-    generate_sss_txt,
     get_default_month_and_year,
     get_months_list,
     get_years_list,
-    load_sss_txt,
-    save_sss_txt,
 )
 from utils.dashboard_stats import record_upload
 from widgets.glass_dialog import GlassDialog
@@ -41,9 +42,10 @@ class SSSBulkWorker(QThread):
     progress = Signal(int, str)
     finished = Signal(bool, str, int)
 
-    def __init__(self, payloads):
+    def __init__(self, payloads, controller=None):
         super().__init__()
         self.payloads = payloads
+        self.controller = controller
 
     def run(self):
         total = max(len(self.payloads), 1)
@@ -56,7 +58,12 @@ class SSSBulkWorker(QThread):
             filename = os.path.basename(source_path)
             self.progress.emit(int((index / total) * 100), filename)
             try:
-                output_path, written_rows = generate_sss_txt(**payload)
+                if self.controller:
+                    output_path, written_rows = self.controller.generate_txt(**payload)
+                else:
+                    from utils.sss_engine import generate_sss_txt
+
+                    output_path, written_rows = generate_sss_txt(**payload)
                 total_written += written_rows
                 results.append(f"{filename}: {written_rows} row(s) -> {output_path}")
             except Exception as exc:
@@ -72,16 +79,25 @@ class SSSWorker(QThread):
     progress = Signal(int)
     finished = Signal(bool, str, str)
 
-    def __init__(self, payload):
+    def __init__(self, payload, controller=None):
         super().__init__()
         self.payload = payload
+        self.controller = controller
 
     def run(self):
         try:
-            output_path, written_rows = generate_sss_txt(
-                progress_callback=self.progress.emit,
-                **self.payload,
-            )
+            if self.controller:
+                output_path, written_rows = self.controller.generate_txt(
+                    progress_callback=self.progress.emit,
+                    **self.payload,
+                )
+            else:
+                from utils.sss_engine import generate_sss_txt
+
+                output_path, written_rows = generate_sss_txt(
+                    progress_callback=self.progress.emit,
+                    **self.payload,
+                )
             self.finished.emit(
                 True,
                 f"Generated {written_rows} row(s).\n\nSaved to:\n{output_path}",
@@ -92,8 +108,11 @@ class SSSWorker(QThread):
 
 
 class SSSPanel(QWidget):
-    def __init__(self, parent=None):
+    def __init__(self, parent=None, controller=None):
         super().__init__(parent)
+        self.controller = controller or SSSController()
+        self.current_username = (get_active_account() or {}).get("username") or "default"
+        self._persist_enabled = False
         self.source_file_path = ""
         self.correction_file_path = ""
         self.txt_file_path = ""
@@ -102,6 +121,8 @@ class SSSPanel(QWidget):
         self.worker = None
         self.account_info = {}
         self._setup_ui()
+        self._load_state()
+        self._persist_enabled = True
 
     def _setup_ui(self):
         self.setStyleSheet("background: transparent;")
@@ -241,11 +262,13 @@ class SSSPanel(QWidget):
         self.employer_id = QLineEdit()
         self.employer_id.setText(format_employer_id("0391148192"))
         self.employer_id.textEdited.connect(self._format_employer_id)
+        self.employer_id.textChanged.connect(self._save_state)
         form_layout.addRow("Employer SSS ID", self.employer_id)
 
         self.branch_code = QLineEdit("000")
         self.branch_code.setValidator(QIntValidator(0, 999, self))
         self.branch_code.setMaxLength(3)
+        self.branch_code.textChanged.connect(self._save_state)
         form_layout.addRow("Branch Code", self.branch_code)
 
         period_row = QWidget()
@@ -258,6 +281,8 @@ class SSSPanel(QWidget):
         self.month_combo.addItems(get_months_list())
         self.year_combo = QComboBox()
         self.year_combo.addItems(get_years_list())
+        self.month_combo.currentTextChanged.connect(self._save_state)
+        self.year_combo.currentTextChanged.connect(self._save_state)
 
         default_month, default_year = get_default_month_and_year()
         self.month_combo.setCurrentText(default_month)
@@ -273,12 +298,14 @@ class SSSPanel(QWidget):
             "Select output folder",
             self.browse_output_folder,
         )
+        self.output_folder.textChanged.connect(self._save_state)
         self.correction_file = self._path_row(
             form_layout,
             "Correction Excel",
             "Optional correction file",
             self.browse_correction_file,
         )
+        self.correction_file.textChanged.connect(self._save_state)
 
         generate_layout.addWidget(form_holder)
 
@@ -387,12 +414,6 @@ class SSSPanel(QWidget):
         """)
         viewer_layout.addWidget(self.txt_table, stretch=1)
 
-        self.status_label = QLabel("Ready")
-        self.status_label.setStyleSheet(
-            "color: #94a3b8; font-size: 11px; border: none; background: transparent;"
-        )
-        main_layout.addWidget(self.status_label)
-
         self.progress_bar = QProgressBar()
         self.progress_bar.setTextVisible(False)
         self.progress_bar.setFixedHeight(24)
@@ -411,7 +432,23 @@ class SSSPanel(QWidget):
                 border-radius: 8px;
             }
         """)
-        main_layout.addWidget(self.progress_bar)
+        progress_stack = QGridLayout()
+        progress_stack.setContentsMargins(0, 0, 0, 0)
+        progress_stack.addWidget(self.progress_bar, 0, 0)
+        self.progress_percent_label = QLabel("0%")
+        self.progress_percent_label.setAlignment(Qt.AlignCenter)
+        self.progress_percent_label.setAttribute(Qt.WA_TransparentForMouseEvents, True)
+        self.progress_percent_label.setStyleSheet(
+            "color: #f8fafc; font-size: 12px; font-weight: 700; background: transparent;"
+        )
+        progress_stack.addWidget(self.progress_percent_label, 0, 0)
+        main_layout.addLayout(progress_stack)
+
+        self.status_label = QLabel("Ready")
+        self.status_label.setStyleSheet(
+            "color: #94a3b8; font-size: 11px; border: none; background: transparent;"
+        )
+        main_layout.addWidget(self.status_label)
         self._refresh_account_banner()
 
     def _secondary_button(self, text):
@@ -427,7 +464,9 @@ class SSSPanel(QWidget):
             self.account_info = account
         else:
             self.account_info = {"username": str(account or "")}
+        self.current_username = self.account_info.get("username") or "default"
         self._refresh_account_banner()
+        self._load_state()
 
     def _refresh_account_banner(self):
         sss_number = str(self.account_info.get("sss_number", "")).strip()
@@ -436,6 +475,71 @@ class SSSPanel(QWidget):
         self.account_banner.setVisible(False)
         if sss_number:
             return
+
+    def _state_path(self):
+        return account_json_path(self.current_username, "sss_panel_state.json")
+
+    def _load_state(self):
+        path = self._state_path()
+        if not os.path.exists(path):
+            return
+        try:
+            with open(path, "r", encoding="utf-8") as input_file:
+                data = json.load(input_file)
+        except (OSError, json.JSONDecodeError):
+            return
+        if not isinstance(data, dict):
+            return
+
+        self.selected_source_files = [str(item) for item in data.get("selected_source_files", []) if str(item).strip()]
+        self.source_queue.clear()
+        for file_path in self.selected_source_files:
+            self.source_queue.addItem(os.path.basename(file_path))
+
+        output_folder = str(data.get("output_folder", "")).strip()
+        if output_folder:
+            self.output_folder.setText(output_folder)
+
+        self.correction_file_path = str(data.get("correction_file_path", "")).strip()
+        if self.correction_file_path:
+            self.correction_file.setText(os.path.basename(self.correction_file_path))
+
+        employer_id = str(data.get("employer_id", "")).strip()
+        if employer_id:
+            self.employer_id.setText(employer_id)
+
+        branch_code = str(data.get("branch_code", "")).strip()
+        if branch_code:
+            self.branch_code.setText(branch_code)
+
+        month = str(data.get("month", "")).strip()
+        year = str(data.get("year", "")).strip()
+        if month:
+            self.month_combo.setCurrentText(month)
+        if year:
+            self.year_combo.setCurrentText(year)
+
+        self.txt_file_path = str(data.get("txt_file_path", "")).strip()
+        self.status_label.setText(str(data.get("status", self.status_label.text())).strip())
+
+    def _save_state(self):
+        if not getattr(self, "_persist_enabled", False):
+            return
+        path = self._state_path()
+        os.makedirs(os.path.dirname(path), exist_ok=True)
+        data = {
+            "selected_source_files": self.selected_source_files,
+            "output_folder": self.output_folder.text().strip(),
+            "correction_file_path": self.correction_file_path,
+            "employer_id": self.employer_id.text().strip(),
+            "branch_code": self.branch_code.text().strip(),
+            "month": self.month_combo.currentText(),
+            "year": self.year_combo.currentText(),
+            "txt_file_path": self.txt_file_path,
+            "status": self.status_label.text(),
+        }
+        with open(path, "w", encoding="utf-8") as output_file:
+            json.dump(data, output_file, indent=2)
 
     def _path_row(self, form_layout, label, placeholder, browse_callback):
         row = QWidget()
@@ -484,6 +588,7 @@ class SSSPanel(QWidget):
         folder = QFileDialog.getExistingDirectory(self, "Select Save Folder")
         if folder:
             self.output_folder.setText(folder)
+            self._save_state()
 
     def browse_correction_file(self):
         path, _ = QFileDialog.getOpenFileName(
@@ -495,6 +600,7 @@ class SSSPanel(QWidget):
         if path:
             self.correction_file_path = path
             self.correction_file.setText(os.path.basename(path))
+            self._save_state()
 
     def add_source_files(self):
         files, _ = QFileDialog.getOpenFileNames(
@@ -521,6 +627,7 @@ class SSSPanel(QWidget):
         self.selected_source_files = []
         self.source_queue.clear()
         self.status_label.setText("Queue cleared.")
+        self._save_state()
 
     def _add_source_paths(self, paths):
         for path in paths:
@@ -528,6 +635,7 @@ class SSSPanel(QWidget):
                 self.selected_source_files.append(path)
                 self.source_queue.addItem(os.path.basename(path))
         self.status_label.setText(f"{len(self.selected_source_files)} file(s) queued.")
+        self._save_state()
 
     def import_txt_file(self):
         path, _ = QFileDialog.getOpenFileName(
@@ -540,7 +648,12 @@ class SSSPanel(QWidget):
             return
 
         try:
-            rows = load_sss_txt(path)
+            if self.controller:
+                rows = self.controller.load_txt(path)
+            else:
+                from utils.sss_engine import load_sss_txt
+
+                rows = load_sss_txt(path)
         except Exception as exc:
             GlassDialog(self, "TXT Import Error", str(exc)).exec()
             return
@@ -548,6 +661,7 @@ class SSSPanel(QWidget):
         self.txt_file_path = path
         self._populate_txt_table(rows)
         self.status_label.setText(f"Loaded {len(rows)} TXT row(s).")
+        self._save_state()
 
     def save_txt_file(self):
         if self.txt_table.rowCount() == 0:
@@ -567,13 +681,19 @@ class SSSPanel(QWidget):
 
         rows = self._table_rows()
         try:
-            output_path, written_rows = save_sss_txt(path, rows)
+            if self.controller:
+                output_path, written_rows = self.controller.save_txt(rows, path)
+            else:
+                from utils.sss_engine import save_sss_txt
+
+                output_path, written_rows = save_sss_txt(path, rows)
         except Exception as exc:
             GlassDialog(self, "TXT Save Error", str(exc)).exec()
             return
 
         self.txt_file_path = output_path
         self.status_label.setText(f"Saved {written_rows} TXT row(s).")
+        self._save_state()
         GlassDialog(self, "TXT Saved", f"Saved {written_rows} row(s).\n\n{output_path}").exec()
 
     def _populate_txt_table(self, rows):
@@ -624,26 +744,29 @@ class SSSPanel(QWidget):
         self._set_enabled(False)
         self.progress_bar.setValue(0)
         self.status_label.setText("Generating TXT file(s)...")
+        self._save_state()
 
         if len(payloads) == 1:
-            self.worker = SSSWorker(payloads[0])
+            self.worker = SSSWorker(payloads[0], controller=self.controller)
             self.worker.progress.connect(self.progress_bar.setValue)
             self.worker.finished.connect(self.on_finished)
             self.worker.start()
             return
 
-        self.bulk_worker = SSSBulkWorker(payloads)
+        self.bulk_worker = SSSBulkWorker(payloads, controller=self.controller)
         self.bulk_worker.progress.connect(self._on_bulk_progress)
         self.bulk_worker.finished.connect(self._on_bulk_finished)
         self.bulk_worker.start()
 
     def _on_bulk_progress(self, percent, filename):
         self.progress_bar.setValue(percent)
+        self.progress_percent_label.setText(f"{max(0, min(100, int(percent)))}%")
         self.status_label.setText(f"Processing: {filename}")
 
     def _on_bulk_finished(self, success, message, total_rows=0):
         self._set_enabled(True)
         self.status_label.setText("Finished." if success else "Finished with errors.")
+        self.progress_percent_label.setText("100%" if success else self.progress_percent_label.text())
         if success and total_rows > 0:
             record_upload(
                 "sss",
@@ -660,10 +783,16 @@ class SSSPanel(QWidget):
     def on_finished(self, success, message, output_path):
         self._set_enabled(True)
         self.status_label.setText("Finished." if success else "Finished with errors.")
+        self.progress_percent_label.setText("100%" if success else self.progress_percent_label.text())
 
         if success and output_path:
             try:
-                rows = load_sss_txt(output_path)
+                if self.controller:
+                    rows = self.controller.load_txt(output_path)
+                else:
+                    from utils.sss_engine import load_sss_txt
+
+                    rows = load_sss_txt(output_path)
                 self.txt_file_path = output_path
                 self._populate_txt_table(rows)
                 self.tabs.setCurrentIndex(1)
@@ -674,6 +803,7 @@ class SSSPanel(QWidget):
                     self.month_combo.currentText(),
                     self.year_combo.currentText(),
                 )
+                self._save_state()
             except Exception as exc:
                 message = f"{message}\n\nViewer load failed: {exc}"
 

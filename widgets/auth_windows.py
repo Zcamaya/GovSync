@@ -21,6 +21,7 @@ from PySide6.QtWidgets import (
 )
 
 from widgets.glass_dialog import GlassDialog
+from controllers.auth_controller import AuthController
 from utils.account_store import (
     authenticate,
     delete_account,
@@ -513,8 +514,9 @@ class LoginDialog(QDialog, AuthShellMixin):
 class LoginPage(QWidget):
     authenticated = Signal(str, str)
 
-    def __init__(self, parent=None):
+    def __init__(self, parent=None, controller=None):
         super().__init__(parent)
+        self.controller = controller
         self._setup_ui()
 
     def _setup_ui(self):
@@ -787,7 +789,7 @@ class LoginPage(QWidget):
     def _login(self):
         username = self.username.text().strip()
         password = self.password.text().strip()
-        role = authenticate(username, password)
+        role = self.controller.login(username, password) if self.controller else authenticate(username, password)
         if not role:
             accounts = load_accounts()
             exists = username == SUPER_ADMIN_USERNAME or any(
@@ -802,13 +804,22 @@ class LoginPage(QWidget):
 
     def _create_account(self):
         try:
-            register_account(
-                self.register_username.text(),
-                self.register_password.text(),
-                self.register_sss_number.text(),
-                self.register_philhealth_number.text(),
-                self.register_hdmf_number.text(),
-            )
+            if self.controller:
+                self.controller.register(
+                    self.register_username.text(),
+                    self.register_password.text(),
+                    self.register_sss_number.text(),
+                    self.register_philhealth_number.text(),
+                    self.register_hdmf_number.text(),
+                )
+            else:
+                register_account(
+                    self.register_username.text(),
+                    self.register_password.text(),
+                    self.register_sss_number.text(),
+                    self.register_philhealth_number.text(),
+                    self.register_hdmf_number.text(),
+                )
         except ValueError as exc:
             self.register_message.setStyleSheet(
                 "color: #fb7185; font: 700 11px 'Segoe UI';"
@@ -828,20 +839,21 @@ class LoginPage(QWidget):
 class SuperAdminPage(QWidget):
     logout_requested = Signal()
 
-    def __init__(self, parent=None):
+    def __init__(self, parent=None, controller=None):
         super().__init__(parent)
+        self.controller = controller
         self._setup_ui()
         self._load_accounts()
 
     def _setup_ui(self):
         self.setStyleSheet(SHELL_STYLE)
         layout = QHBoxLayout(self)
-        layout.setContentsMargins(58, 42, 58, 42)
-        layout.setSpacing(28)
+        layout.setContentsMargins(42, 34, 42, 34)
+        layout.setSpacing(24)
 
         brand = QFrame()
         brand.setObjectName("BrandPanel")
-        brand.setFixedWidth(260)
+        brand.setFixedWidth(220)
         brand_layout = QVBoxLayout(brand)
         brand_layout.addStretch()
         logo = QLabel()
@@ -857,21 +869,35 @@ class SuperAdminPage(QWidget):
         admin_panel = QFrame()
         admin_panel.setObjectName("ContentPanel")
         admin_layout = QHBoxLayout(admin_panel)
-        admin_layout.setContentsMargins(18, 18, 18, 18)
-        admin_layout.setSpacing(16)
+        admin_layout.setContentsMargins(22, 22, 22, 22)
+        admin_layout.setSpacing(18)
 
         sidebar = QVBoxLayout()
         sidebar.setSpacing(10)
         title = QLabel("Account List")
-        title.setFont(QFont("Segoe UI", 15, QFont.Bold))
+        title.setFont(QFont("Segoe UI", 14, QFont.Bold))
+        self.account_count_label = QLabel("0 accounts")
+        self.account_count_label.setStyleSheet("color: #94a3b8; font: 600 10px 'Segoe UI';")
         self.account_list = QListWidget()
         self.account_list.currentRowChanged.connect(self._select_account)
+        self.account_list.setMinimumWidth(260)
+        self.account_list.setMinimumHeight(360)
+        self.account_list.setStyleSheet("""
+            QListWidget {
+                padding: 6px;
+            }
+            QListWidget::item {
+                padding: 8px 10px;
+                margin: 2px 0;
+            }
+        """)
 
         logout_btn = QPushButton("Log Out")
         logout_btn.setObjectName("DangerButton")
         logout_btn.clicked.connect(self.logout_requested.emit)
 
         sidebar.addWidget(title)
+        sidebar.addWidget(self.account_count_label)
         sidebar.addWidget(self.account_list, stretch=1)
         sidebar.addWidget(logout_btn)
 
@@ -891,13 +917,22 @@ class SuperAdminPage(QWidget):
         ])
         table_header = self.table.horizontalHeader()
         table_header.setDefaultAlignment(Qt.AlignLeft | Qt.AlignVCenter)
-        table_header.setSectionResizeMode(QHeaderView.ResizeToContents)
-        table_header.setStretchLastSection(False)
+        table_header.setSectionResizeMode(QHeaderView.Stretch)
+        table_header.setStretchLastSection(True)
         self.table.setWordWrap(False)
         self.table.setTextElideMode(Qt.ElideNone)
         self.table.verticalHeader().setVisible(False)
         self.table.setEditTriggers(QTableWidget.NoEditTriggers)
-        self.table.setMinimumHeight(300)
+        self.table.setMinimumHeight(380)
+        self.table.setAlternatingRowColors(True)
+        self.table.setStyleSheet("""
+            QTableWidget {
+                background: rgba(2, 6, 23, 0.50);
+            }
+            QTableWidget::item {
+                padding: 8px 6px;
+            }
+        """)
 
         buttons = QHBoxLayout()
         refresh_btn = QPushButton("Refresh")
@@ -916,7 +951,7 @@ class SuperAdminPage(QWidget):
 
         sidebar_widget = QWidget()
         sidebar_widget.setLayout(sidebar)
-        sidebar_widget.setFixedWidth(250)
+        sidebar_widget.setFixedWidth(290)
         admin_layout.addWidget(sidebar_widget)
         admin_layout.addLayout(content, stretch=1)
 
@@ -924,22 +959,28 @@ class SuperAdminPage(QWidget):
         layout.addWidget(admin_panel, stretch=1)
 
     def _load_accounts(self):
-        self.accounts = load_accounts()
+        self.accounts = self.controller.list_accounts() if self.controller else load_accounts()
         self.account_list.clear()
         for account in self.accounts:
-            self.account_list.addItem(account.get("username", ""))
+            username = account.username if hasattr(account, "username") else account.get("username", "")
+            self.account_list.addItem(username)
+        self.account_count_label.setText(f"{len(self.accounts)} account{'s' if len(self.accounts) != 1 else ''}")
         self._render_table(self.accounts)
 
     def _render_table(self, accounts):
         self.table.setRowCount(len(accounts))
         for row, account in enumerate(accounts):
-            self.table.setItem(row, 0, QTableWidgetItem(account.get("username", "")))
-            self.table.setItem(row, 1, QTableWidgetItem(account.get("password", "")))
-            self.table.setItem(row, 2, QTableWidgetItem(account.get("sss_number", "")))
+            username = account.username if hasattr(account, "username") else account.get("username", "")
+            sss_number = account.sss_number if hasattr(account, "sss_number") else account.get("sss_number", "")
+            philhealth_number = account.philhealth_number if hasattr(account, "philhealth_number") else account.get("philhealth_number", "")
+            hdmf_number = account.hdmf_number if hasattr(account, "hdmf_number") else account.get("hdmf_number", "")
+            self.table.setItem(row, 0, QTableWidgetItem(username))
+            self.table.setItem(row, 1, QTableWidgetItem("Protected"))
+            self.table.setItem(row, 2, QTableWidgetItem(sss_number))
             self.table.setItem(
-                row, 3, QTableWidgetItem(account.get("philhealth_number", ""))
+                row, 3, QTableWidgetItem(philhealth_number)
             )
-            self.table.setItem(row, 4, QTableWidgetItem(account.get("hdmf_number", "")))
+            self.table.setItem(row, 4, QTableWidgetItem(hdmf_number))
 
     def _select_account(self, row):
         if row < 0 or row >= len(self.accounts):
@@ -952,7 +993,8 @@ class SuperAdminPage(QWidget):
         if row < 0 or row >= len(self.accounts):
             return
 
-        username = self.accounts[row].get("username", "")
+        account = self.accounts[row]
+        username = account.username if hasattr(account, "username") else account.get("username", "")
         dialog = GlassDialog(
             self,
             "Delete Account",
@@ -961,7 +1003,10 @@ class SuperAdminPage(QWidget):
                 ("No", lambda: dialog.reject(), False),
                 (
                     "Yes",
-                    lambda: (delete_account(username), dialog.accept()),
+                    lambda: (
+                        self.controller.delete_account(username) if self.controller else delete_account(username),
+                        dialog.accept(),
+                    ),
                     True,
                 ),
             ],
@@ -973,8 +1018,9 @@ class SuperAdminPage(QWidget):
 
 
 class RegisterDialog(QDialog, AuthShellMixin):
-    def __init__(self, parent=None):
+    def __init__(self, parent=None, controller=None):
         super().__init__(parent)
+        self.controller = controller
         self.setWindowTitle("Create Account")
         self._setup_ui()
 
@@ -1038,13 +1084,22 @@ class RegisterDialog(QDialog, AuthShellMixin):
 
     def _create(self):
         try:
-            register_account(
-                self.username.text(),
-                self.password.text(),
-                self.sss_number.text(),
-                self.philhealth_number.text(),
-                self.hdmf_number.text(),
-            )
+            if self.controller:
+                self.controller.register(
+                    self.username.text(),
+                    self.password.text(),
+                    self.sss_number.text(),
+                    self.philhealth_number.text(),
+                    self.hdmf_number.text(),
+                )
+            else:
+                register_account(
+                    self.username.text(),
+                    self.password.text(),
+                    self.sss_number.text(),
+                    self.philhealth_number.text(),
+                    self.hdmf_number.text(),
+                )
         except ValueError as exc:
             QMessageBox.warning(self, "Invalid Account", str(exc))
             return
@@ -1056,8 +1111,9 @@ class RegisterDialog(QDialog, AuthShellMixin):
 class SuperAdminWindow(QWidget, AuthShellMixin):
     logout_requested = Signal()
 
-    def __init__(self):
+    def __init__(self, controller=None):
         super().__init__()
+        self.controller = controller
         self.setWindowTitle("GovSync Super Admin")
         self._setup_ui()
         self._load_accounts()
@@ -1070,21 +1126,35 @@ class SuperAdminWindow(QWidget, AuthShellMixin):
         admin_panel = QFrame()
         admin_panel.setObjectName("ContentPanel")
         admin_layout = QHBoxLayout(admin_panel)
-        admin_layout.setContentsMargins(18, 18, 18, 18)
-        admin_layout.setSpacing(16)
+        admin_layout.setContentsMargins(22, 22, 22, 22)
+        admin_layout.setSpacing(18)
 
         sidebar = QVBoxLayout()
         sidebar.setSpacing(10)
         title = QLabel("Account List")
-        title.setFont(QFont("Segoe UI", 15, QFont.Bold))
+        title.setFont(QFont("Segoe UI", 14, QFont.Bold))
+        self.account_count_label = QLabel("0 accounts")
+        self.account_count_label.setStyleSheet("color: #94a3b8; font: 600 10px 'Segoe UI';")
         self.account_list = QListWidget()
         self.account_list.currentRowChanged.connect(self._select_account)
+        self.account_list.setMinimumWidth(260)
+        self.account_list.setMinimumHeight(360)
+        self.account_list.setStyleSheet("""
+            QListWidget {
+                padding: 6px;
+            }
+            QListWidget::item {
+                padding: 8px 10px;
+                margin: 2px 0;
+            }
+        """)
 
         logout_btn = QPushButton("Log Out")
         logout_btn.setObjectName("DangerButton")
         logout_btn.clicked.connect(self.logout_requested.emit)
 
         sidebar.addWidget(title)
+        sidebar.addWidget(self.account_count_label)
         sidebar.addWidget(self.account_list, stretch=1)
         sidebar.addWidget(logout_btn)
 
@@ -1104,13 +1174,22 @@ class SuperAdminWindow(QWidget, AuthShellMixin):
         ])
         table_header = self.table.horizontalHeader()
         table_header.setDefaultAlignment(Qt.AlignLeft | Qt.AlignVCenter)
-        table_header.setSectionResizeMode(QHeaderView.ResizeToContents)
-        table_header.setStretchLastSection(False)
+        table_header.setSectionResizeMode(QHeaderView.Stretch)
+        table_header.setStretchLastSection(True)
         self.table.setWordWrap(False)
         self.table.setTextElideMode(Qt.ElideNone)
         self.table.verticalHeader().setVisible(False)
         self.table.setEditTriggers(QTableWidget.NoEditTriggers)
-        self.table.setMinimumHeight(300)
+        self.table.setMinimumHeight(380)
+        self.table.setAlternatingRowColors(True)
+        self.table.setStyleSheet("""
+            QTableWidget {
+                background: rgba(2, 6, 23, 0.50);
+            }
+            QTableWidget::item {
+                padding: 8px 6px;
+            }
+        """)
 
         buttons = QHBoxLayout()
         refresh_btn = QPushButton("Refresh")
@@ -1129,29 +1208,35 @@ class SuperAdminWindow(QWidget, AuthShellMixin):
 
         sidebar_widget = QWidget()
         sidebar_widget.setLayout(sidebar)
-        sidebar_widget.setFixedWidth(250)
+        sidebar_widget.setFixedWidth(290)
         admin_layout.addWidget(sidebar_widget)
         admin_layout.addLayout(content, stretch=1)
 
         shell_layout.addWidget(admin_panel, stretch=1)
 
     def _load_accounts(self):
-        self.accounts = load_accounts()
+        self.accounts = self.controller.list_accounts() if self.controller else load_accounts()
         self.account_list.clear()
         for account in self.accounts:
-            self.account_list.addItem(account.get("username", ""))
+            username = account.username if hasattr(account, "username") else account.get("username", "")
+            self.account_list.addItem(username)
+        self.account_count_label.setText(f"{len(self.accounts)} account{'s' if len(self.accounts) != 1 else ''}")
         self._render_table(self.accounts)
 
     def _render_table(self, accounts):
         self.table.setRowCount(len(accounts))
         for row, account in enumerate(accounts):
-            self.table.setItem(row, 0, QTableWidgetItem(account.get("username", "")))
-            self.table.setItem(row, 1, QTableWidgetItem(account.get("password", "")))
-            self.table.setItem(row, 2, QTableWidgetItem(account.get("sss_number", "")))
+            username = account.username if hasattr(account, "username") else account.get("username", "")
+            sss_number = account.sss_number if hasattr(account, "sss_number") else account.get("sss_number", "")
+            philhealth_number = account.philhealth_number if hasattr(account, "philhealth_number") else account.get("philhealth_number", "")
+            hdmf_number = account.hdmf_number if hasattr(account, "hdmf_number") else account.get("hdmf_number", "")
+            self.table.setItem(row, 0, QTableWidgetItem(username))
+            self.table.setItem(row, 1, QTableWidgetItem("Protected"))
+            self.table.setItem(row, 2, QTableWidgetItem(sss_number))
             self.table.setItem(
-                row, 3, QTableWidgetItem(account.get("philhealth_number", ""))
+                row, 3, QTableWidgetItem(philhealth_number)
             )
-            self.table.setItem(row, 4, QTableWidgetItem(account.get("hdmf_number", "")))
+            self.table.setItem(row, 4, QTableWidgetItem(hdmf_number))
 
     def _select_account(self, row):
         if row < 0 or row >= len(self.accounts):
@@ -1164,7 +1249,8 @@ class SuperAdminWindow(QWidget, AuthShellMixin):
         if row < 0 or row >= len(self.accounts):
             return
 
-        username = self.accounts[row].get("username", "")
+        account = self.accounts[row]
+        username = account.username if hasattr(account, "username") else account.get("username", "")
         dialog = GlassDialog(
             self,
             "Delete Account",
@@ -1173,7 +1259,10 @@ class SuperAdminWindow(QWidget, AuthShellMixin):
                 ("No", lambda: dialog.reject(), False),
                 (
                     "Yes",
-                    lambda: (delete_account(username), dialog.accept()),
+                    lambda: (
+                        self.controller.delete_account(username) if self.controller else delete_account(username),
+                        dialog.accept(),
+                    ),
                     True,
                 ),
             ],

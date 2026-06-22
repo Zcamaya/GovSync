@@ -65,8 +65,6 @@ class SidebarWidget(QWidget):
                 "HDMF",
                 "SSS",
                 "HDMF Loan",
-                "SSS Loan",
-                "Calendar",
             ]
         )
         nav.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)

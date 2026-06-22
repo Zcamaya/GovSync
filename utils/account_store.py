@@ -3,11 +3,14 @@ import os
 import re
 import shutil
 
-from PySide6.QtCore import QStandardPaths
+from core.exceptions import AuthenticationError
+from config import DATA_DIR, SUPER_ADMIN_PASSWORD, SUPER_ADMIN_USERNAME
+from models.account import Account
+from repositories.account_repository import AccountRepository
+from services.auth_service import AuthService
+from storage.sqlite import initialize_database
 
 
-SUPER_ADMIN_USERNAME = "superadmin"
-SUPER_ADMIN_PASSWORD = "admin1234"
 SAFE_NAME_PATTERN = re.compile(r"[^A-Za-z0-9_.-]")
 ACCOUNT_FIELDS = (
     "username",
@@ -22,22 +25,24 @@ ACCOUNT_NUMBER_LENGTHS = {
     "hdmf_number": 12,
 }
 _active_account = None
-
-
-def accounts_path():
-    base_dir = QStandardPaths.writableLocation(QStandardPaths.AppDataLocation)
-    if not base_dir:
-        base_dir = os.path.join(os.path.expanduser("~"), ".govsync")
-    os.makedirs(base_dir, exist_ok=True)
-    return os.path.join(base_dir, "accounts.json")
+_account_repository = None
+_auth_service = None
+_ACTIVE_ACCOUNT_FILENAME = "active_account.json"
 
 
 def app_data_dir():
-    return os.path.dirname(accounts_path())
+    DATA_DIR.mkdir(parents=True, exist_ok=True)
+    return str(DATA_DIR)
 
 
-def global_json_path(filename):
-    return os.path.join(app_data_dir(), filename)
+def database_path():
+    from config import DATABASE_PATH
+
+    return DATABASE_PATH
+
+
+def active_account_path():
+    return os.path.join(app_data_dir(), _ACTIVE_ACCOUNT_FILENAME)
 
 
 def account_folder(username):
@@ -51,35 +56,59 @@ def account_json_path(username, filename):
     return os.path.join(account_folder(username), filename)
 
 
+def _get_account_repository():
+    global _account_repository
+    if _account_repository is None:
+        initialize_database(database_path())
+        _account_repository = AccountRepository(database_path())
+    return _account_repository
+
+
+def _get_auth_service():
+    global _auth_service
+    if _auth_service is None:
+        _auth_service = AuthService(_get_account_repository())
+    return _auth_service
+
+
 def load_accounts():
-    path = accounts_path()
-    if not os.path.exists(path):
-        save_accounts([])
-        return []
-
-    try:
-        with open(path, "r", encoding="utf-8") as input_file:
-            data = json.load(input_file)
-    except (OSError, json.JSONDecodeError):
-        return []
-
-    if not isinstance(data, list):
-        return []
-
-    return [normalize_account(account) for account in data]
+    repository = _get_account_repository()
+    return [
+        {
+            "username": account.username,
+            "password": account.password_hash,
+            "password_hash": account.password_hash,
+            "sss_number": account.sss_number,
+            "philhealth_number": account.philhealth_number,
+            "hdmf_number": account.hdmf_number,
+        }
+        for account in repository.list_all()
+    ]
 
 
 def save_accounts(accounts):
-    normalized = [normalize_account(account) for account in accounts]
-    with open(accounts_path(), "w", encoding="utf-8") as output_file:
-        json.dump(normalized, output_file, indent=2)
+    repository = _get_account_repository()
+    normalized_accounts = []
+    for account in accounts:
+        normalized = normalize_account(account)
+        normalized_accounts.append(
+            Account(
+                username=normalized["username"],
+                password_hash=normalized["password"],
+                sss_number=normalized["sss_number"],
+                philhealth_number=normalized["philhealth_number"],
+                hdmf_number=normalized["hdmf_number"],
+            )
+        )
+    repository.replace_all(normalized_accounts)
 
 
 def normalize_account(account):
     account = account if isinstance(account, dict) else {}
+    password_value = account.get("password_hash", account.get("password", ""))
     return {
         "username": str(account.get("username", "")).strip(),
-        "password": str(account.get("password", "")),
+        "password": str(password_value),
         "sss_number": digits_only(account.get("sss_number", "")),
         "philhealth_number": digits_only(account.get("philhealth_number", "")),
         "hdmf_number": digits_only(account.get("hdmf_number", "")),
@@ -91,19 +120,51 @@ def get_account(username):
     if not username:
         return None
 
-    for account in load_accounts():
-        if account.get("username", "").lower() == username.lower():
-            return normalize_account(account)
-    return None
+    account = _get_account_repository().get_by_username(username)
+    if account is None:
+        return None
+
+    return {
+        "username": account.username,
+        "password": account.password_hash,
+        "password_hash": account.password_hash,
+        "sss_number": account.sss_number,
+        "philhealth_number": account.philhealth_number,
+        "hdmf_number": account.hdmf_number,
+    }
 
 
 def set_active_account(account):
     global _active_account
     _active_account = normalize_account(account) if account else None
+    path = active_account_path()
+    if _active_account:
+        with open(path, "w", encoding="utf-8") as output_file:
+            json.dump(_active_account, output_file, indent=2)
+    elif os.path.exists(path):
+        try:
+            os.remove(path)
+        except OSError:
+            pass
 
 
 def get_active_account():
-    return normalize_account(_active_account) if _active_account else None
+    global _active_account
+    if _active_account:
+        return normalize_account(_active_account)
+
+    path = active_account_path()
+    if os.path.exists(path):
+        try:
+            with open(path, "r", encoding="utf-8") as input_file:
+                data = json.load(input_file)
+        except (OSError, json.JSONDecodeError):
+            data = None
+        if isinstance(data, dict):
+            _active_account = normalize_account(data)
+            return normalize_account(_active_account)
+
+    return None
 
 
 def validate_username(username):
@@ -154,22 +215,23 @@ def register_account(
     validate_password(password)
     validate_account_numbers(sss_number, philhealth_number, hdmf_number)
 
-    accounts = load_accounts()
-    if any(account["username"].lower() == username.lower() for account in accounts):
+    if get_account(username):
         raise ValueError("Username already exists.")
 
-    accounts.append(
-        normalize_account(
-            {
-                "username": username,
-                "password": password,
-                "sss_number": digits_only(sss_number),
-                "philhealth_number": digits_only(philhealth_number),
-                "hdmf_number": digits_only(hdmf_number),
-            }
+    try:
+        _get_auth_service().register(
+            Account(
+                username=username,
+                password_hash="",
+                sss_number=digits_only(sss_number),
+                philhealth_number=digits_only(philhealth_number),
+                hdmf_number=digits_only(hdmf_number),
+            ),
+            password,
         )
-    )
-    save_accounts(accounts)
+    except AuthenticationError as exc:
+        raise ValueError(str(exc)) from exc
+
     account_folder(username)
 
 
@@ -190,38 +252,53 @@ def authenticate(username, password):
         )
         return "admin"
 
-    for account in load_accounts():
-        if account.get("username") == username and account.get("password") == password:
-            account_folder(username)
-            set_active_account(account)
-            return "user"
+    try:
+        account = _get_auth_service().authenticate(username, password)
+    except AuthenticationError:
+        set_active_account(None)
+        return ""
 
-    set_active_account(None)
-    return ""
+    account_folder(username)
+    set_active_account(
+        {
+            "username": account.username,
+            "password": account.password_hash,
+            "sss_number": account.sss_number,
+            "philhealth_number": account.philhealth_number,
+            "hdmf_number": account.hdmf_number,
+        }
+    )
+    return "user"
 
 
 def delete_account(username):
-    accounts = [
-        account for account in load_accounts() if account.get("username") != username
-    ]
-    save_accounts(accounts)
+    _get_account_repository().delete_by_username(username)
     folder = account_folder(username)
     if os.path.isdir(folder):
         shutil.rmtree(folder, ignore_errors=True)
+    active = get_active_account() or {}
+    if active.get("username", "").lower() == str(username).strip().lower():
+        set_active_account(None)
 
 
 def update_account(username, **fields):
-    accounts = load_accounts()
-    updated = False
-    for index, account in enumerate(accounts):
-        if account.get("username", "").lower() == str(username).strip().lower():
-            merged = normalize_account(account)
-            merged.update({key: str(value).strip() for key, value in fields.items() if key in ACCOUNT_FIELDS})
-            accounts[index] = normalize_account(merged)
-            updated = True
-            break
+    account = get_account(username)
+    if not account:
+        return
 
-    if updated:
-        save_accounts(accounts)
-        if _active_account and _active_account.get("username", "").lower() == str(username).strip().lower():
-            set_active_account(accounts[index])
+    merged = normalize_account(account)
+    for key, value in fields.items():
+        if key in ACCOUNT_FIELDS:
+            merged[key] = str(value).strip()
+
+    _get_account_repository().save(
+        Account(
+            username=merged["username"],
+            password_hash=merged["password"],
+            sss_number=merged["sss_number"],
+            philhealth_number=merged["philhealth_number"],
+            hdmf_number=merged["hdmf_number"],
+        )
+    )
+    if _active_account and _active_account.get("username", "").lower() == str(username).strip().lower():
+        set_active_account(merged)

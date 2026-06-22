@@ -14,6 +14,9 @@ from PySide6.QtWidgets import (
 from PySide6.QtGui import QColor
 import openpyxl
 from openpyxl.styles import Font as XlFont, PatternFill, Alignment as XlAlignment, Border as XlBorder, Side as XlSide
+from models.history import HistoryRecord
+from repositories.history_repository import HistoryRepository
+from utils.account_store import database_path, get_active_account
 from utils.ui_icons import set_exit_icon
 
 
@@ -296,6 +299,7 @@ class PhicExtractorApp(QWidget):
         self.cache_missing = []
         self.cache_newly_hired = []
         self.history_records = []
+        self.history_repository = HistoryRepository(database_path())
         
         self.init_ui()
 
@@ -477,43 +481,70 @@ class PhicExtractorApp(QWidget):
     # DATA & HISTORY LOGIC
     # ---------------------------------------------------------
     
-    def get_history_file_path(self):
-        save_dir = self.save_input.text().strip()
-        if not save_dir or not os.path.isdir(save_dir): return None
-        return os.path.join(save_dir, "phic_history.json")
+    def _load_previous_month_identities_from_history(self, period_label):
+        for record in reversed(self.history_records):
+            if record.get("month_year") != period_label:
+                continue
+
+            identities = set()
+            for row in record.get("data_total", []):
+                if len(row) < 4:
+                    continue
+                client, phealth, name, birthdate = row[:4]
+                identities.add((str(phealth or "").strip(), str(birthdate or "").strip(), str(name or "").strip(), str(client or "").strip()))
+            return identities
+
+        return set()
+
+    def _emit_progress(self, progress_callback, percent, filename="", message=""):
+        if progress_callback:
+            progress_callback(int(max(0, min(100, percent))), filename, message)
 
     def load_history(self):
         self.history_records = []
-        filepath = self.get_history_file_path()
-        if filepath and os.path.exists(filepath):
-            try:
-                with open(filepath, 'r', encoding='utf-8') as f:
-                    self.history_records = json.load(f)
-            except Exception as e: print("Error loading history:", e)
+        active_account = get_active_account() or {}
+        username = active_account.get("username") or "default"
+        try:
+            records = self.history_repository.list_by_account(username)
+            loaded_records = [
+                record.extra.get("payload", {})
+                for record in records
+                if isinstance(record.extra.get("payload", {}), dict)
+            ]
+            self.history_records = list(reversed(loaded_records))
+        except Exception as e:
+            print("Error loading history:", e)
         self.render_history_grid()
 
     def save_history_record(self, record_data):
         self.history_records.append(record_data)
-        filepath = self.get_history_file_path()
-        if filepath:
-            try:
-                with open(filepath, 'w', encoding='utf-8') as f:
-                    json.dump(self.history_records, f, indent=4)
-                self.render_history_grid()
-            except Exception as e:
-                QMessageBox.warning(self, "Save Error", f"Could not save history log.\n{str(e)}")
+        active_account = get_active_account() or {}
+        username = active_account.get("username") or "default"
+        try:
+            self.history_repository.save(
+                HistoryRecord(
+                    id=str(record_data.get("id", "")),
+                    account_username=username,
+                    module="philhealth",
+                    period_label=str(record_data.get("month_year", "")),
+                    payload_json=json.dumps(record_data),
+                    created_at=record_data.get("created_at"),
+                    extra={"payload": dict(record_data)},
+                )
+            )
+            self.render_history_grid()
+        except Exception as e:
+            QMessageBox.warning(self, "Save Error", f"Could not save history log.\n{str(e)}")
 
     def delete_history_record(self, record_id, month_year_label):
         confirm = QMessageBox.question(self, "Delete History", f"Are you sure you want to delete the history log for {month_year_label}?", QMessageBox.Yes | QMessageBox.No)
         if confirm == QMessageBox.Yes:
             self.history_records = [r for r in self.history_records if r["id"] != record_id]
-            filepath = self.get_history_file_path()
-            if filepath:
-                try:
-                    with open(filepath, 'w', encoding='utf-8') as f:
-                        json.dump(self.history_records, f, indent=4)
-                    self.render_history_grid()
-                except Exception as e: print("Error saving after delete:", e)
+            try:
+                self.history_repository.delete_by_id(record_id)
+                self.render_history_grid()
+            except Exception as e:
+                print("Error saving after delete:", e)
 
     def render_history_grid(self):
         while self.history_grid_layout.count():
@@ -740,7 +771,7 @@ class PhicExtractorApp(QWidget):
 
         ws.column_dimensions["B"].width = 45; ws.column_dimensions["C"].width = 20
 
-    def process_files(self):
+    def process_files(self, progress_callback=None):
         source_dir = self.src_input.text().strip()
         save_dir = self.save_input.text().strip()
         base_filename = self.fn_input.text().strip()
@@ -754,20 +785,43 @@ class PhicExtractorApp(QWidget):
         if not os.path.exists(save_dir): os.makedirs(save_dir)
         self.set_ui_enabled(False)
         QApplication.processEvents()
+        self._emit_progress(progress_callback, 0, "", "Preparing PhilHealth reconciliation...")
 
         prev_month, prev_year = self.get_previous_month_info(selected_month, selected_year)
-        prev_filename = f"{base_filename} {prev_month} {prev_year}.xlsx"
-        prev_filepath = os.path.join(save_dir, prev_filename)
-        previous_month_set = self.read_existing_master_identities(prev_filepath) if os.path.exists(prev_filepath) else set()
+        prev_period_label = f"{prev_month} {prev_year}" if prev_month and prev_year else ""
+        previous_month_set = self._load_previous_month_identities_from_history(prev_period_label) if prev_period_label else set()
+
+        if not previous_month_set and prev_month and prev_year:
+            prev_filename = f"{base_filename} {prev_month} {prev_year}.xlsx"
+            prev_filepath = os.path.join(save_dir, prev_filename)
+            previous_month_set = self.read_existing_master_identities(prev_filepath) if os.path.exists(prev_filepath) else set()
 
         excel_files = [f for f in os.listdir(source_dir) if f.endswith((".xlsx", ".xls", ".xlsm"))]
         if not excel_files:
             self.set_ui_enabled(True)
+            self._emit_progress(progress_callback, 100, "", "No source files found.")
             return
+
+        file_plan = []
+        total_work_units = 0
+        for file in excel_files:
+            file_path = os.path.join(source_dir, file)
+            row_estimate = 1
+            try:
+                probe_wb = openpyxl.load_workbook(file_path, data_only=True, read_only=True)
+                if "PHIC" in probe_wb.sheetnames:
+                    probe_ws = probe_wb["PHIC"]
+                    row_estimate = max(1, probe_ws.max_row - 1)
+                probe_wb.close()
+            except Exception:
+                row_estimate = 1
+            file_plan.append((file, file_path, row_estimate))
+            total_work_units += row_estimate
+        total_work_units = max(total_work_units, 1)
 
         out_wb = openpyxl.Workbook()
         out_ws = out_wb.active
-        out_ws.title = "PHIC Master"
+        out_ws.title = "PHIC All CLient"
         out_ws.append(self.MASTER_HEADERS)
         
         green_fill = PatternFill(start_color="2E7D32", end_color="2E7D32", fill_type="solid")
@@ -783,20 +837,35 @@ class PhicExtractorApp(QWidget):
 
         output_current_row = 2
         current_month_set = set()
+        completed_work_units = 0
 
         try:
-            for file in excel_files:
+            for file_index, (file, file_path, row_estimate) in enumerate(file_plan, start=1):
+                self._emit_progress(
+                    progress_callback,
+                    int((completed_work_units / total_work_units) * 100),
+                    file,
+                    f"Scanning file {file_index} of {len(file_plan)}",
+                )
                 QApplication.processEvents()
-                file_path = os.path.join(source_dir, file)
                 try:
                     in_wb = openpyxl.load_workbook(file_path, data_only=True)
                     if "PHIC" in in_wb.sheetnames:
                         in_ws = in_wb["PHIC"]
                         client_name = self.clean_filename(file)
+                        file_rows_done = 0
 
                         for row_idx in range(2, in_ws.max_row + 1):
                             if row_idx % 50 == 0:
                                 QApplication.processEvents()
+                            file_rows_done = min(row_idx - 1, row_estimate)
+                            current_units = completed_work_units + file_rows_done
+                            self._emit_progress(
+                                progress_callback,
+                                int((current_units / total_work_units) * 100),
+                                file,
+                                f"Reading row {row_idx - 1} in {file}",
+                            )
                             raw_phealth = in_ws.cell(row=row_idx, column=2).value
                             phealth_val = self.clean_phealth_no(raw_phealth)
                             if not phealth_val: break
@@ -854,6 +923,13 @@ class PhicExtractorApp(QWidget):
                             output_current_row += 1
                     in_wb.close()
                 except Exception as e: print(f"Error parsing file {file}: {str(e)}")
+                completed_work_units += row_estimate
+                self._emit_progress(
+                    progress_callback,
+                    int((completed_work_units / total_work_units) * 100),
+                    file,
+                    f"Finished file {file_index} of {len(file_plan)}",
+                )
 
             if output_current_row > 2:
                 # Use robust lookup keys immune to birthdate formatting
@@ -897,6 +973,7 @@ class PhicExtractorApp(QWidget):
                     "id": str(uuid.uuid4()),
                     "month_year": f"{selected_month} {selected_year}",
                     "total_count": len(current_month_list),
+                    "previous_count": len(previous_month_set),
                     "missing_count": len(missing_raw),
                     "new_count": len(added_raw),
                     "data_total": self.cache_total_active,
@@ -908,6 +985,7 @@ class PhicExtractorApp(QWidget):
                 QMessageBox.information(self, "Success", f"Workbook Compiled Successfully!\n\nReview UI dashboard metrics.")
             else:
                 QMessageBox.information(self, "Finished", "No compiled records structured.")
+            self._emit_progress(progress_callback, 100, "", "PhilHealth reconciliation finished.")
         finally:
             out_wb.close()
             self.set_ui_enabled(True)

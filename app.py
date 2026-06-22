@@ -2,12 +2,30 @@ import os
 import sys
 import traceback
 
-from PySide6.QtCore import Qt, QRect
-from PySide6.QtGui import QImage, QPainter, QPixmap, QFont
+from PySide6.QtCore import QRect, Qt, QLockFile
+from PySide6.QtGui import QFont, QIcon, QImage, QPainter, QPixmap
 from PySide6.QtSvg import QSvgRenderer
-from PySide6.QtWidgets import QApplication, QMessageBox, QSplashScreen, QLabel
+from PySide6.QtWidgets import QApplication, QLabel, QMessageBox, QSplashScreen
 
+from config import DATA_DIR
+from core.application import GovSyncApplication
 from utils.resources import asset_path
+
+
+_single_instance_lock = None
+
+
+def acquire_single_instance_lock():
+    global _single_instance_lock
+
+    DATA_DIR.mkdir(parents=True, exist_ok=True)
+    lock = QLockFile(str(DATA_DIR / "govsync.lock"))
+    lock.setStaleLockTime(0)
+    if not lock.tryLock(100):
+        return False
+
+    _single_instance_lock = lock
+    return True
 
 
 def create_splash():
@@ -15,73 +33,64 @@ def create_splash():
     if not os.path.exists(logo_path):
         return None
 
-    # 1. Define the logo's intended base size
     logo_size = 250
-    # Define how much empty vertical space to add BELOW the logo
     text_buffer_height = 40
-    
     total_canvas_width = logo_size
-    # Calculate the new total height: 250 logo + 40 text = 290px
     total_canvas_height = logo_size + text_buffer_height
 
-    # 2. Create the expanded, taller canvas image
     renderer = QSvgRenderer(logo_path)
-    # image size is now 250x290
     image = QImage(total_canvas_width, total_canvas_height, QImage.Format_ARGB32)
     image.fill(Qt.transparent)
-    
-    # 3. Create painter and render the SVG asset, but constraint its size!
+
     painter = QPainter(image)
-    # Explicitly render the SVG artwork into ONLY the top 250x250 square.
-    # This leaves the bottom 40px completely empty and ensures no stretching.
     renderer.render(painter, QRect(0, 0, logo_size, logo_size))
     painter.end()
 
-    # 4. Use the new, taller pixmap for the splash screen
     splash = QSplashScreen(QPixmap.fromImage(image))
-    
-    # 5. Attach the text QLabel to the splash screen
+
     label = QLabel("Loading GovSync...", splash)
     label.setAlignment(Qt.AlignCenter)
     label.setStyleSheet("color: white; font-weight: bold;")
-    
+
     font = QFont()
-    # Increase slightly if desired, as you have more space now
     font.setPointSize(20)
     label.setFont(font)
-    
-    # Size the text box to fill the buffer zone
-    label.setFixedWidth(total_canvas_width) # 250
-    label.setFixedHeight(text_buffer_height) # 40
-    
-    # 6. Push the text box completely past the 250px logo asset.
-    # Text now starts at pixel 250, directly in the empty 40px buffer zone.
-    # No physical overlap is possible anymore.
-    label.move(0, logo_size) 
+    label.setFixedWidth(total_canvas_width)
+    label.setFixedHeight(text_buffer_height)
+    label.move(0, logo_size)
 
     return splash
 
 
-if __name__ == "__main__":
-    app = QApplication(sys.argv)
+def main():
     splash = None
 
     try:
+        qt_app = QApplication.instance() or QApplication(sys.argv)
+        qt_app.setWindowIcon(QIcon(asset_path("icon.ico")))
+
+        if not acquire_single_instance_lock():
+            QMessageBox.information(
+                None,
+                "GovSync",
+                "GovSync is already running.",
+            )
+            return 0
+
         splash = create_splash()
         if splash:
             splash.show()
-            app.processEvents()
+            qt_app.processEvents()
 
-        from main_window import MainWindow
-
-        window = MainWindow()
+        app = GovSyncApplication()
+        window = app.create_main_window()
+        window.setWindowIcon(QIcon(asset_path("icon.ico")))
 
         if splash:
             splash.close()
 
         window.show()
-        sys.exit(app.exec())
-
+        return qt_app.exec()
     except Exception:
         if splash:
             splash.close()
@@ -100,7 +109,9 @@ if __name__ == "__main__":
         error_dialog.setInformativeText("Review the technical trace details below:")
         error_dialog.setDetailedText(error_message)
         error_dialog.setStandardButtons(QMessageBox.Ok)
-        error_dialog.setStyleSheet(
-            "QLabel { color: #1e293b; font-family: 'Segoe UI'; font-size: 12px; }"
-        )
         error_dialog.exec()
+        return 1
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

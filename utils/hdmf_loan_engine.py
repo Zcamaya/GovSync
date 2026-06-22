@@ -1,3 +1,4 @@
+import os
 import re
 
 import pandas as pd
@@ -6,10 +7,12 @@ from openpyxl import load_workbook
 from utils.payroll_engine import safe_save_workbook
 
 
-def separate_hdmf_loans(earnings_file, monitoring_file):
+def separate_hdmf_loans(earnings_file, monitoring_file, progress_callback=None):
     if not earnings_file or not monitoring_file:
         raise ValueError("Please select both earnings and monitoring files.")
 
+    if progress_callback:
+        progress_callback(5, os.path.basename(earnings_file), "Loading HDMF earnings workbook...")
     monitoring_df = pd.read_excel(monitoring_file, header=6, engine="openpyxl")
     required_columns = {"HDMF", "LOAN TYPE"}
     missing_columns = required_columns.difference(monitoring_df.columns)
@@ -29,6 +32,8 @@ def separate_hdmf_loans(earnings_file, monitoring_file):
         workbook.close()
         raise ValueError("HDMF_LOANS sheet not found in the earnings file.")
 
+    if progress_callback:
+        progress_callback(35, os.path.basename(monitoring_file), "Preparing HDMF loan matches...")
     worksheet = workbook["HDMF_LOANS"]
     headers = {str(cell.value).strip(): cell.column for cell in worksheet[1] if cell.value}
     pbig_col = headers.get("pagibigno")
@@ -48,6 +53,7 @@ def separate_hdmf_loans(earnings_file, monitoring_file):
         "MPL",
         sl_col,
         pbig_col,
+        progress_callback=progress_callback,
     )
     updates_cl = apply_loan_type(
         worksheet,
@@ -55,14 +61,27 @@ def separate_hdmf_loans(earnings_file, monitoring_file):
         "CAL",
         cl_col,
         pbig_col,
+        progress_callback=progress_callback,
     )
 
+    if progress_callback:
+        progress_callback(85, os.path.basename(earnings_file), "Saving HDMF loan workbook...")
     safe_save_workbook(workbook, earnings_file)
+    if progress_callback:
+        progress_callback(100, os.path.basename(earnings_file), "HDMF loan separation finished.")
     return updates_sl, updates_cl
 
 
-def apply_loan_type(worksheet, monitoring_df, target_loan_type, target_col_idx, pbig_col_idx):
+def apply_loan_type(
+    worksheet,
+    monitoring_df,
+    target_loan_type,
+    target_col_idx,
+    pbig_col_idx,
+    progress_callback=None,
+):
     updates_count = 0
+    total_rows = max(worksheet.max_row - 1, 1)
 
     for row in range(2, worksheet.max_row + 1):
         first_value = str(worksheet.cell(row=row, column=1).value).strip()
@@ -97,5 +116,12 @@ def apply_loan_type(worksheet, monitoring_df, target_loan_type, target_col_idx, 
         if pd.notna(value) and str(value).strip() != "":
             worksheet.cell(row=row, column=target_col_idx).value = value
             updates_count += 1
+
+        if progress_callback and row % 10 == 0:
+            progress_callback(
+                35 + int((row / max(total_rows, 1)) * 40),
+                "",
+                f"Matching {target_loan_type} row {row - 1}",
+            )
 
     return updates_count

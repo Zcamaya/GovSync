@@ -1,3 +1,4 @@
+import json
 import os
 
 from PySide6.QtCore import QThread, Signal, Qt
@@ -6,6 +7,7 @@ from PySide6.QtWidgets import (
     QAbstractItemView,
     QFileDialog,
     QHBoxLayout,
+    QGridLayout,
     QLabel,
     QListWidget,
     QProgressBar,
@@ -15,9 +17,10 @@ from PySide6.QtWidgets import (
 )
 
 from constants.styles import AppStyles
-from utils.payroll_engine import run_payroll_task
+from utils.account_store import account_json_path, get_active_account
 from utils.sss_engine import get_default_month_and_year
 from utils.dashboard_stats import record_upload
+from controllers.payroll_controller import PayrollController
 from widgets.glass_dialog import GlassDialog
 
 
@@ -25,9 +28,10 @@ class PayrollWorker(QThread):
     progress = Signal(int, str)
     finished = Signal(bool, str, int)
 
-    def __init__(self, files):
+    def __init__(self, files, controller=None):
         super().__init__()
         self.files = files
+        self.controller = controller
 
     def run(self):
         total = len(self.files)
@@ -39,7 +43,12 @@ class PayrollWorker(QThread):
             self.progress.emit(int((index / total) * 100), filename)
 
             try:
-                success, message, hdmf_count = run_payroll_task(path)
+                if self.controller:
+                    success, message, hdmf_count = self.controller.process_file(path)
+                else:
+                    from utils.payroll_engine import run_payroll_task
+
+                    success, message, hdmf_count = run_payroll_task(path)
                 total_hdmf += hdmf_count
                 if not success:
                     errors.append(f"{filename}: {message}")
@@ -53,11 +62,22 @@ class PayrollWorker(QThread):
 
 
 class EarningsPanel(QWidget):
-    def __init__(self, parent=None):
+    def __init__(self, parent=None, controller=None):
         super().__init__(parent)
         self.selected_files = []
+        self.controller = controller or PayrollController()
+        self.current_username = (get_active_account() or {}).get("username") or "default"
         self.worker = None
         self._setup_ui()
+        self._load_state()
+
+    def set_account(self, account):
+        if isinstance(account, dict):
+            username = account.get("username", "")
+        else:
+            username = str(account or "")
+        self.current_username = username or "default"
+        self._load_state()
 
     def _setup_ui(self):
         self.setStyleSheet("background: transparent;")
@@ -97,12 +117,6 @@ class EarningsPanel(QWidget):
         """)
         main_layout.addWidget(self.list_widget, stretch=1)
 
-        self.status_label = QLabel("Ready")
-        self.status_label.setStyleSheet(
-            "color: #94a3b8; font-size: 11px; border: none; background: transparent;"
-        )
-        main_layout.addWidget(self.status_label)
-
         self.progress_bar = QProgressBar()
         self.progress_bar.setTextVisible(False)
         self.progress_bar.setFixedHeight(24)
@@ -121,7 +135,23 @@ class EarningsPanel(QWidget):
                 border-radius: 8px;
             }
         """)
-        main_layout.addWidget(self.progress_bar)
+        progress_stack = QGridLayout()
+        progress_stack.setContentsMargins(0, 0, 0, 0)
+        progress_stack.addWidget(self.progress_bar, 0, 0)
+        self.progress_percent_label = QLabel("0%")
+        self.progress_percent_label.setAlignment(Qt.AlignCenter)
+        self.progress_percent_label.setAttribute(Qt.WA_TransparentForMouseEvents, True)
+        self.progress_percent_label.setStyleSheet(
+            "color: #f8fafc; font-size: 12px; font-weight: 700; background: transparent;"
+        )
+        progress_stack.addWidget(self.progress_percent_label, 0, 0)
+        main_layout.addLayout(progress_stack)
+
+        self.status_label = QLabel("Ready")
+        self.status_label.setStyleSheet(
+            "color: #94a3b8; font-size: 11px; border: none; background: transparent;"
+        )
+        main_layout.addWidget(self.status_label)
 
         button_layout = QHBoxLayout()
         button_layout.setSpacing(14)
@@ -179,6 +209,7 @@ class EarningsPanel(QWidget):
                 self.list_widget.addItem(os.path.basename(file_path))
 
         self.status_label.setText(f"{len(self.selected_files)} file(s) ready")
+        self._save_state()
 
     def remove_selected(self):
         for item in reversed(self.list_widget.selectedItems()):
@@ -187,6 +218,7 @@ class EarningsPanel(QWidget):
             self.selected_files.pop(index)
 
         self.status_label.setText(f"{len(self.selected_files)} file(s) ready")
+        self._save_state()
 
     def start_processing(self):
         if not self.selected_files:
@@ -195,24 +227,60 @@ class EarningsPanel(QWidget):
 
         self._set_processing_enabled(False)
         self.progress_bar.setValue(0)
+        self.progress_percent_label.setText("0%")
         self.status_label.setText("Starting...")
 
-        self.worker = PayrollWorker(self.selected_files)
+        self.worker = PayrollWorker(self.selected_files, controller=self.controller)
         self.worker.progress.connect(self.update_progress)
         self.worker.finished.connect(self.on_finished)
         self.worker.start()
 
     def update_progress(self, percent, filename):
         self.progress_bar.setValue(percent)
+        self.progress_percent_label.setText(f"{max(0, min(100, int(percent)))}%")
         self.status_label.setText(f"Processing: {filename}")
 
     def on_finished(self, success, message, total_hdmf=0):
         self._set_processing_enabled(True)
         self.status_label.setText("Finished." if success else "Finished with errors.")
+        self.progress_percent_label.setText("100%" if success else self.progress_percent_label.text())
         if success and total_hdmf > 0:
             month, year = get_default_month_and_year()
             record_upload("hdmf", total_hdmf, month, year)
+        self._save_state()
         GlassDialog(self, "Processing Summary", message).exec()
+
+    def _state_path(self):
+        return account_json_path(self.current_username, "earnings_panel_state.json")
+
+    def _load_state(self):
+        path = self._state_path()
+        if not os.path.exists(path):
+            return
+        try:
+            with open(path, "r", encoding="utf-8") as input_file:
+                data = json.load(input_file)
+        except (OSError, json.JSONDecodeError):
+            return
+        if not isinstance(data, dict):
+            return
+        files = data.get("selected_files", [])
+        if isinstance(files, list):
+            self.selected_files = [str(item) for item in files if str(item).strip()]
+            self.list_widget.clear()
+            for file_path in self.selected_files:
+                self.list_widget.addItem(os.path.basename(file_path))
+        self.status_label.setText(data.get("status", f"{len(self.selected_files)} file(s) ready"))
+
+    def _save_state(self):
+        path = self._state_path()
+        data = {
+            "selected_files": self.selected_files,
+            "status": self.status_label.text(),
+        }
+        os.makedirs(os.path.dirname(path), exist_ok=True)
+        with open(path, "w", encoding="utf-8") as output_file:
+            json.dump(data, output_file, indent=2)
 
     def _set_processing_enabled(self, enabled):
         self.btn_add_file.setEnabled(enabled)
