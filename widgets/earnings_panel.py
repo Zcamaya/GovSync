@@ -17,9 +17,8 @@ from PySide6.QtWidgets import (
 )
 
 from constants.styles import AppStyles
-from utils.account_store import account_json_path, get_active_account
-from utils.sss_engine import get_default_month_and_year
-from utils.dashboard_stats import record_upload
+from services.auth_manager import account_json_path, get_active_account
+from services.dashboard_service import record_upload
 from controllers.payroll_controller import PayrollController
 from widgets.glass_dialog import GlassDialog
 
@@ -43,12 +42,10 @@ class PayrollWorker(QThread):
             self.progress.emit(int((index / total) * 100), filename)
 
             try:
-                if self.controller:
-                    success, message, hdmf_count = self.controller.process_file(path)
-                else:
-                    from utils.payroll_engine import run_payroll_task
-
-                    success, message, hdmf_count = run_payroll_task(path)
+                success, message, hdmf_count = self.controller.process_file(
+                    path,
+                    progress_callback=self.progress.emit,
+                )
                 total_hdmf += hdmf_count
                 if not success:
                     errors.append(f"{filename}: {message}")

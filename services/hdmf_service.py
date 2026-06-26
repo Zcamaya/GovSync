@@ -1,4 +1,4 @@
-from utils.hdmf_loan_engine import separate_hdmf_loans
+from services.hdmf_engine import separate_hdmf_loans
 
 
 class HDMFService:

@@ -4,7 +4,7 @@ import re
 import pandas as pd
 from openpyxl import load_workbook
 
-from utils.payroll_engine import safe_save_workbook
+from services.payroll_engine import safe_save_workbook
 
 
 def separate_hdmf_loans(earnings_file, monitoring_file, progress_callback=None):

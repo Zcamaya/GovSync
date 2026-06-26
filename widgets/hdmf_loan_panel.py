@@ -17,7 +17,7 @@ from PySide6.QtWidgets import (
 )
 
 from constants.styles import AppStyles
-from utils.account_store import account_json_path, get_active_account
+from services.auth_manager import account_json_path, get_active_account
 from controllers.hdmf_controller import HDMFController
 from widgets.glass_dialog import GlassDialog
 
@@ -34,20 +34,11 @@ class HDMFLoanWorker(QThread):
 
     def run(self):
         try:
-            if self.controller:
-                updates_sl, updates_cl = self.controller.separate_loans(
-                    self.earnings_file,
-                    self.monitoring_file,
-                    progress_callback=self.progress.emit,
-                )
-            else:
-                from utils.hdmf_loan_engine import separate_hdmf_loans
-
-                updates_sl, updates_cl = separate_hdmf_loans(
-                    self.earnings_file,
-                    self.monitoring_file,
-                    progress_callback=self.progress.emit,
-                )
+            updates_sl, updates_cl = self.controller.separate_loans(
+                self.earnings_file,
+                self.monitoring_file,
+                progress_callback=self.progress.emit,
+            )
             self.finished.emit(
                 True,
                 "File updated successfully.\n\n"

@@ -26,12 +26,11 @@ from PySide6.QtWidgets import (
 from constants.styles import AppStyles
 from controllers.philhealth_controller import PhilHealthController
 from widgets.glass_dialog import GlassDialog
-from utils import philhealth_engine
 from repositories.history_repository import HistoryRepository
 from repositories.statistics_repository import StatisticsRepository
 from services.philhealth_service import PhilHealthService
-from utils.account_store import database_path, get_account, get_active_account, set_active_account
-from utils.ui_icons import set_exit_icon
+from services.auth_manager import database_path, get_account, get_active_account, set_active_account
+from shared.ui import set_exit_icon
 
 
 class SingleTablePopup(QDialog):
@@ -368,11 +367,11 @@ class PhilHealthPanel(QWidget):
         self.is_processing = False
         self.detail_popups = []
         self.selected_history_record_id = None
-        philhealth_engine.QMessageBox = GovSyncMessageBox
         self.controller = controller or PhilHealthController(
             PhilHealthService(
                 HistoryRepository(database_path()),
                 StatisticsRepository(database_path()),
+                message_box_class=GovSyncMessageBox,
             )
         )
         self.engine = self.controller.get_engine()

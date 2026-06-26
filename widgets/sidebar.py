@@ -5,7 +5,7 @@ from PySide6.QtGui import QImage, QPainter, QPixmap
 from PySide6.QtSvg import QSvgRenderer
 from PySide6.QtWidgets import QHBoxLayout, QLabel, QListWidget, QPushButton, QVBoxLayout, QWidget
 
-from utils.resources import asset_path
+from shared.resources import asset_path
 
 
 class SidebarWidget(QWidget):

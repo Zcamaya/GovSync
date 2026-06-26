@@ -16,8 +16,8 @@ import openpyxl
 from openpyxl.styles import Font as XlFont, PatternFill, Alignment as XlAlignment, Border as XlBorder, Side as XlSide
 from models.history import HistoryRecord
 from repositories.history_repository import HistoryRepository
-from utils.account_store import database_path, get_active_account
-from utils.ui_icons import set_exit_icon
+from services.auth_manager import database_path, get_active_account
+from shared.ui import set_exit_icon
 
 
 # ---------------------------------------------------------

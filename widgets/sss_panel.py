@@ -25,16 +25,17 @@ from PySide6.QtWidgets import (
 )
 
 from constants.styles import AppStyles
-from utils.account_store import account_json_path, get_active_account
+from services.auth_manager import account_json_path, get_active_account
 from controllers.sss_controller import SSSController
-from utils.sss_engine import (
+from services.dashboard_service import record_upload
+from services.sss_service import (
+    SSSService,
     TXT_COLUMNS,
     format_employer_id,
     get_default_month_and_year,
     get_months_list,
     get_years_list,
 )
-from utils.dashboard_stats import record_upload
 from widgets.glass_dialog import GlassDialog
 
 
@@ -58,12 +59,7 @@ class SSSBulkWorker(QThread):
             filename = os.path.basename(source_path)
             self.progress.emit(int((index / total) * 100), filename)
             try:
-                if self.controller:
-                    output_path, written_rows = self.controller.generate_txt(**payload)
-                else:
-                    from utils.sss_engine import generate_sss_txt
-
-                    output_path, written_rows = generate_sss_txt(**payload)
+                output_path, written_rows = self.controller.generate_txt(**payload)
                 total_written += written_rows
                 results.append(f"{filename}: {written_rows} row(s) -> {output_path}")
             except Exception as exc:
@@ -86,18 +82,10 @@ class SSSWorker(QThread):
 
     def run(self):
         try:
-            if self.controller:
-                output_path, written_rows = self.controller.generate_txt(
-                    progress_callback=self.progress.emit,
-                    **self.payload,
-                )
-            else:
-                from utils.sss_engine import generate_sss_txt
-
-                output_path, written_rows = generate_sss_txt(
-                    progress_callback=self.progress.emit,
-                    **self.payload,
-                )
+            output_path, written_rows = self.controller.generate_txt(
+                progress_callback=self.progress.emit,
+                **self.payload,
+            )
             self.finished.emit(
                 True,
                 f"Generated {written_rows} row(s).\n\nSaved to:\n{output_path}",
@@ -648,12 +636,7 @@ class SSSPanel(QWidget):
             return
 
         try:
-            if self.controller:
-                rows = self.controller.load_txt(path)
-            else:
-                from utils.sss_engine import load_sss_txt
-
-                rows = load_sss_txt(path)
+            rows = self.controller.load_txt(path)
         except Exception as exc:
             GlassDialog(self, "TXT Import Error", str(exc)).exec()
             return
@@ -681,12 +664,7 @@ class SSSPanel(QWidget):
 
         rows = self._table_rows()
         try:
-            if self.controller:
-                output_path, written_rows = self.controller.save_txt(rows, path)
-            else:
-                from utils.sss_engine import save_sss_txt
-
-                output_path, written_rows = save_sss_txt(path, rows)
+            output_path, written_rows = self.controller.save_txt(rows, path)
         except Exception as exc:
             GlassDialog(self, "TXT Save Error", str(exc)).exec()
             return
@@ -787,12 +765,7 @@ class SSSPanel(QWidget):
 
         if success and output_path:
             try:
-                if self.controller:
-                    rows = self.controller.load_txt(output_path)
-                else:
-                    from utils.sss_engine import load_sss_txt
-
-                    rows = load_sss_txt(output_path)
+                rows = self.controller.load_txt(output_path)
                 self.txt_file_path = output_path
                 self._populate_txt_table(rows)
                 self.tabs.setCurrentIndex(1)

@@ -1,3 +1,4 @@
 dist/
 build/
 *.spec
+RESTRUCTURE_PLAN.md

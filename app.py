@@ -9,7 +9,7 @@ from PySide6.QtWidgets import QApplication, QLabel, QMessageBox, QSplashScreen
 
 from config import DATA_DIR
 from core.application import GovSyncApplication
-from utils.resources import asset_path
+from shared.resources import asset_path
 
 
 _single_instance_lock = None

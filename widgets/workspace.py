@@ -1,6 +1,6 @@
 from PySide6.QtWidgets import QHBoxLayout, QLabel, QVBoxLayout, QWidget
 
-from utils.dashboard_stats import get_all_past_month_totals
+from services.dashboard_service import get_all_past_month_totals
 from widgets.glass_panel import TrueGlassPanel
 
 

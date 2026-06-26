@@ -1,4 +1,4 @@
-from utils.payroll_engine import run_payroll_task
+from services.payroll_engine import run_payroll_task
 
 
 class PayrollService:

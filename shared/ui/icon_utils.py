@@ -4,7 +4,7 @@ from PySide6.QtCore import QByteArray, QSize, Qt
 from PySide6.QtGui import QIcon, QPainter, QPixmap
 from PySide6.QtSvg import QSvgRenderer
 
-from utils.resources import asset_path
+from shared.helpers.resource_helpers import asset_path
 
 
 def svg_icon(filename, color="#f8fafc", size=18):

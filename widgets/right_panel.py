@@ -5,7 +5,7 @@ import re
 import uuid
 from datetime import datetime
 
-from PySide6.QtCore import QPoint, QTimer, Qt, Signal
+from PySide6.QtCore import QPoint, QTimer, Qt, Signal, QSize
 from PySide6.QtGui import QFont, QTextCursor, QTextListFormat
 from PySide6.QtWidgets import (
     QDialog,
@@ -27,8 +27,8 @@ from PySide6.QtWidgets import (
 
 from constants.styles import AppStyles
 from widgets.glass_panel import TrueGlassPanel
-from utils.account_store import account_json_path
-from utils.ui_icons import set_exit_icon
+from services.auth_manager import account_json_path
+from shared.ui import set_exit_icon
 
 
 class RichNotesEditor(QTextEdit):
@@ -219,19 +219,13 @@ class NoteRowWidget(QFrame):
 
     def _setup_ui(self):
         self.setStyleSheet(AppStyles.NOTE_ROW)
-        layout = QVBoxLayout(self)
-        layout.setContentsMargins(0, 0, 0, 4)
-        layout.setSpacing(0)
-        self.setFixedHeight(44)
+        layout = QHBoxLayout(self)
+        layout.setContentsMargins(10, 0, 0, 0)
+        layout.setSpacing(4)
+        layout.setAlignment(Qt.AlignVCenter)
+        self.setFixedHeight(38)
         self.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed)
         self.setAttribute(Qt.WA_StyledBackground, True)
-
-        title_bar = QFrame()
-        title_bar.setObjectName("NoteTitleBar")
-        title_bar.setFixedHeight(38)
-        title_layout = QHBoxLayout(title_bar)
-        title_layout.setContentsMargins(12, 0, 0, 0)
-        title_layout.setSpacing(0)
 
         self.title_label = QLabel(self.note.get("title", "Untitled"))
         self.title_label.setStyleSheet("color: #f8fafc; font: 800 12px 'Segoe UI';")
@@ -239,27 +233,29 @@ class NoteRowWidget(QFrame):
         self.title_label.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed)
 
         delete_btn = QToolButton()
-        delete_btn.setFixedSize(42, 38)
+        delete_btn.setFixedSize(36, 36)
         delete_btn.setCursor(Qt.PointingHandCursor)
-        set_exit_icon(delete_btn, "#ffffff", 14)
         delete_btn.setStyleSheet("""
             QToolButton {
                 background: rgba(244, 63, 94, 0.96);
                 border: none;
-                border-top-right-radius: 8px;
-                border-bottom-right-radius: 8px;
+                border-top-right-radius: 10px;
+                border-bottom-right-radius: 10px;
                 color: #ffffff;
-                font: 900 18px 'Segoe UI';
+                padding: 0;
+                margin: 0;
             }
             QToolButton:hover {
                 background: rgba(251, 113, 133, 0.98);
             }
         """)
+        set_exit_icon(delete_btn, "#ffffff", 14)
+        delete_btn.setIconSize(QSize(14, 14))
+        delete_btn.setToolButtonStyle(Qt.ToolButtonIconOnly)
         delete_btn.clicked.connect(lambda: self.delete_requested.emit(self.note["id"]))
 
-        title_layout.addWidget(self.title_label, stretch=1)
-        title_layout.addWidget(delete_btn, alignment=Qt.AlignRight | Qt.AlignVCenter)
-        layout.addWidget(title_bar)
+        layout.addWidget(self.title_label)
+        layout.addWidget(delete_btn, alignment=Qt.AlignCenter)
 
     def _preview_text(self):
         content = self.note.get("content", "")
@@ -392,7 +388,7 @@ class CustomReferenceCalendar(QFrame):
 class RightPanelWidget(QWidget):
     MAX_NOTES = 30
     UNDO_SECONDS = 3
-    NOTE_ROW_HEIGHT = 46
+    NOTE_ROW_HEIGHT = 44
     NOTE_ROW_GAP = 3
     NOTES_VIEWPORT_HEIGHT = 150
 
@@ -745,6 +741,7 @@ class RightPanelWidget(QWidget):
             "id": str(note.get("id") or uuid.uuid4()),
             "title": str(note.get("title", "")).strip() or "Untitled",
             "content": str(note.get("content", "")),
+            "created_at": str(note.get("created_at") or datetime.now().strftime("%b %d, %Y")),
         }
 
     def _add_note(self):

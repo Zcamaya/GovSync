@@ -1,11 +1,10 @@
 from services.philhealth_service import PhilHealthService
-from utils import philhealth_engine
 
 
 class PhilHealthController:
-    def __init__(self, service: PhilHealthService):
+    def __init__(self, service: PhilHealthService, engine=None):
         self.service = service
-        self.engine = philhealth_engine.PhicExtractorApp()
+        self.engine = engine or self.service.create_engine()
 
     def list_history(self, account_username: str) -> list[dict]:
         return self.service.list_history(account_username)
@@ -17,7 +16,7 @@ class PhilHealthController:
         self.service.delete_history(record_id)
 
     def process(self, progress_callback=None):
-        return self.engine.process_files(progress_callback=progress_callback)
+        return self.service.process(self.engine, progress_callback=progress_callback)
 
     def get_engine(self):
         return self.engine

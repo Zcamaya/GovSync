@@ -5,8 +5,7 @@ import re
 from repositories.history_repository import HistoryRepository
 from repositories.statistics_repository import StatisticsRepository
 from storage.sqlite import initialize_database
-from utils.account_store import database_path, get_active_account
-
+from services.auth_manager import database_path, get_active_account
 
 MODULES = ("philhealth", "sss", "hdmf")
 MONTH_NAMES = {name.lower(): index for index, name in enumerate(calendar.month_name) if name}
@@ -38,14 +37,14 @@ def _history_repository():
     return HistoryRepository(database_path())
 
 
-def load_stats():
+def load_stats() -> dict[str, dict[str, int]]:
     repository = _stats_repository()
     username = _account_username()
     data = repository.list_by_account(username)
     return {module: data.get(module, {}) for module in MODULES}
 
 
-def save_stats(data):
+def save_stats(data: dict[str, dict[str, int]]) -> None:
     repository = _stats_repository()
     username = _account_username()
     normalized = {module: {} for module in MODULES}
@@ -62,14 +61,14 @@ def save_stats(data):
     _notify()
 
 
-def past_month_key(reference_date=None):
+def past_month_key(reference_date=None) -> str:
     reference = reference_date or datetime.date.today()
     first_of_month = reference.replace(day=1)
     previous_month = first_of_month - datetime.timedelta(days=1)
     return f"{previous_month.year}-{previous_month.month:02d}"
 
 
-def period_key(month, year):
+def period_key(month, year) -> str:
     month_index = _month_to_index(month)
     year_value = _year_to_int(year)
     if month_index is None or year_value is None:
@@ -89,7 +88,7 @@ def period_key_from_label(label):
     return period_key(match.group(1), match.group(2))
 
 
-def record_upload(module, employee_count, month, year):
+def record_upload(module, employee_count, month, year) -> None:
     module = str(module or "").strip().lower()
     if module not in MODULES:
         return
@@ -105,7 +104,7 @@ def record_upload(module, employee_count, month, year):
     save_stats(stats)
 
 
-def get_past_month_total(module):
+def get_past_month_total(module) -> int:
     module = str(module or "").strip().lower()
     key = past_month_key()
     stats = load_stats()
@@ -119,7 +118,7 @@ def get_past_month_total(module):
     return 0
 
 
-def get_all_past_month_totals():
+def get_all_past_month_totals() -> dict[str, int]:
     return {
         "philhealth": get_past_month_total("philhealth"),
         "sss": get_past_month_total("sss"),

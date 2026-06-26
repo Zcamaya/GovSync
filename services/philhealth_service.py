@@ -3,13 +3,33 @@ import json
 from models.history import HistoryRecord
 from repositories.history_repository import HistoryRepository
 from repositories.statistics_repository import StatisticsRepository
-from utils.dashboard_stats import period_key_from_label
+from services.dashboard_service import period_key_from_label
+import services.philhealth_engine as philhealth_engine
 
 
 class PhilHealthService:
-    def __init__(self, history_repository: HistoryRepository, statistics_repository: StatisticsRepository):
+    def __init__(
+        self,
+        history_repository: HistoryRepository,
+        statistics_repository: StatisticsRepository,
+        message_box_class=None,
+    ):
         self.history_repository = history_repository
         self.statistics_repository = statistics_repository
+        self.message_box_class = message_box_class
+
+    def _apply_message_box_override(self):
+        if self.message_box_class is not None:
+            philhealth_engine.QMessageBox = self.message_box_class
+
+    def create_engine(self):
+        self._apply_message_box_override()
+        return philhealth_engine.PhicExtractorApp()
+
+    def process(self, engine=None, progress_callback=None):
+        if engine is None:
+            engine = self.create_engine()
+        return engine.process_files(progress_callback=progress_callback)
 
     def list_history(self, account_username: str) -> list[dict]:
         records = self.history_repository.list_by_account(account_username)

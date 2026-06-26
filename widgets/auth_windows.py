@@ -22,15 +22,15 @@ from PySide6.QtWidgets import (
 
 from widgets.glass_dialog import GlassDialog
 from controllers.auth_controller import AuthController
-from utils.account_store import (
+from services.auth_manager import (
     authenticate,
     delete_account,
     load_accounts,
     register_account,
     SUPER_ADMIN_USERNAME,
 )
-from utils.resources import asset_path
-from utils.ui_icons import set_exit_icon
+from shared.resources import asset_path
+from shared.ui import set_exit_icon
 
 
 def logo_pixmap(size):
