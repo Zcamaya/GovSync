@@ -9,7 +9,7 @@ from widgets.right_panel import RightPanelWidget
 from widgets.sidebar import SidebarWidget
 from widgets.sss_panel import SSSPanel
 from widgets.workspace import WorkspaceWidget
-from services.dashboard_service import set_refresh_callback
+
 
 
 class GenericPlaceholderPage(QWidget):
@@ -40,11 +40,11 @@ class PageFactory:
         right_column = RightPanelWidget()
         workspace_stack = QStackedWidget()
 
-        workspace_widget = WorkspaceWidget()
+        workspace_widget = WorkspaceWidget(dashboard_service=self.container.dashboard_service)
         workspace_stack.addWidget(workspace_widget)
 
         payroll_controller = getattr(self.container, "payroll_controller", None)
-        earnings_panel = EarningsPanel(controller=payroll_controller)
+        earnings_panel = EarningsPanel(controller=payroll_controller, dashboard_service=self.container.dashboard_service)
         workspace_stack.addWidget(earnings_panel)
 
         employee_records_controller = getattr(self.container, "employee_records_controller", None)
@@ -61,12 +61,12 @@ class PageFactory:
 
         sss_controller = getattr(self.container, "sss_controller", None)
         hdmf_controller = getattr(self.container, "hdmf_controller", None)
-        sss_panel = SSSPanel(controller=sss_controller)
+        sss_panel = SSSPanel(controller=sss_controller, dashboard_service=self.container.dashboard_service)
         hdmf_panel = HDMFLoanPanel(controller=hdmf_controller)
         workspace_stack.addWidget(sss_panel)
         workspace_stack.addWidget(hdmf_panel)
 
-        set_refresh_callback(workspace_widget.refresh_stats)
+        self.container.dashboard_service.register_refresh_callback(workspace_widget.refresh_stats)
 
         app_page = QWidget()
         app_page.setStyleSheet("background: transparent; border: none;")

@@ -27,7 +27,6 @@ from PySide6.QtWidgets import (
 from constants.styles import AppStyles
 from services.auth_manager import account_json_path, get_active_account
 from controllers.sss_controller import SSSController
-from services.dashboard_service import record_upload
 from services.sss_service import (
     SSSService,
     TXT_COLUMNS,
@@ -96,9 +95,10 @@ class SSSWorker(QThread):
 
 
 class SSSPanel(QWidget):
-    def __init__(self, parent=None, controller=None):
+    def __init__(self, parent=None, controller=None, dashboard_service=None):
         super().__init__(parent)
         self.controller = controller or SSSController()
+        self.dashboard_service = dashboard_service
         self.current_username = (get_active_account() or {}).get("username") or "default"
         self._persist_enabled = False
         self.source_file_path = ""
@@ -760,12 +760,13 @@ class SSSPanel(QWidget):
         self._set_enabled(True)
         self.status_label.setText("Finished." if success else "Finished with errors.")
         self.progress_percent_label.setText("100%" if success else self.progress_percent_label.text())
-        if success and total_rows > 0:
-            record_upload(
+        if success and total_rows > 0 and self.dashboard_service is not None:
+            self.dashboard_service.record_upload(
                 "sss",
                 total_rows,
                 self.month_combo.currentText(),
                 self.year_combo.currentText(),
+                account_username=self.current_username,
             )
         GlassDialog(
             self,
@@ -785,12 +786,14 @@ class SSSPanel(QWidget):
                 self._populate_txt_table(rows)
                 self.tabs.setCurrentIndex(1)
                 self.status_label.setText(f"Generated and loaded {len(rows)} TXT row(s).")
-                record_upload(
-                    "sss",
-                    len(rows),
-                    self.month_combo.currentText(),
-                    self.year_combo.currentText(),
-                )
+                if self.dashboard_service is not None:
+                    self.dashboard_service.record_upload(
+                        "sss",
+                        len(rows),
+                        self.month_combo.currentText(),
+                        self.year_combo.currentText(),
+                        account_username=self.current_username,
+                    )
                 self._save_state()
             except Exception as exc:
                 message = f"{message}\n\nViewer load failed: {exc}"

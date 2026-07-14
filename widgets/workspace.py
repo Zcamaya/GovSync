@@ -1,12 +1,12 @@
 from PySide6.QtWidgets import QHBoxLayout, QLabel, QVBoxLayout, QWidget
 
-from services.dashboard_service import get_all_past_month_totals
 from widgets.glass_panel import TrueGlassPanel
 
 
 class WorkspaceWidget(QWidget):
-    def __init__(self, parent=None):
+    def __init__(self, parent=None, dashboard_service=None):
         super().__init__(parent)
+        self.dashboard_service = dashboard_service
         self.account_name = "Account"
 
         layout = QVBoxLayout(self)
@@ -77,7 +77,13 @@ class WorkspaceWidget(QWidget):
         self.refresh_stats()
 
     def refresh_stats(self):
-        totals = get_all_past_month_totals()
-        self.lbl_ph_count.setText(str(totals["philhealth"]))
-        self.lbl_hd_count.setText(str(totals["hdmf"]))
-        self.lbl_sss_count.setText(str(totals["sss"]))
+        if self.dashboard_service is None:
+            self.lbl_ph_count.setText("0")
+            self.lbl_hd_count.setText("0")
+            self.lbl_sss_count.setText("0")
+            return
+
+        totals = self.dashboard_service.get_all_past_month_totals()
+        self.lbl_ph_count.setText(str(totals.get("philhealth", 0)))
+        self.lbl_hd_count.setText(str(totals.get("hdmf", 0)))
+        self.lbl_sss_count.setText(str(totals.get("sss", 0)))

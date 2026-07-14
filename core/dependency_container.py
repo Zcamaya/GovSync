@@ -12,6 +12,7 @@ from services.philhealth_service import PhilHealthService
 from services.sss_service import SSSService
 from services.hdmf_service import HDMFService
 from services.statistics_service import StatisticsService
+from services.dashboard_service import DashboardService
 from services.employee_records_service import EmployeeRecordsService
 from controllers.payroll_controller import PayrollController
 from controllers.sss_controller import SSSController
@@ -31,6 +32,7 @@ class DependencyContainer:
     auth_service: AuthService
     history_service: HistoryService
     statistics_service: StatisticsService
+    dashboard_service: DashboardService
     payroll_service: PayrollService
     sss_service: SSSService
     hdmf_service: HDMFService
@@ -53,6 +55,7 @@ def build_container() -> DependencyContainer:
     auth_service = AuthService(account_repository)
     history_service = HistoryService(history_repository)
     statistics_service = StatisticsService(statistics_repository)
+    dashboard_service = DashboardService(statistics_service, history_service)
     payroll_service = PayrollService()
     sss_service = SSSService()
     hdmf_service = HDMFService()
@@ -73,6 +76,7 @@ def build_container() -> DependencyContainer:
         auth_service=auth_service,
         history_service=history_service,
         statistics_service=statistics_service,
+        dashboard_service=dashboard_service,
         payroll_service=payroll_service,
         sss_service=sss_service,
         hdmf_service=hdmf_service,

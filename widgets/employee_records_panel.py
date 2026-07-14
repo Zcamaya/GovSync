@@ -1,25 +1,23 @@
-from PySide6.QtCore import Qt, QTimer, Signal, QSize
+from PySide6.QtCore import Qt, QTimer
 from PySide6.QtGui import QColor
 from PySide6.QtWidgets import (
     QDialog,
     QFrame,
     QHBoxLayout,
-    QHeaderView,
     QLabel,
-    QLineEdit,
     QPushButton,
     QScrollArea,
-    QSizePolicy,
-    QComboBox,
     QTableWidget,
     QTableWidgetItem,
     QVBoxLayout,
     QWidget,
 )
-from PySide6.QtWidgets import QAbstractItemView
 
 from constants.styles import AppStyles
 from controllers.employee_records_controller import EmployeeRecordsController
+from widgets.employee_records_header import EmployeeRecordsHeader
+from widgets.employee_records_paginator import EmployeeRecordsPaginator
+from widgets.employee_records_table import EmployeeRecordsTable
 from widgets.glass_panel import TrueGlassPanel
 from widgets.glass_dialog import GlassDialog
 from core.session_manager import get_active_account
@@ -43,146 +41,31 @@ class EmployeeRecordsPanel(QWidget):
         layout.setContentsMargins(0, 0, 0, 0)
         layout.setSpacing(16)
 
-        self.stats_panel = TrueGlassPanel(border_radius=16)
-        stats_layout = QHBoxLayout(self.stats_panel)
-        stats_layout.setContentsMargins(18, 18, 18, 18)
-        stats_layout.setSpacing(12)
-        self.stats_cards = []
-        for label in ["Total Employees", "Total Clients", "Total Payroll Imports", "Last Imported Payroll"]:
-            card = QFrame()
-            card.setStyleSheet("background: rgba(15, 23, 42, 0.55); border: 1px solid rgba(255,255,255,0.08); border-radius: 14px;")
-            card_layout = QVBoxLayout(card)
-            card_layout.setContentsMargins(12, 12, 12, 12)
-            card_layout.setSpacing(6)
-            title = QLabel(label)
-            title.setStyleSheet("color: #cbd5e1; font-size: 12px;")
-            value = QLabel("0")
-            value.setStyleSheet("color: #34d399; font-size: 22px; font-weight: 700;")
-            card_layout.addWidget(title)
-            card_layout.addWidget(value)
-            stats_layout.addWidget(card)
-            self.stats_cards.append((title, value))
-        layout.addWidget(self.stats_panel)
+        self.header = EmployeeRecordsHeader(self)
+        layout.addWidget(self.header)
 
-        filters_panel = TrueGlassPanel(border_radius=16)
-        filters_layout = QHBoxLayout(filters_panel)
-        filters_layout.setContentsMargins(16, 16, 16, 16)
-        filters_layout.setSpacing(10)
-
-        self.search_input = QLineEdit()
-        self.search_input.setPlaceholderText("Search employee")
-        self.search_input.setStyleSheet("QLineEdit { background: rgba(15,23,42,0.75); color: white; border: 1px solid rgba(255,255,255,0.14); border-radius: 8px; padding: 8px 10px; }")
-        filters_layout.addWidget(self.search_input, stretch=1)
-
-        self.employer_combo = QComboBox()
-        self.employer_combo.addItem("Employer")
-        filters_layout.addWidget(self.employer_combo)
-
-        self.client_combo = QComboBox()
-        self.client_combo.addItem("Client")
-        filters_layout.addWidget(self.client_combo)
-
-        self.applicable_month_combo = QComboBox()
-        self.applicable_month_combo.addItem("Applicable Month")
-        filters_layout.addWidget(self.applicable_month_combo)
-
-        # Style dropdowns to match screenshot: dark popup, teal selection
-        combo_style = AppStyles.GLOBAL_DROPDOWN
-        for cb in (self.employer_combo, self.client_combo, self.applicable_month_combo):
-            cb.setStyleSheet(combo_style)
-            cb.setFocusPolicy(Qt.NoFocus)
-            try:
-                view = cb.view()
-                view.setVerticalScrollMode(QAbstractItemView.ScrollPerPixel)
-            except Exception as exc:
-                print(f"Failed to style combo box view: {exc}")
-            cb.setSizeAdjustPolicy(QComboBox.AdjustToContents)
-
-        layout.addWidget(filters_panel)
-
-        self.table = QTableWidget(0, 3)
-        self.table.setAlternatingRowColors(True)
-        self.table.setSelectionBehavior(QTableWidget.SelectRows)
-        self.table.setSelectionMode(QTableWidget.SingleSelection)
-        self.table.setShowGrid(False)
-        self.table.setEditTriggers(QTableWidget.NoEditTriggers)
-        self.table.verticalHeader().setVisible(False)
-        self.table.setStyleSheet(
-            "QTableWidget { background: #071b1b; color: #dbeafe; border: 1px solid rgba(255,255,255,0.06); border-radius: 12px; margin-right: 2px; }"
-            " QHeaderView::section { background: #2b3744; color: #f8fafc; padding: 8px; border: none; font-weight: 700; }"
-            " QTableWidget::item { padding: 6px 8px; border-bottom: 1px solid rgba(255,255,255,0.04); }"
-            " QTableWidget::item:selected { background: #0f766e; color: #ffffff; }"
-            " QTableWidget::item:alternate { background: #041516; }"
-            " QTableWidget QScrollBar:vertical { background: rgba(15,23,42,0.48); width: 12px; border-radius: 6px; margin: 2px; }"
-            " QTableWidget QScrollBar::handle:vertical { background: qlineargradient(x1:0, y1:0, x2:1, y2:0, stop:0 #14b8a6, stop:1 #3b82f6); border-radius: 6px; min-height: 20px; }"
-            " QTableWidget QScrollBar::handle:vertical:hover { background: qlineargradient(x1:0, y1:0, x2:1, y2:0, stop:0 #2dd4bf, stop:1 #60a5fa); }",
-        )
-        self.table.setHorizontalHeaderLabels(["No.", "Client", "Employee Name"])
-        self.table.horizontalHeader().setStretchLastSection(False)
-        self.table.horizontalHeader().setSectionResizeMode(0, QHeaderView.ResizeToContents)
-        self.table.horizontalHeader().setSectionResizeMode(1, QHeaderView.Stretch)
-        self.table.horizontalHeader().setSectionResizeMode(2, QHeaderView.Stretch)
-        self.table.setWordWrap(True)
-        # sensible default column widths - No. is fixed, others stretch proportionally
-        self.table.setColumnWidth(0, 48)
-        self.table.setSortingEnabled(False)
-        self.table.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
-        self.table.setMinimumHeight(200)
-        self.table.verticalHeader().setDefaultSectionSize(36)
+        self.table = EmployeeRecordsTable(self)
         self.table.cellDoubleClicked.connect(self._on_cell_double_clicked)
         layout.addWidget(self.table, stretch=1)
 
-        paginator = QFrame()
-        paginator.setMinimumHeight(52)
-        paginator.setMaximumHeight(52)
-        paginator_layout = QHBoxLayout(paginator)
-        paginator_layout.setContentsMargins(4, 4, 4, 4)
-        self.prev_button = QPushButton("← Previous")
-        self.next_button = QPushButton("Next →")
-        btn_style = """
-            QPushButton {
-                background: rgba(30, 41, 59, 0.82);
-                color: #f8fafc;
-                border: 1px solid rgba(148, 163, 184, 0.28);
-                border-radius: 8px;
-                padding: 8px 16px;
-                font: 700 11px 'Segoe UI';
-            }
-            QPushButton:hover:!disabled {
-                background: rgba(51, 65, 85, 0.92);
-                border-color: rgba(148, 163, 184, 0.42);
-                color: #ffffff;
-            }
-            QPushButton:disabled {
-                color: rgba(226, 232, 240, 0.38);
-                background: rgba(15, 23, 42, 0.5);
-                border-color: rgba(148, 163, 184, 0.12);
-            }
-        """
-        self.prev_button.setStyleSheet(btn_style)
-        self.next_button.setStyleSheet(btn_style)
-        self.page_label = QLabel("Page 1")
-        self.page_label.setStyleSheet("color: #cbd5e1;")
-        paginator_layout.addStretch()
-        paginator_layout.addWidget(self.prev_button)
-        paginator_layout.addWidget(self.page_label)
-        paginator_layout.addWidget(self.next_button)
-        paginator_layout.addStretch()
-        layout.addWidget(paginator)
+        self.paginator = EmployeeRecordsPaginator(self)
+        layout.addWidget(self.paginator)
 
         self.loading_label = QLabel("Loading employees...")
         self.loading_label.setAlignment(Qt.AlignCenter)
-        self.loading_label.setStyleSheet("color: #f8fafc; font-size: 13px; font-weight: 600; background: rgba(15, 23, 42, 0.68); border-radius: 8px; padding: 8px 12px;")
+        self.loading_label.setStyleSheet(
+            "color: #f8fafc; font-size: 13px; font-weight: 600; background: rgba(15, 23, 42, 0.68); border-radius: 8px; padding: 8px 12px;"
+        )
         self.loading_label.hide()
         layout.addWidget(self.loading_label)
 
     def _connect_signals(self):
-        self.search_input.textChanged.connect(self._schedule_refresh)
-        self.employer_combo.currentTextChanged.connect(self._schedule_refresh)
-        self.client_combo.currentTextChanged.connect(self._schedule_refresh)
-        self.applicable_month_combo.currentTextChanged.connect(self._schedule_refresh)
-        self.prev_button.clicked.connect(self._previous_page)
-        self.next_button.clicked.connect(self._next_page)
+        self.header.search_input.textChanged.connect(self._schedule_refresh)
+        self.header.employer_combo.currentTextChanged.connect(self._schedule_refresh)
+        self.header.client_combo.currentTextChanged.connect(self._schedule_refresh)
+        self.header.applicable_month_combo.currentTextChanged.connect(self._schedule_refresh)
+        self.paginator.prev_button.clicked.connect(self._previous_page)
+        self.paginator.next_button.clicked.connect(self._next_page)
 
     def set_account(self, account):
         # Refresh data when account changes (shows all employees across all accounts)
@@ -201,10 +84,10 @@ class EmployeeRecordsPanel(QWidget):
     def _load_data_async(self):
         account = get_active_account() or {}
         employer_id = None  # Show all employees from all accounts
-        employer_filter = self.employer_combo.currentText() if self.employer_combo.currentText() != "Employer" else ""
-        search_text = self.search_input.text().strip()
-        client_filter = self.client_combo.currentText() if self.client_combo.currentText() != "Client" else ""
-        applicable_month_filter = self.applicable_month_combo.currentText() if self.applicable_month_combo.currentText() != "Applicable Month" else ""
+        employer_filter = self.header.employer_combo.currentText() if self.header.employer_combo.currentText() != "Employer" else ""
+        search_text = self.header.search_input.text().strip()
+        client_filter = self.header.client_combo.currentText() if self.header.client_combo.currentText() != "Client" else ""
+        applicable_month_filter = self.header.applicable_month_combo.currentText() if self.header.applicable_month_combo.currentText() != "Applicable Month" else ""
         
         sort_by = "lastname"
         sort_order = "asc"
@@ -230,67 +113,20 @@ class EmployeeRecordsPanel(QWidget):
 
     def _populate_stats(self, employer_id):
         stats = self.controller.get_statistics(employer_id=employer_id)
-        labels = ["total_employees", "total_clients", "total_imports", "last_imported"]
-        for (title_label, value_label), key in zip(self.stats_cards, labels):
-            value = stats.get(key, "")
-            if key == "last_imported" and value:
-                value = str(value)
-            value_label.setText(str(value))
+        self.header.set_stats(stats)
 
     def _populate_filters(self, employer_id):
         options = self.controller.get_filter_options(employer_id=employer_id) or {}
-        self._set_combo_items(self.employer_combo, ["Employer"] + options.get("employers", []), self.employer_combo.currentText())
-        self._set_combo_items(self.client_combo, ["Client"] + options.get("clients", []), self.client_combo.currentText())
-        self._set_combo_items(self.applicable_month_combo, ["Applicable Month"] + options.get("applicable_months", []), self.applicable_month_combo.currentText())
-
-    def _set_combo_items(self, combo, values, current_value):
-        current = current_value if current_value in values else values[0] if values else ""
-        combo.blockSignals(True)
-        combo.clear()
-        combo.addItems(values)
-        combo.setCurrentText(current)
-        combo.blockSignals(False)
+        self.header.set_filter_options(options)
 
     def _populate_table(self, employees):
-        self.table.setRowCount(0)
-        self._current_employee_rows = []
-        if not employees:
-            self.table.setRowCount(1)
-            empty_item = QTableWidgetItem("No records found")
-            empty_item.setTextAlignment(Qt.AlignCenter)
-            self.table.setItem(0, 0, empty_item)
-            self.table.setSpan(0, 0, 1, self.table.columnCount())
-            return
-
-        self.table.setRowCount(len(employees))
-        self._current_employee_rows = employees
-        search_text = self.search_input.text().strip().lower()
-        
-        for row_index, employee in enumerate(employees):
-            employee_name = " ".join(
-                filter(
-                    None,
-                    [
-                        employee.get("lastname", ""),
-                        employee.get("firstname", ""),
-                        employee.get("middlename", ""),
-                    ],
-                )
-            ).strip()
-            values = [
-                str((self.current_page - 1) * self.page_size + row_index + 1),
-                employee.get("client", ""),
-                employee_name,
-            ]
-            for col_idx, value in enumerate(values):
-                item = QTableWidgetItem(str(value))
-                item.setFlags(item.flags() & ~Qt.ItemIsEditable)
-                if search_text and search_text in str(value).lower():
-                    item.setBackground(QColor(20, 100, 90))  # Teal highlight
-                if col_idx in (1, 2):
-                    item.setToolTip(str(value))
-                self.table.setItem(row_index, col_idx, item)
-            self.table.setRowHeight(row_index, 38)
+        search_text = self.header.search_input.text().strip().lower()
+        self.table.populate(
+            employees,
+            search_text=search_text,
+            page=self.current_page,
+            page_size=self.page_size,
+        )
 
     def _show_details(self, employee):
         if not employee:
@@ -304,15 +140,15 @@ class EmployeeRecordsPanel(QWidget):
         dialog.exec()
 
     def _on_cell_double_clicked(self, row, column):
-        employees = getattr(self, "_current_employee_rows", [])
-        if row < 0 or row >= len(employees):
-            return
-        self._show_details(employees[row])
+        employee = self.table.get_current_employee(row)
+        self._show_details(employee)
 
     def _update_pagination(self, total_count):
-        self.page_label.setText(f"Page {self.current_page}")
-        self.prev_button.setEnabled(self.current_page > 1)
-        self.next_button.setEnabled((self.current_page * self.page_size) < total_count)
+        self.paginator.update_page(self.current_page)
+        self.paginator.set_buttons_enabled(
+            prev_enabled=self.current_page > 1,
+            next_enabled=(self.current_page * self.page_size) < total_count,
+        )
 
     def _previous_page(self):
         if self.current_page > 1:

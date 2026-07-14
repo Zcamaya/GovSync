@@ -23,7 +23,6 @@ from PySide6.QtWidgets import (
 
 from constants.styles import AppStyles
 from services.auth_manager import account_json_path, get_active_account
-from services.dashboard_service import record_upload
 from services.sss_engine import get_default_month_and_year, get_months_list, get_years_list
 from controllers.payroll_controller import PayrollController
 from widgets.glass_dialog import GlassDialog
@@ -110,10 +109,11 @@ class PayrollWorker(QThread):
 
 
 class EarningsPanel(QWidget):
-    def __init__(self, parent=None, controller=None):
+    def __init__(self, parent=None, controller=None, dashboard_service=None):
         super().__init__(parent)
         self.selected_files = []
         self.controller = controller or PayrollController()
+        self.dashboard_service = dashboard_service
         self.current_username = (get_active_account() or {}).get("username") or "default"
         self.worker = None
         self._setup_ui()
@@ -471,9 +471,15 @@ class EarningsPanel(QWidget):
         self._set_processing_enabled(True)
         self.status_label.setText("Finished." if success else "Finished with errors.")
         self.progress_percent_label.setText("100%" if success else self.progress_percent_label.text())
-        if success and total_hdmf > 0:
+        if success and total_hdmf > 0 and self.dashboard_service is not None:
             month, year = get_default_month_and_year()
-            record_upload("hdmf", total_hdmf, month, year)
+            self.dashboard_service.record_upload(
+                "hdmf",
+                total_hdmf,
+                month,
+                year,
+                account_username=self.current_username,
+            )
         self._save_state()
         GlassDialog(self, "Processing Summary", message).exec()
 
