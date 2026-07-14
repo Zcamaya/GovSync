@@ -367,6 +367,14 @@ class LoginDialog(QDialog, AuthShellMixin):
         self.register_password.setStyleSheet("color: #0f172a; background: #ffffff;")
         panel_layout.addWidget(self.register_password)
 
+        employer_label = QLabel("Employer Name:")
+        employer_label.setStyleSheet("color: #475569; font: 700 10px 'Segoe UI'; text-transform: uppercase;")
+        self.register_employer_name = QLineEdit()
+        self.register_employer_name.setPlaceholderText("Employer Name")
+        self.register_employer_name.setStyleSheet("color: #0f172a; background: #ffffff;")
+        panel_layout.addWidget(employer_label)
+        panel_layout.addWidget(self.register_employer_name)
+
         sss_label = QLabel("SSS Number:")
         sss_label.setStyleSheet("color: #475569; font: 700 10px 'Segoe UI'; text-transform: uppercase;")
         self.register_sss_number = QLineEdit()
@@ -494,6 +502,7 @@ class LoginDialog(QDialog, AuthShellMixin):
                 self.register_sss_number.text(),
                 self.register_philhealth_number.text(),
                 self.register_hdmf_number.text(),
+                self.register_employer_name.text(),
             )
         except ValueError as exc:
             self.register_message.setStyleSheet(
@@ -667,6 +676,14 @@ class LoginPage(QWidget):
         self.register_password.setStyleSheet("color: #0f172a; background: #ffffff;")
         panel_layout.addWidget(self.register_password)
 
+        employer_label = QLabel("Employer Name:")
+        employer_label.setStyleSheet("color: #475569; font: 700 10px 'Segoe UI'; text-transform: uppercase;")
+        self.register_employer_name = QLineEdit()
+        self.register_employer_name.setPlaceholderText("Employer Name")
+        self.register_employer_name.setStyleSheet("color: #0f172a; background: #ffffff;")
+        panel_layout.addWidget(employer_label)
+        panel_layout.addWidget(self.register_employer_name)
+
         sss_label = QLabel("SSS Number:")
         sss_label.setStyleSheet("color: #475569; font: 700 10px 'Segoe UI'; text-transform: uppercase;")
         self.register_sss_number = QLineEdit()
@@ -811,6 +828,7 @@ class LoginPage(QWidget):
                     self.register_sss_number.text(),
                     self.register_philhealth_number.text(),
                     self.register_hdmf_number.text(),
+                    self.register_employer_name.text(),
                 )
             else:
                 register_account(
@@ -819,6 +837,7 @@ class LoginPage(QWidget):
                     self.register_sss_number.text(),
                     self.register_philhealth_number.text(),
                     self.register_hdmf_number.text(),
+                    self.register_employer_name.text(),
                 )
         except ValueError as exc:
             self.register_message.setStyleSheet(
@@ -907,13 +926,14 @@ class SuperAdminPage(QWidget):
         sub = QLabel("Super admin can view and delete registered user accounts.")
         sub.setStyleSheet("color: #94a3b8;")
 
-        self.table = QTableWidget(0, 5)
+        self.table = QTableWidget(0, 6)
         self.table.setHorizontalHeaderLabels([
             "Username",
             "Password",
             "SSS Number",
             "PhilHealth Number",
             "HDMF Number",
+            "Employer Name",
         ])
         table_header = self.table.horizontalHeader()
         table_header.setDefaultAlignment(Qt.AlignLeft | Qt.AlignVCenter)
@@ -974,13 +994,13 @@ class SuperAdminPage(QWidget):
             sss_number = account.sss_number if hasattr(account, "sss_number") else account.get("sss_number", "")
             philhealth_number = account.philhealth_number if hasattr(account, "philhealth_number") else account.get("philhealth_number", "")
             hdmf_number = account.hdmf_number if hasattr(account, "hdmf_number") else account.get("hdmf_number", "")
+            employer_name = account.employer_name if hasattr(account, "employer_name") else account.get("employer_name", "")
             self.table.setItem(row, 0, QTableWidgetItem(username))
             self.table.setItem(row, 1, QTableWidgetItem("Protected"))
             self.table.setItem(row, 2, QTableWidgetItem(sss_number))
-            self.table.setItem(
-                row, 3, QTableWidgetItem(philhealth_number)
-            )
+            self.table.setItem(row, 3, QTableWidgetItem(philhealth_number))
             self.table.setItem(row, 4, QTableWidgetItem(hdmf_number))
+            self.table.setItem(row, 5, QTableWidgetItem(employer_name))
 
     def _select_account(self, row):
         if row < 0 or row >= len(self.accounts):
@@ -1053,6 +1073,11 @@ class RegisterDialog(QDialog, AuthShellMixin):
         panel_layout.addWidget(self.username)
         panel_layout.addWidget(self.password)
 
+        employer_label = QLabel("Employer Name:")
+        self.employer_name = QLineEdit()
+        panel_layout.addWidget(employer_label)
+        panel_layout.addWidget(self.employer_name)
+
         panel_layout.addWidget(QLabel("SSS Number:"))
         self.sss_number = QLineEdit()
         self.sss_number.setInputMask("00-0000000-0;_")
@@ -1091,6 +1116,7 @@ class RegisterDialog(QDialog, AuthShellMixin):
                     self.sss_number.text(),
                     self.philhealth_number.text(),
                     self.hdmf_number.text(),
+                    self.employer_name.text(),
                 )
             else:
                 register_account(
@@ -1099,6 +1125,7 @@ class RegisterDialog(QDialog, AuthShellMixin):
                     self.sss_number.text(),
                     self.philhealth_number.text(),
                     self.hdmf_number.text(),
+                    self.employer_name.text(),
                 )
         except ValueError as exc:
             QMessageBox.warning(self, "Invalid Account", str(exc))
@@ -1164,13 +1191,14 @@ class SuperAdminWindow(QWidget, AuthShellMixin):
         sub = QLabel("Super admin can view and delete registered user accounts.")
         sub.setStyleSheet("color: #94a3b8;")
 
-        self.table = QTableWidget(0, 5)
+        self.table = QTableWidget(0, 6)
         self.table.setHorizontalHeaderLabels([
             "Username",
             "Password",
             "SSS Number",
             "PhilHealth Number",
             "HDMF Number",
+            "Employer Name",
         ])
         table_header = self.table.horizontalHeader()
         table_header.setDefaultAlignment(Qt.AlignLeft | Qt.AlignVCenter)
@@ -1230,13 +1258,13 @@ class SuperAdminWindow(QWidget, AuthShellMixin):
             sss_number = account.sss_number if hasattr(account, "sss_number") else account.get("sss_number", "")
             philhealth_number = account.philhealth_number if hasattr(account, "philhealth_number") else account.get("philhealth_number", "")
             hdmf_number = account.hdmf_number if hasattr(account, "hdmf_number") else account.get("hdmf_number", "")
+            employer_name = account.employer_name if hasattr(account, "employer_name") else account.get("employer_name", "")
             self.table.setItem(row, 0, QTableWidgetItem(username))
             self.table.setItem(row, 1, QTableWidgetItem("Protected"))
             self.table.setItem(row, 2, QTableWidgetItem(sss_number))
-            self.table.setItem(
-                row, 3, QTableWidgetItem(philhealth_number)
-            )
+            self.table.setItem(row, 3, QTableWidgetItem(philhealth_number))
             self.table.setItem(row, 4, QTableWidgetItem(hdmf_number))
+            self.table.setItem(row, 5, QTableWidgetItem(employer_name))
 
     def _select_account(self, row):
         if row < 0 or row >= len(self.accounts):

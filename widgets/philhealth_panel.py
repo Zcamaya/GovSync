@@ -407,6 +407,7 @@ class PhilHealthPanel(QWidget):
         self.current_username = self._resolve_username(account_or_username)
         account = get_account(self.current_username) or {"username": self.current_username}
         set_active_account(account)
+        self._reset_process_view()
         self.engine.load_history()
         self._restore_latest_process_state()
 
@@ -426,6 +427,7 @@ class PhilHealthPanel(QWidget):
         popup.setStyleSheet(self._detail_style())
         self.detail_popups.append(popup)
         popup.destroyed.connect(lambda: self._forget_popup(popup))
+        popup.setAttribute(Qt.WA_DeleteOnClose, True)
         popup.show()
         popup.activateWindow()
         popup.raise_()
@@ -438,6 +440,7 @@ class PhilHealthPanel(QWidget):
         popup.setStyleSheet(self._detail_style())
         self.detail_popups.append(popup)
         popup.destroyed.connect(lambda: self._forget_popup(popup))
+        popup.setAttribute(Qt.WA_DeleteOnClose, True)
         popup.show()
         popup.activateWindow()
         popup.raise_()
@@ -445,9 +448,32 @@ class PhilHealthPanel(QWidget):
     def _forget_popup(self, popup):
         if popup in self.detail_popups:
             self.detail_popups.remove(popup)
+        # Don't call deleteLater() here since WA_DeleteOnClose already handles deletion
+
+    def _reset_process_view(self):
+        if not hasattr(self, "engine"):
+            return
+
+        self.engine.card_month.update_value("Pending")
+        self.engine.card_total.update_value(0)
+        self.engine.card_missing.update_value(0)
+        self.engine.card_new.update_value(0)
+        self.engine.cache_total_active = []
+        self.engine.cache_missing = []
+        self.engine.cache_newly_hired = []
+        self._populate_process_table(self.engine.missing_table, {})
+        self._populate_process_table(self.engine.newly_hired_table, {})
+        self._populate_summary_table([])
+        self.progress_note_label.setText("No history for this account yet.")
+        self.progress_bar.setRange(0, 100)
+        self.progress_bar.setValue(0)
+        self.progress_percent_label.setText("0%")
 
     def _restore_latest_process_state(self):
-        if not hasattr(self, "engine") or not getattr(self.engine, "history_records", None):
+        if not hasattr(self, "engine"):
+            return
+        if not getattr(self.engine, "history_records", None):
+            self._reset_process_view()
             return
 
         latest_record = self.engine.history_records[-1]
@@ -639,7 +665,7 @@ class PhilHealthPanel(QWidget):
         try:
             self.engine.process_btn.clicked.disconnect()
         except RuntimeError:
-            pass
+            print("PhilHealth process button was already disconnected.")
         self.engine.process_btn.clicked.connect(self.start_processing)
         layout.addWidget(self.engine.process_btn)
 
@@ -683,7 +709,7 @@ class PhilHealthPanel(QWidget):
 
         self.progress_note_label = QLabel("Ready")
         self.progress_note_label.setStyleSheet(
-            "color: #94a3b8; font-size: 11px; border: none; background: transparent;"
+            "color: #cbd5e1; font-size: 11px; border: none; background: rgba(15, 23, 42, 0.4); border-radius: 8px; padding: 6px 10px;"
         )
         layout.addWidget(self.progress_note_label)
 
@@ -814,7 +840,7 @@ class PhilHealthPanel(QWidget):
             record for record in self.engine.history_records if record.get("id") != record_id
         ]
         try:
-            self.controller.delete_history(record_id)
+            self.controller.delete_history(self.current_username, record_id)
             self._render_history_grid()
             self._restore_latest_process_state()
         except Exception as exc:

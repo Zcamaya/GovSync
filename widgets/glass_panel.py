@@ -6,6 +6,9 @@ from PySide6.QtWidgets import QGraphicsDropShadowEffect
 class TrueGlassPanel(QFrame):
     def __init__(self, border_radius=18, parent=None):
         super().__init__(parent)
+        # Ensure proper rendering with rounded borders
+        self.setLineWidth(0)
+        self.setFrameStyle(QFrame.NoFrame)
         self.setStyleSheet(f"""
             QFrame {{
                 background-color: rgba(20, 30, 45, 0.65);
@@ -14,12 +17,12 @@ class TrueGlassPanel(QFrame):
             }}
             QLabel {{ 
                 background: transparent; 
-                border: none;            /* Strips any clipping box outline */
-                outline: none;           /* Prevents focus borders */
+                border: none;
+                outline: none;
             }}
         """)
         glow = QGraphicsDropShadowEffect(self)
-        glow.setBlurRadius(25)
-        glow.setColor(QColor(16, 185, 129, 35)) 
+        glow.setBlurRadius(15)
+        glow.setColor(QColor(16, 185, 129, 25)) 
         glow.setOffset(0, 0)
         self.setGraphicsEffect(glow)

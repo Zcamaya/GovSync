@@ -267,8 +267,10 @@ class SSSPanel(QWidget):
 
         self.month_combo = QComboBox()
         self.month_combo.addItems(get_months_list())
+        self.month_combo.setStyleSheet(AppStyles.GLOBAL_DROPDOWN)
         self.year_combo = QComboBox()
         self.year_combo.addItems(get_years_list())
+        self.year_combo.setStyleSheet(AppStyles.GLOBAL_DROPDOWN)
         self.month_combo.currentTextChanged.connect(self._save_state)
         self.year_combo.currentTextChanged.connect(self._save_state)
 
@@ -453,8 +455,13 @@ class SSSPanel(QWidget):
         else:
             self.account_info = {"username": str(account or "")}
         self.current_username = self.account_info.get("username") or "default"
+        self._reset_ui_state()
         self._refresh_account_banner()
         self._load_state()
+
+    def _reset_ui_state(self):
+        self.progress_bar.setValue(0)
+        self.status_label.setText("Ready")
 
     def _refresh_account_banner(self):
         sss_number = str(self.account_info.get("sss_number", "")).strip()
@@ -468,6 +475,14 @@ class SSSPanel(QWidget):
         return account_json_path(self.current_username, "sss_panel_state.json")
 
     def _load_state(self):
+        # Clear form fields first to avoid stale data from previous account
+        self.source_queue.clear()
+        self.selected_source_files = []
+        self.output_folder.clear()
+        self.correction_file.clear()
+        self.correction_file_path = ""
+        self.txt_file_path = ""
+        
         path = self._state_path()
         if not os.path.exists(path):
             return

@@ -66,25 +66,64 @@ def select_input():
     return selected_paths
 
 
-def run_payroll_task(file_path):
+def _read_earnings_sheet(file_path):
+    workbook = load_workbook(file_path, data_only=True, read_only=True)
+    try:
+        sheet_map = {sheet.lower().strip(): sheet for sheet in workbook.sheetnames}
+        if "earnings" not in sheet_map:
+            raise ValueError("No 'Earnings' sheet found")
+
+        worksheet = workbook[sheet_map["earnings"]]
+        rows = list(worksheet.iter_rows(values_only=True))
+    finally:
+        workbook.close()
+
+    if not rows:
+        return pd.DataFrame()
+
+    header_row = None
+    for index, row in enumerate(rows):
+        values = [value.strip() if isinstance(value, str) else value for value in row]
+        if any(value not in (None, "") for value in values):
+            header_row = index
+            break
+
+    if header_row is None:
+        return pd.DataFrame()
+
+    headers = [str(value).strip() if value is not None else f"column_{idx + 1}" for idx, value in enumerate(rows[header_row])]
+    data_rows = []
+    for row in rows[header_row + 1 :]:
+        values = [value.strip() if isinstance(value, str) else value for value in row]
+        if not any(value not in (None, "") for value in values):
+            continue
+        if len(values) < len(headers):
+            values.extend([""] * (len(headers) - len(values)))
+        elif len(values) > len(headers):
+            values = values[: len(headers)]
+        data_rows.append(values)
+
+    if not data_rows:
+        return pd.DataFrame(columns=headers)
+
+    return pd.DataFrame(data_rows, columns=headers)
+
+
+def run_payroll_task(file_path, selected_sheets=None):
     """Main integration function used by the PySide UI."""
     filename = os.path.basename(file_path)
     if filename.startswith("~$"):
         return True, f"Skipped temporary file {filename}", 0
 
-    with pd.ExcelFile(file_path) as workbook:
-        sheet_map = {sheet.lower().strip(): sheet for sheet in workbook.sheet_names}
+    df_master = _read_earnings_sheet(file_path)
+    if df_master.empty:
+        raise ValueError(f"No usable rows found in the Earnings sheet for {filename}")
 
-        if "earnings" not in sheet_map:
-            raise ValueError(f"No 'Earnings' sheet found in {filename}")
-
-        df_master = pd.read_excel(workbook, sheet_name=sheet_map["earnings"])
-
-    df_master.columns = df_master.columns.str.strip()
+    df_master.columns = [str(column).strip() for column in df_master.columns]
 
     sheets_data = generate_slices(df_master)
     hdmf_count = len(sheets_data.get("HDMF", []))
-    save_and_format_sheets(file_path, sheets_data)
+    save_and_format_sheets(file_path, sheets_data, selected_sheets=selected_sheets)
     return True, f"Processed and formatted {filename}", hdmf_count
 
 
@@ -179,7 +218,7 @@ def generate_slices(df):
     return processed_sheets
 
 
-def save_and_format_sheets(file_path, sheets_data):
+def save_and_format_sheets(file_path, sheets_data, selected_sheets=None):
     workbook = load_workbook(file_path, keep_vba=file_path.lower().endswith(".xlsm"))
 
     font_header = Font(name="Calibri", size=11, bold=True, color="FFFFFF")
@@ -201,7 +240,12 @@ def save_and_format_sheets(file_path, sheets_data):
     min_contribution = 250
     phealth_percentage = 0.05
 
+    if selected_sheets is None:
+        selected_sheets = list(sheets_data.keys())
+
     for sheet_name, dataframe in sheets_data.items():
+        if sheet_name not in selected_sheets:
+            continue
         if sheet_name in workbook.sheetnames:
             del workbook[sheet_name]
 
@@ -271,13 +315,13 @@ def safe_save_workbook(workbook, file_path):
         workbook.save(temp_path)
         load_workbook(temp_path, keep_vba=file_path.lower().endswith(".xlsm")).close()
         os.replace(temp_path, file_path)
-    except Exception:
+    except Exception as exc:
         if temp_path and os.path.exists(temp_path):
             try:
                 os.remove(temp_path)
-            except OSError:
-                pass
-        raise
+            except OSError as cleanup_error:
+                raise RuntimeError(f"Failed to save workbook: {exc}") from cleanup_error
+        raise RuntimeError(f"Failed to save workbook: {exc}") from exc
     finally:
         workbook.close()
 

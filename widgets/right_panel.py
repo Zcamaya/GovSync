@@ -469,7 +469,6 @@ class RightPanelWidget(QWidget):
         notes_scroll.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
         notes_scroll.setStyleSheet(self._scrollable_style())
         notes_scroll.setMinimumHeight(self.NOTES_VIEWPORT_HEIGHT)
-        notes_scroll.setMaximumHeight(self.NOTES_VIEWPORT_HEIGHT)
 
         self.add_note_btn = QPushButton("+ Add Item")
         self.add_note_btn.setCursor(Qt.PointingHandCursor)
@@ -483,7 +482,7 @@ class RightPanelWidget(QWidget):
         log_card_layout.addWidget(activity_scroll, stretch=1)
         notes_layout.addLayout(notes_header_row)
         notes_layout.addWidget(notes_scroll, stretch=1)
-        notes_card.setMinimumHeight(235)
+        notes_card.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
 
         right_panel_layout.addWidget(self.calendar_view)
         right_panel_layout.addWidget(log_card, stretch=2)

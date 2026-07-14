@@ -1,0 +1,25 @@
+# Ignore build and distribution artifacts
+build/
+dist/
+
+# Ignore editor/user settings
+.vscode/
+.idea/
+
+# Ignore Python caches and environment files
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+env/
+venv/
+.venv/
+
+# Ignore local data files and databases
+*.sqlite
+*.db
+*.log
+
+# Ignore generated project files
+*.spec

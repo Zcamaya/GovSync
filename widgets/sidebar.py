@@ -61,6 +61,7 @@ class SidebarWidget(QWidget):
             [
                 "Dashboard",
                 "Earnings",
+                "Employee Records",
                 "Philhealth",
                 "HDMF",
                 "SSS",

@@ -1,11 +1,16 @@
 import json
 import os
+import threading
 
 from PySide6.QtCore import QThread, Signal, Qt
 from PySide6.QtGui import QFont
 from PySide6.QtWidgets import (
     QAbstractItemView,
+    QCheckBox,
+    QComboBox,
+    QDialog,
     QFileDialog,
+    QFrame,
     QHBoxLayout,
     QGridLayout,
     QLabel,
@@ -19,6 +24,7 @@ from PySide6.QtWidgets import (
 from constants.styles import AppStyles
 from services.auth_manager import account_json_path, get_active_account
 from services.dashboard_service import record_upload
+from services.sss_engine import get_default_month_and_year, get_months_list, get_years_list
 from controllers.payroll_controller import PayrollController
 from widgets.glass_dialog import GlassDialog
 
@@ -26,11 +32,17 @@ from widgets.glass_dialog import GlassDialog
 class PayrollWorker(QThread):
     progress = Signal(int, str)
     finished = Signal(bool, str, int)
+    confirm_overwrite = Signal(object)
 
-    def __init__(self, files, controller=None):
-        super().__init__()
+    def __init__(self, files, controller=None, applicable_month="", import_data=True, generate_sheets=None, parent=None):
+        super().__init__(parent)
         self.files = files
         self.controller = controller
+        self.applicable_month = applicable_month
+        self.import_data = import_data
+        self.generate_sheets = generate_sheets or ["PHIC", "HDMF", "SSS", "HDMF_LOANS", "SSS_LOANS"]
+        self.overwrite_event = threading.Event()
+        self.overwrite_decision = False
 
     def run(self):
         total = len(self.files)
@@ -41,10 +53,49 @@ class PayrollWorker(QThread):
             filename = os.path.basename(path)
             self.progress.emit(int((index / total) * 100), filename)
 
+            if filename.startswith("~$"):
+                errors.append(f"{filename}: Skipped temporary Excel file.")
+                continue
+
             try:
+                plan = self.controller.build_import_plan(
+                    path,
+                    applicable_month=self.applicable_month,
+                    progress_callback=self.progress.emit,
+                )
+                if self.import_data:
+                    self.overwrite_decision = False
+                    plan = self.controller.build_import_plan(
+                        path,
+                        applicable_month=self.applicable_month,
+                        progress_callback=self.progress.emit,
+                    )
+                    if plan.existing_import is not None:
+                        self.confirm_overwrite.emit({"plan": plan, "exact_duplicate": True})
+                        self.overwrite_event.wait(timeout=300)
+                        self.overwrite_event.clear()
+                        if not self.overwrite_decision:
+                            errors.append(f"{filename}: This exact workbook has already been imported.")
+                            continue
+                    elif plan.existing_payroll is not None:
+                        self.confirm_overwrite.emit({"plan": plan, "exact_duplicate": False})
+                        self.overwrite_event.wait(timeout=300)
+                        self.overwrite_event.clear()
+                        if not self.overwrite_decision:
+                            errors.append(f"{filename}: Skipped because the payroll already exists.")
+                            continue
+                else:
+                    plan = None
+                    self.overwrite_decision = True
+
                 success, message, hdmf_count = self.controller.process_file(
                     path,
                     progress_callback=self.progress.emit,
+                    applicable_month=self.applicable_month,
+                    plan=plan,
+                    overwrite=self.overwrite_decision,
+                    import_data=self.import_data,
+                    generate_sheets=self.generate_sheets,
                 )
                 total_hdmf += hdmf_count
                 if not success:
@@ -167,12 +218,133 @@ class EarningsPanel(QWidget):
         button_layout.addWidget(self.btn_remove)
         main_layout.addLayout(button_layout)
 
+        month_label = QLabel("Applicable Month:")
+        month_label.setStyleSheet("color: #94a3b8; font-size: 11px;")
+        self.month_combo = QComboBox()
+        self.month_combo.setStyleSheet(AppStyles.GLOBAL_DROPDOWN)
+        self.month_combo.addItems(get_months_list())
+        default_month, default_year = get_default_month_and_year()
+        self.month_combo.setCurrentText(default_month)
+
+        year_label = QLabel("Year:")
+        year_label.setStyleSheet("color: #94a3b8; font-size: 11px;")
+        self.year_combo = QComboBox()
+        self.year_combo.setStyleSheet(AppStyles.GLOBAL_DROPDOWN)
+        self.year_combo.addItems(get_years_list())
+        self.year_combo.setCurrentText(default_year)
+
+        month_row = QHBoxLayout()
+        month_row.setSpacing(10)
+        month_row.addWidget(month_label)
+        month_row.addWidget(self.month_combo)
+        month_row.addWidget(year_label)
+        month_row.addWidget(self.year_combo)
+        month_row.addStretch()
+        main_layout.addLayout(month_row)
+
         self.btn_start = QPushButton("Start Processing")
         self.btn_start.setCursor(Qt.PointingHandCursor)
         self.btn_start.setMinimumHeight(50)
         self.btn_start.setStyleSheet(AppStyles.PRIMARY_BUTTON)
         self.btn_start.clicked.connect(self.start_processing)
         main_layout.addWidget(self.btn_start)
+
+    def _show_import_confirmation(self):
+        dialog = QDialog(self)
+        dialog.setWindowFlags(Qt.FramelessWindowHint | Qt.Dialog)
+        dialog.setAttribute(Qt.WA_TranslucentBackground)
+        dialog.setFixedSize(520, 420)
+        dialog.setStyleSheet(AppStyles.DIALOG_BASE + "QCheckBox { color: #e2e8f0; }")
+
+        outer = QFrame(dialog)
+        outer.setObjectName("DialogCard")
+        outer.setGeometry(0, 0, 520, 420)
+
+        layout = QVBoxLayout(outer)
+        layout.setContentsMargins(18, 18, 18, 18)
+        layout.setSpacing(16)
+
+        title = QLabel("Import Confirmation")
+        title.setStyleSheet("color: #f8fafc; font-size: 18px; font-weight: 700;")
+        layout.addWidget(title)
+
+        description = QLabel(
+            "Choose whether to update the database and separately select which sheets to generate."
+        )
+        description.setWordWrap(True)
+        description.setStyleSheet("color: #cbd5e1; font-size: 13px;")
+        layout.addWidget(description)
+
+        self.import_data_checkbox = QCheckBox("Import data and update database")
+        self.import_data_checkbox.setChecked(True)
+        self.import_data_checkbox.setStyleSheet("QCheckBox { font-size: 13px; }")
+        layout.addWidget(self.import_data_checkbox)
+
+        sheet_section_label = QLabel("Generate Sheets")
+        sheet_section_label.setStyleSheet("color: #f8fafc; font-size: 13px; font-weight: 700;")
+        layout.addWidget(sheet_section_label)
+
+        # Master enable checkbox for sheet generation (controls per-sheet checkboxes)
+        self.enable_sheets_checkbox = QCheckBox("Enable sheet generation")
+        self.enable_sheets_checkbox.setChecked(True)
+        self.enable_sheets_checkbox.setStyleSheet("QCheckBox { font-size: 13px; }")
+        layout.addWidget(self.enable_sheets_checkbox)
+
+        self.sheet_checkboxes = []
+        sheet_labels = ["PHIC", "HDMF", "SSS", "HDMF LOANS", "SSS LOANS"]
+        sheet_layout = QVBoxLayout()
+        sheet_layout.setContentsMargins(16, 0, 0, 0)
+        for label in sheet_labels:
+            checkbox = QCheckBox(label)
+            checkbox.setChecked(True)
+            checkbox.setStyleSheet("QCheckBox { font-size: 13px; }")
+            sheet_layout.addWidget(checkbox)
+            self.sheet_checkboxes.append((label, checkbox))
+        layout.addLayout(sheet_layout)
+
+        def update_sheet_enable():
+            enabled = bool(self.enable_sheets_checkbox.isChecked())
+            for _, checkbox in self.sheet_checkboxes:
+                checkbox.setEnabled(enabled)
+
+        self.enable_sheets_checkbox.stateChanged.connect(lambda _: update_sheet_enable())
+        update_sheet_enable()
+
+        button_row = QHBoxLayout()
+        button_row.addStretch()
+        cancel_btn = QPushButton("Cancel")
+        cancel_btn.setCursor(Qt.PointingHandCursor)
+        cancel_btn.setFixedHeight(40)
+        cancel_btn.setStyleSheet(AppStyles.SECONDARY_BUTTON)
+        ok_btn = QPushButton("Continue")
+        ok_btn.setCursor(Qt.PointingHandCursor)
+        ok_btn.setFixedHeight(40)
+        ok_btn.setStyleSheet(AppStyles.PRIMARY_BUTTON)
+        button_row.addWidget(cancel_btn)
+        button_row.addWidget(ok_btn)
+        layout.addLayout(button_row)
+
+        result = {}
+
+        def accept_dialog():
+            # If sheet generation master is unchecked, return empty generate_sheets
+            if self.enable_sheets_checkbox.isChecked():
+                selected = [key.replace(" ", "_") for key, checkbox in self.sheet_checkboxes if checkbox.isChecked()]
+            else:
+                selected = []
+            result["import_data"] = self.import_data_checkbox.isChecked()
+            result["generate_sheets"] = selected
+            dialog.accept()
+
+        def cancel_dialog():
+            dialog.reject()
+
+        ok_btn.clicked.connect(accept_dialog)
+        cancel_btn.clicked.connect(cancel_dialog)
+
+        if dialog.exec() == QDialog.Accepted:
+            return result
+        return None
 
     def _secondary_button(self, text):
         button = QPushButton(text)
@@ -225,17 +397,75 @@ class EarningsPanel(QWidget):
         self._set_processing_enabled(False)
         self.progress_bar.setValue(0)
         self.progress_percent_label.setText("0%")
-        self.status_label.setText("Starting...")
+        account = get_active_account() or {}
+        employer_name = str(account.get("employer_name") or account.get("username") or "").strip() or "Current Employer"
+        self.status_label.setText(f"Starting import for {employer_name}...")
 
-        self.worker = PayrollWorker(self.selected_files, controller=self.controller)
+        confirmation = self._show_import_confirmation()
+        if not confirmation:
+            self._set_processing_enabled(True)
+            return
+
+        applicable_month = f"{self.month_combo.currentText()} {self.year_combo.currentText()}".strip()
+        self.worker = PayrollWorker(
+            self.selected_files,
+            controller=self.controller,
+            applicable_month=applicable_month,
+            import_data=confirmation.get("import_data", True),
+            generate_sheets=confirmation.get("generate_sheets", []),
+        )
         self.worker.progress.connect(self.update_progress)
         self.worker.finished.connect(self.on_finished)
+        self.worker.confirm_overwrite.connect(self.handle_duplicate_confirmation)
         self.worker.start()
 
     def update_progress(self, percent, filename):
         self.progress_bar.setValue(percent)
         self.progress_percent_label.setText(f"{max(0, min(100, int(percent)))}%")
         self.status_label.setText(f"Processing: {filename}")
+
+    def handle_duplicate_confirmation(self, payload):
+        plan = payload.get("plan")
+        exact_duplicate = bool(payload.get("exact_duplicate", False))
+        if exact_duplicate:
+            GlassDialog(
+                self,
+                "Duplicate Workbook",
+                "This exact workbook has already been imported.",
+            ).exec()
+            self.worker.overwrite_decision = False
+            self.worker.overwrite_event.set()
+            return
+
+        employer = plan.employer_id or "Unknown Employer"
+        client = plan.client_name or plan.client_id or "Unknown Client"
+        message = (
+            f"Payroll Already Exists\n\n"
+            f"Employer: {employer}\n"
+            f"Client: {client}\n"
+            f"Applicable Month: {plan.applicable_month}\n"
+            f"Payroll Period: {plan.from_date} - {plan.to_date}\n\n"
+            "Do you want to overwrite this payroll?"
+        )
+        dialog = GlassDialog(
+            self,
+            "Payroll Already Exists",
+            message,
+            buttons=[
+                ("Overwrite", lambda: self._close_duplicate_prompt(dialog, True), True),
+                ("Cancel", lambda: self._close_duplicate_prompt(dialog, False), False),
+            ],
+        )
+        dialog.exec()
+
+    def _close_duplicate_prompt(self, dialog, decision):
+        self._set_overwrite_decision(decision)
+        dialog.accept()
+
+    def _set_overwrite_decision(self, decision):
+        if self.worker is not None:
+            self.worker.overwrite_decision = decision
+            self.worker.overwrite_event.set()
 
     def on_finished(self, success, message, total_hdmf=0):
         self._set_processing_enabled(True)

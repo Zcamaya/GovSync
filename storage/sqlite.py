@@ -13,6 +13,7 @@ CREATE TABLE IF NOT EXISTS accounts (
     sss_number TEXT NOT NULL DEFAULT '',
     philhealth_number TEXT NOT NULL DEFAULT '',
     hdmf_number TEXT NOT NULL DEFAULT '',
+    employer_name TEXT NOT NULL DEFAULT '',
     created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
@@ -58,9 +59,16 @@ def connect(path: Path | None = None) -> sqlite3.Connection:
     return connection
 
 
+def _ensure_account_columns(connection: sqlite3.Connection) -> None:
+    columns = {row[1] for row in connection.execute("PRAGMA table_info(accounts)")}
+    if "employer_name" not in columns:
+        connection.execute("ALTER TABLE accounts ADD COLUMN employer_name TEXT NOT NULL DEFAULT ''")
+
+
 def initialize_database(path: Path | None = None) -> None:
     target_path = Path(path or database_path())
     _migrate_legacy_database(target_path)
     with connect(target_path) as connection:
         connection.executescript(SCHEMA)
+        _ensure_account_columns(connection)
         connection.commit()

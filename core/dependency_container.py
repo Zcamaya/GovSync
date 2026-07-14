@@ -12,11 +12,13 @@ from services.philhealth_service import PhilHealthService
 from services.sss_service import SSSService
 from services.hdmf_service import HDMFService
 from services.statistics_service import StatisticsService
+from services.employee_records_service import EmployeeRecordsService
 from controllers.payroll_controller import PayrollController
 from controllers.sss_controller import SSSController
 from controllers.hdmf_controller import HDMFController
 from controllers.philhealth_controller import PhilHealthController
 from controllers.auth_controller import AuthController
+from controllers.employee_records_controller import EmployeeRecordsController
 
 
 @dataclass
@@ -37,6 +39,8 @@ class DependencyContainer:
     hdmf_controller: HDMFController
     philhealth_service: PhilHealthService
     philhealth_controller: PhilHealthController
+    employee_records_service: EmployeeRecordsService
+    employee_records_controller: EmployeeRecordsController
     auth_controller: AuthController
 
 
@@ -57,6 +61,8 @@ def build_container() -> DependencyContainer:
     hdmf_controller = HDMFController(hdmf_service)
     philhealth_service = PhilHealthService(history_repository, statistics_repository)
     philhealth_controller = PhilHealthController(philhealth_service)
+    employee_records_service = EmployeeRecordsService()
+    employee_records_controller = EmployeeRecordsController(employee_records_service)
     auth_controller = AuthController(auth_service)
     return DependencyContainer(
         settings=settings,
@@ -75,5 +81,7 @@ def build_container() -> DependencyContainer:
         hdmf_controller=hdmf_controller,
         philhealth_service=philhealth_service,
         philhealth_controller=philhealth_controller,
+        employee_records_service=employee_records_service,
+        employee_records_controller=employee_records_controller,
         auth_controller=auth_controller,
     )

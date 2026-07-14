@@ -12,8 +12,8 @@ class PhilHealthController:
     def save_history(self, account_username: str, record_data: dict) -> None:
         self.service.save_history(account_username, record_data)
 
-    def delete_history(self, record_id: str) -> None:
-        self.service.delete_history(record_id)
+    def delete_history(self, account_username: str, record_id: str) -> None:
+        self.service.delete_history(account_username, record_id)
 
     def process(self, progress_callback=None):
         return self.service.process(self.engine, progress_callback=progress_callback)

@@ -8,6 +8,7 @@ class Account:
     sss_number: str = ""
     philhealth_number: str = ""
     hdmf_number: str = ""
+    employer_name: str = ""
     id: int | None = None
     created_at: str | None = None
     updated_at: str | None = None

@@ -283,8 +283,7 @@ class AppStyles:
             background: rgba(255, 255, 255, 0.03);
             border: none;
             border-top: 1px solid rgba(148, 163, 184, 0.16);
-            border-bottom-left-radius: 16px;
-            border-bottom-right-radius: 16px;
+            border-radius: 12px;
         }
     """
 
@@ -318,3 +317,50 @@ class AppStyles:
                 background: rgba(251, 113, 133, 0.98);
             }}
         """
+
+    GLOBAL_DROPDOWN = """
+        QComboBox {
+            background: rgba(15, 23, 42, 0.78);
+            color: #f8fafc;
+            border: 1px solid rgba(148, 163, 184, 0.28);
+            border-radius: 8px;
+            padding: 6px 10px;
+            font: 11px 'Segoe UI';
+        }
+        QComboBox:hover {
+            border: 1px solid rgba(148, 163, 184, 0.42);
+            background: rgba(15, 23, 42, 0.88);
+        }
+        QComboBox:focus {
+            border: 2px solid rgba(59, 130, 246, 0.62);
+            background: rgba(15, 23, 42, 0.92);
+        }
+        QComboBox::drop-down {
+            border: none;
+            width: 20px;
+        }
+        QComboBox::down-arrow {
+            image: none;
+            width: 0;
+            height: 0;
+        }
+        QComboBox QAbstractItemView {
+            background: rgba(15, 23, 42, 0.95);
+            color: #f8fafc;
+            border: 1px solid rgba(59, 130, 246, 0.34);
+            border-radius: 8px;
+            selection-background-color: rgba(59, 130, 246, 0.48);
+            outline: none;
+        }
+        QComboBox QAbstractItemView::item {
+            padding: 6px 10px;
+            border: none;
+        }
+        QComboBox QAbstractItemView::item:selected {
+            background: rgba(59, 130, 246, 0.48);
+            color: #ffffff;
+        }
+        QComboBox QAbstractItemView::item:hover {
+            background: rgba(59, 130, 246, 0.34);
+        }
+    """

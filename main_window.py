@@ -1,4 +1,4 @@
-from PySide6.QtCore import QPoint, Qt
+from PySide6.QtCore import QPoint, Qt, QEvent
 from PySide6.QtGui import QIcon
 from PySide6.QtWidgets import (
     QFrame,
@@ -37,12 +37,18 @@ class MainWindow(QMainWindow):
         self.container = QFrame()
         self.container.setObjectName("MainContainer")
         self.setCentralWidget(self.container)
-        self.container.setStyleSheet("""
+        self.container.setStyleSheet(self._container_style(False))
+        self._was_maximized_before_minimize = False
+        self._build_ui()
+
+    def _container_style(self, maximized: bool) -> str:
+        radius = 0 if maximized else 20
+        css = """
             #MainContainer {
                 background: qradialgradient(cx:0.3, cy:0.2, radius:1.4, fx:0.3, fy:0.2,
                                             stop:0 #0a1f1a, stop:0.5 #070b12, stop:1 #020408);
                 border: 1px solid rgba(20, 184, 166, 0.16);
-                border-radius: 20px;
+                border-radius: {radius}px;
             }
             QLabel {
                 font-family: 'Segoe UI', sans-serif;
@@ -95,8 +101,10 @@ class MainWindow(QMainWindow):
                 border: none;
                 width: 0;
             }
-        """)
+        """
+        return css.replace("{radius}", str(radius))
 
+    def _build_ui(self):
         main_layout = QVBoxLayout(self.container)
         main_layout.setContentsMargins(10, 10, 10, 10)
         main_layout.setSpacing(0)
@@ -132,6 +140,7 @@ class MainWindow(QMainWindow):
         main_layout.addLayout(grip_layout)
 
         self.window_state_manager = WindowStateManager(self)
+        self._update_maximized_style()
 
         page_factory = PageFactory(self.app_container)
         self.login_page, self.admin_page = page_factory.create_auth_pages()
@@ -142,6 +151,7 @@ class MainWindow(QMainWindow):
             self.workspace_stack,
             self.workspace_widget,
             self.earnings_panel,
+            self.employee_records_panel,
             self.philhealth_panel,
             self.sss_panel,
             self.hdmf_panel,
@@ -158,6 +168,7 @@ class MainWindow(QMainWindow):
             self.workspace_stack,
             self.workspace_widget,
             self.earnings_panel,
+            self.employee_records_panel,
             self.philhealth_panel,
             self.sss_panel,
             self.hdmf_panel,
@@ -198,12 +209,46 @@ class MainWindow(QMainWindow):
 
     def toggle_maximized(self):
         self.window_state_manager.toggle_maximized()
+        self._update_maximized_style()
+
+    def showMaximized(self):
+        super().showMaximized()
+        self._update_maximized_style()
+        self.window_state_manager.update_lock_state(True)
+
+    def showNormal(self):
+        super().showNormal()
+        self._update_maximized_style()
+        self.window_state_manager.update_lock_state(False)
+
+    def showMinimized(self):
+        self._was_maximized_before_minimize = self.isMaximized() or bool(self.windowState() & Qt.WindowMaximized)
+        super().showMinimized()
+        self._update_maximized_style()
+        self.window_state_manager.update_lock_state(False)
+
+    def _update_maximized_style(self):
+        maximized = bool(self.windowState() & Qt.WindowMaximized)
+        self.container.setStyleSheet(self._container_style(maximized))
+        self.container.update()
+        if hasattr(self, "window_state_manager"):
+            self.window_state_manager.update_lock_state(maximized)
 
     def mousePressEvent(self, event):
         self.window_state_manager.mousePressEvent(event)
 
     def mouseMoveEvent(self, event):
         self.window_state_manager.mouseMoveEvent(event)
+
+    def changeEvent(self, event):
+        super().changeEvent(event)
+        if event.type() == QEvent.WindowStateChange:
+            if self._was_maximized_before_minimize and not self.isMinimized() and not self.isMaximized():
+                super().showMaximized()
+                self._was_maximized_before_minimize = False
+            self._update_maximized_style()
+        elif event.type() == QEvent.ActivationChange:
+            self._update_maximized_style()
 
     def closeEvent(self, event):
         self.window_state_manager.closeEvent(event)

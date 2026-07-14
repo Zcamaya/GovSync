@@ -68,7 +68,12 @@ class HDMFLoanPanel(QWidget):
         else:
             username = str(account or "")
         self.current_username = username or "default"
+        self._reset_ui_state()
         self._load_state()
+
+    def _reset_ui_state(self):
+        self.progress_bar.setValue(0)
+        self.status_label.setText("Ready")
 
     def _setup_ui(self):
         self.setStyleSheet("background: transparent;")
@@ -262,6 +267,12 @@ class HDMFLoanPanel(QWidget):
         return account_json_path(self.current_username, "hdmf_loan_panel_state.json")
 
     def _load_state(self):
+        # Clear form fields first to avoid stale data from previous account
+        self.earnings_file.clear()
+        self.monitoring_file.clear()
+        self.earnings_file_path = ""
+        self.monitoring_file_path = ""
+        
         path = self._state_path()
         if not os.path.exists(path):
             return

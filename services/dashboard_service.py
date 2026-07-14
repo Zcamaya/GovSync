@@ -27,6 +27,11 @@ def _account_username():
     return active_account.get("username") or "default"
 
 
+def get_account_username(default: str = "default") -> str:
+    active_account = get_active_account() or {}
+    return active_account.get("username") or default
+
+
 def _stats_repository():
     initialize_database(database_path())
     return StatisticsRepository(database_path())

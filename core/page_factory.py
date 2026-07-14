@@ -2,6 +2,7 @@ from PySide6.QtWidgets import QHBoxLayout, QStackedWidget, QVBoxLayout, QWidget,
 
 from widgets.auth_windows import LoginPage, SuperAdminPage
 from widgets.earnings_panel import EarningsPanel
+from widgets.employee_records_panel import EmployeeRecordsPanel
 from widgets.hdmf_loan_panel import HDMFLoanPanel
 from widgets.philhealth_panel import PhilHealthPanel
 from widgets.right_panel import RightPanelWidget
@@ -46,6 +47,10 @@ class PageFactory:
         earnings_panel = EarningsPanel(controller=payroll_controller)
         workspace_stack.addWidget(earnings_panel)
 
+        employee_records_controller = getattr(self.container, "employee_records_controller", None)
+        employee_records_panel = EmployeeRecordsPanel(controller=employee_records_controller)
+        workspace_stack.addWidget(employee_records_panel)
+
         philhealth_controller = getattr(self.container, "philhealth_controller", None)
         philhealth_panel = PhilHealthPanel(controller=philhealth_controller)
         workspace_stack.addWidget(philhealth_panel)
@@ -80,6 +85,7 @@ class PageFactory:
             workspace_stack,
             workspace_widget,
             earnings_panel,
+            employee_records_panel,
             philhealth_panel,
             sss_panel,
             hdmf_panel,

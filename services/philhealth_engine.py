@@ -9,7 +9,7 @@ from PySide6.QtWidgets import (
     QApplication, QWidget, QVBoxLayout, QHBoxLayout, QLabel,
     QLineEdit, QPushButton, QFileDialog, QMessageBox, QComboBox,
     QTableWidget, QTableWidgetItem, QHeaderView, QTabWidget,
-    QProgressBar, QFrame, QScrollArea, QGridLayout
+    QProgressBar, QFrame, QScrollArea, QGridLayout, QAbstractItemView
 )
 from PySide6.QtGui import QColor
 import openpyxl
@@ -17,7 +17,9 @@ from openpyxl.styles import Font as XlFont, PatternFill, Alignment as XlAlignmen
 from models.history import HistoryRecord
 from repositories.history_repository import HistoryRepository
 from services.auth_manager import database_path, get_active_account
+from services.dashboard_service import get_account_username
 from shared.ui import set_exit_icon
+from constants.styles import AppStyles
 
 
 # ---------------------------------------------------------
@@ -379,10 +381,12 @@ class PhicExtractorApp(QWidget):
         self.month_combo = QComboBox()
         self.months_list = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
         self.month_combo.addItems(self.months_list)
+        self.month_combo.setStyleSheet(AppStyles.GLOBAL_DROPDOWN)
 
         self.year_combo = QComboBox()
         current_year = datetime.datetime.now().year
         self.year_combo.addItems([str(y) for y in range(current_year - 5, current_year + 3)])
+        self.year_combo.setStyleSheet(AppStyles.GLOBAL_DROPDOWN)
 
         today = datetime.datetime.now()
         last_day_of_prev_month = today.replace(day=1) - datetime.timedelta(days=1)
@@ -502,8 +506,7 @@ class PhicExtractorApp(QWidget):
 
     def load_history(self):
         self.history_records = []
-        active_account = get_active_account() or {}
-        username = active_account.get("username") or "default"
+        username = get_account_username()
         try:
             records = self.history_repository.list_by_account(username)
             loaded_records = [
@@ -518,8 +521,7 @@ class PhicExtractorApp(QWidget):
 
     def save_history_record(self, record_data):
         self.history_records.append(record_data)
-        active_account = get_active_account() or {}
-        username = active_account.get("username") or "default"
+        username = get_account_username()
         try:
             self.history_repository.save(
                 HistoryRecord(
@@ -541,7 +543,8 @@ class PhicExtractorApp(QWidget):
         if confirm == QMessageBox.Yes:
             self.history_records = [r for r in self.history_records if r["id"] != record_id]
             try:
-                self.history_repository.delete_by_id(record_id)
+                username = get_account_username()
+                self.history_repository.delete_by_id(record_id, username)
                 self.render_history_grid()
             except Exception as e:
                 print("Error saving after delete:", e)
@@ -611,12 +614,16 @@ class PhicExtractorApp(QWidget):
         
         clean_str = str(val).strip()
         if clean_str.isdigit():
-            try: return (datetime.datetime(1899, 12, 30) + datetime.timedelta(days=int(clean_str))).date()
-            except: pass
+            try:
+                return (datetime.datetime(1899, 12, 30) + datetime.timedelta(days=int(clean_str))).date()
+            except (ValueError, OverflowError):
+                pass
 
         for pattern in ["%m/%d/%Y", "%m-%d-%Y", "%Y-%m-%d", "%d/%m/%Y", "%Y/%m/%d", "%b %d, %Y", "%B %d, %Y", "%m/%d/%y", "%d-%b-%y"]:
-            try: return datetime.datetime.strptime(clean_str, pattern).date()
-            except ValueError: continue
+            try:
+                return datetime.datetime.strptime(clean_str, pattern).date()
+            except ValueError:
+                continue
         return clean_str
 
     def get_previous_month_info(self, current_month_str, current_year_str):
@@ -625,7 +632,8 @@ class PhicExtractorApp(QWidget):
             year = int(current_year_str)
             prev_month_date = datetime.date(year, m_idx, 1) - datetime.timedelta(days=1)
             return self.months_list[prev_month_date.month - 1], str(prev_month_date.year)
-        except: return None, None
+        except (ValueError, IndexError, TypeError):
+            return None, None
 
     def read_existing_master_identities(self, file_path):
         identities = set()
@@ -641,10 +649,11 @@ class PhicExtractorApp(QWidget):
                     lname = str(ws.cell(row=r_idx, column=5).value or "").strip().upper()
                     fname = str(ws.cell(row=r_idx, column=6).value or "").strip().upper()
                     client = str(ws.cell(row=r_idx, column=17).value or "").strip()
-                    if phealth or lname or fname: 
+                    if phealth or lname or fname:
                         identities.add((phealth, bdate_str, f"{lname}, {fname}", client))
             wb.close()
-        except: pass
+        except Exception as exc:
+            print(f"Error reading existing master identities: {exc}")
         return identities
 
     def set_ui_enabled(self, enabled: bool):

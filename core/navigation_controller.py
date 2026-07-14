@@ -11,6 +11,7 @@ class NavigationController:
         workspace_stack,
         workspace_widget,
         earnings_panel,
+        employee_records_panel,
         philhealth_panel,
         sss_panel,
         hdmf_panel,
@@ -24,6 +25,7 @@ class NavigationController:
         self.workspace_stack = workspace_stack
         self.workspace_widget = workspace_widget
         self.earnings_panel = earnings_panel
+        self.employee_records_panel = employee_records_panel
         self.philhealth_panel = philhealth_panel
         self.sss_panel = sss_panel
         self.hdmf_panel = hdmf_panel
@@ -57,6 +59,8 @@ class NavigationController:
 
         if hasattr(self.earnings_panel, "set_account"):
             self.earnings_panel.set_account(account)
+        if hasattr(self.employee_records_panel, "set_account"):
+            self.employee_records_panel.set_account(account)
         if hasattr(self.sss_panel, "set_account"):
             self.sss_panel.set_account(account)
         if hasattr(self.hdmf_panel, "set_account"):

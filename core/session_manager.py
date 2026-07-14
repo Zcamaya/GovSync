@@ -6,6 +6,22 @@ from typing import Any
 from config import DATA_DIR
 
 
+def normalize_account_data(account: Any) -> dict[str, Any] | None:
+    if not isinstance(account, dict):
+        return None
+
+    password_value = account.get("password_hash", account.get("password", ""))
+    return {
+        "username": str(account.get("username", "")).strip(),
+        "password": str(password_value),
+        "password_hash": str(password_value),
+        "sss_number": SessionManager._digits_only(account.get("sss_number", "")),
+        "philhealth_number": SessionManager._digits_only(account.get("philhealth_number", "")),
+        "hdmf_number": SessionManager._digits_only(account.get("hdmf_number", "")),
+        "employer_name": str(account.get("employer_name", "")).strip(),
+    }
+
+
 class SessionManager:
     _ACTIVE_ACCOUNT_FILENAME = "active_account.json"
     _ACCOUNT_FIELDS = (
@@ -15,6 +31,7 @@ class SessionManager:
         "sss_number",
         "philhealth_number",
         "hdmf_number",
+        "employer_name",
     )
 
     def __init__(self, data_dir: Path | str = DATA_DIR):
@@ -33,18 +50,7 @@ class SessionManager:
         return "".join(re.findall(r"\d", str(value)))
 
     def _normalize_account(self, account: Any) -> dict[str, Any] | None:
-        if not isinstance(account, dict):
-            return None
-
-        password_value = account.get("password_hash", account.get("password", ""))
-        return {
-            "username": str(account.get("username", "")).strip(),
-            "password": str(password_value),
-            "password_hash": str(password_value),
-            "sss_number": self._digits_only(account.get("sss_number", "")),
-            "philhealth_number": self._digits_only(account.get("philhealth_number", "")),
-            "hdmf_number": self._digits_only(account.get("hdmf_number", "")),
-        }
+        return normalize_account_data(account)
 
     def set_active_account(self, account: Any | None) -> None:
         self._active_account = self._normalize_account(account) if account else None

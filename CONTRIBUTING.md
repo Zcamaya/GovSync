@@ -24,11 +24,15 @@ Thank you for helping improve GovSync. This document describes the process for c
 - Prefer dependency injection via the `core/dependency_container.py` and service/controller constructors.
 - Avoid direct business logic in widgets.
 - Keep legacy module references out of new code.
+- Preserve the current UI and user-facing workflow when fixing logic or state handling; avoid UI redesigns unless explicitly requested.
+- Update the relevant documentation files, including `README.md`, `AI_CONTEXT.md`, and `CHANGELOG.md`, whenever a feature, bug fix, or structural change is made.
+- Keep `.gitignore` and `.aiignore` up to date for generated files, local environments, and editor metadata.
 
 ## Testing and validation
 
 - Run Python syntax checks with `python -m py_compile`.
 - Ensure changes do not introduce direct `utils.*` imports for migrated functionality.
+- AI-assisted updates should not execute test suites or automated tests unless explicitly requested.
 - Maintain or update `RESTRUCTURE_PLAN.md` if the change affects the migration roadmap.
 
 ## Code style

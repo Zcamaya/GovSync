@@ -7,7 +7,7 @@ from typing import Any
 
 from config import DATA_DIR, SUPER_ADMIN_PASSWORD, SUPER_ADMIN_USERNAME
 from core.exceptions import AuthenticationError
-from core.session_manager import clear_active_account, get_active_account, set_active_account
+from core.session_manager import clear_active_account, get_active_account, normalize_account_data, set_active_account
 from models.account import Account
 from repositories.account_repository import AccountRepository
 from services.auth_service import AuthService
@@ -44,9 +44,13 @@ def _get_auth_service() -> AuthService:
     return _auth_service
 
 
-def account_folder(username: str) -> str:
+def account_folder_path(username: str) -> str:
     safe_name = SAFE_NAME_PATTERN.sub("_", username.strip() or "default")
-    folder = os.path.join(app_data_dir(), "accounts", safe_name)
+    return os.path.join(app_data_dir(), "accounts", safe_name)
+
+
+def account_folder(username: str) -> str:
+    folder = account_folder_path(username)
     os.makedirs(folder, exist_ok=True)
     return folder
 
@@ -61,18 +65,7 @@ def account_json_path(username: str, filename: str) -> str:
 
 
 def normalize_account(account: Any) -> dict[str, str] | None:
-    if not isinstance(account, dict):
-        return None
-
-    password_value = account.get("password_hash", account.get("password", ""))
-    return {
-        "username": str(account.get("username", "")).strip(),
-        "password": str(password_value),
-        "password_hash": str(password_value),
-        "sss_number": digits_only(account.get("sss_number", "")),
-        "philhealth_number": digits_only(account.get("philhealth_number", "")),
-        "hdmf_number": digits_only(account.get("hdmf_number", "")),
-    }
+    return normalize_account_data(account)
 
 
 def digits_only(value: Any) -> str:
@@ -104,6 +97,9 @@ def validate_account_numbers(sss_number: str = "", philhealth_number: str = "", 
     }
 
     for field, raw_value in values.items():
+        if not raw_value:
+            continue
+
         digits = digits_only(raw_value)
         expected_length = ACCOUNT_NUMBER_LENGTHS[field]
         if len(digits) != expected_length:
@@ -127,6 +123,7 @@ def load_accounts() -> list[dict[str, str]]:
             "sss_number": account.sss_number,
             "philhealth_number": account.philhealth_number,
             "hdmf_number": account.hdmf_number,
+            "employer_name": account.employer_name,
         }
         for account in list_accounts()
     ]
@@ -145,6 +142,7 @@ def save_accounts(accounts: list[dict[str, Any]]) -> None:
                 sss_number=normalized["sss_number"],
                 philhealth_number=normalized["philhealth_number"],
                 hdmf_number=normalized["hdmf_number"],
+                employer_name=normalized["employer_name"],
             )
         )
     _get_account_repository().replace_all(normalized_accounts)
@@ -165,6 +163,7 @@ def get_account(username: str) -> dict[str, str] | None:
         "sss_number": account.sss_number,
         "philhealth_number": account.philhealth_number,
         "hdmf_number": account.hdmf_number,
+        "employer_name": account.employer_name,
     }
 
 
@@ -174,6 +173,7 @@ def register_account(
     sss_number: str = "",
     philhealth_number: str = "",
     hdmf_number: str = "",
+    employer_name: str = "",
 ) -> Account:
     username = username.strip()
     password = password.strip()
@@ -190,6 +190,7 @@ def register_account(
         sss_number=digits_only(sss_number),
         philhealth_number=digits_only(philhealth_number),
         hdmf_number=digits_only(hdmf_number),
+        employer_name=employer_name.strip(),
     )
     saved = _get_auth_service().register(account, password)
     account_folder(saved.username)
@@ -210,6 +211,7 @@ def authenticate(username: str, password: str) -> str:
                 "sss_number": "",
                 "philhealth_number": "",
                 "hdmf_number": "",
+                "employer_name": "",
             }
         )
         return "admin"
@@ -229,6 +231,7 @@ def authenticate(username: str, password: str) -> str:
             "sss_number": account.sss_number,
             "philhealth_number": account.philhealth_number,
             "hdmf_number": account.hdmf_number,
+            "employer_name": account.employer_name,
         }
     )
     return "user"
@@ -236,7 +239,7 @@ def authenticate(username: str, password: str) -> str:
 
 def delete_account(username: str) -> None:
     _get_account_repository().delete_by_username(username)
-    folder = account_folder(username)
+    folder = account_folder_path(username)
     if os.path.isdir(folder):
         shutil.rmtree(folder, ignore_errors=True)
     active = get_active_account() or {}
@@ -251,8 +254,11 @@ def update_account(username: str, **fields: Any) -> None:
 
     merged = normalize_account(account)
     for key, value in fields.items():
-        if key in ("username", "password", "password_hash", "sss_number", "philhealth_number", "hdmf_number"):
-            merged[key] = str(value).strip()
+        if key in ("username", "password", "password_hash", "sss_number", "philhealth_number", "hdmf_number", "employer_name"):
+            if key in {"sss_number", "philhealth_number", "hdmf_number"}:
+                merged[key] = digits_only(value)
+            else:
+                merged[key] = str(value).strip()
 
     _get_account_repository().save(
         Account(
@@ -261,6 +267,7 @@ def update_account(username: str, **fields: Any) -> None:
             sss_number=merged["sss_number"],
             philhealth_number=merged["philhealth_number"],
             hdmf_number=merged["hdmf_number"],
+            employer_name=merged["employer_name"],
         )
     )
     active = get_active_account() or {}

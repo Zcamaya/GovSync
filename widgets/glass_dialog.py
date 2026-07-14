@@ -19,6 +19,7 @@ class GlassDialog(QDialog):
         self.setAttribute(Qt.WA_TranslucentBackground)
         self.setFixedSize(560, 380)
         self.drag_pos = QPoint()
+        self._is_dragging = False
 
         outer_layout = QVBoxLayout(self)
         outer_layout.setContentsMargins(1, 1, 1, 1)
@@ -78,10 +79,24 @@ class GlassDialog(QDialog):
 
     def mousePressEvent(self, event):
         if event.button() == Qt.LeftButton:
+            self._is_dragging = True
             self.drag_pos = event.globalPosition().toPoint()
+            event.accept()
+        else:
+            super().mousePressEvent(event)
 
     def mouseMoveEvent(self, event):
-        if event.buttons() == Qt.LeftButton:
+        if event.buttons() == Qt.LeftButton and self._is_dragging:
             next_pos = self.pos() + event.globalPosition().toPoint() - self.drag_pos
             self.move(next_pos)
             self.drag_pos = event.globalPosition().toPoint()
+            event.accept()
+        else:
+            super().mouseMoveEvent(event)
+
+    def mouseReleaseEvent(self, event):
+        if event.button() == Qt.LeftButton:
+            self._is_dragging = False
+            event.accept()
+        else:
+            super().mouseReleaseEvent(event)

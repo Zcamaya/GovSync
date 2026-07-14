@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+- Added employer-name capture during account creation so users can associate accounts with different employers.
+- Persisted employer names in account storage, registration forms, and account listings.
+- Improved account switching isolation across SSS, HDMF, and PhilHealth panels by resetting stale UI state and clearing form fields.
+- Scoped PhilHealth history and delete actions to the active account to prevent cross-account data leakage.
+- Added regression tests covering employer-name persistence and account-scoped panel behavior.
+- Updated project documentation to keep the handoff notes and contribution guidance aligned with the current system behavior.
 - Migrated legacy `utils/` engines into the `services/` package.
 - Replaced legacy `utils` imports with service/core/shared equivalents.
 - Removed `utils/` package after successful migration.

@@ -60,12 +60,18 @@ class HistoryRepository:
             )
         return records
 
-    def delete_by_id(self, record_id: str) -> None:
+    def delete_by_id(self, record_id: str, account_username: str | None = None) -> None:
         with connect(self.database_path) as connection:
-            connection.execute(
-                "DELETE FROM history_records WHERE id = ?",
-                (record_id,),
-            )
+            if account_username is None:
+                connection.execute(
+                    "DELETE FROM history_records WHERE id = ?",
+                    (record_id,),
+                )
+            else:
+                connection.execute(
+                    "DELETE FROM history_records WHERE id = ? AND account_username = ?",
+                    (record_id, account_username),
+                )
             connection.commit()
 
     def replace_many(self, account_username: str, records: list[HistoryRecord]) -> None:

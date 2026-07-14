@@ -60,5 +60,9 @@ class PhilHealthService:
             int(record.get("total_count", 0)),
         )
 
-    def delete_history(self, record_id: str) -> None:
-        self.history_repository.delete_by_id(record_id)
+    def delete_history(self, account_username, record_id):
+        records = self.history_repository.list_by_account(account_username)
+        matching_record = next((record for record in records if record.id == record_id), None)
+        if matching_record is None:
+            return
+        self.history_repository.delete_by_id(record_id, account_username)
