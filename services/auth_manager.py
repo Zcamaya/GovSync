@@ -9,7 +9,9 @@ from config import DATA_DIR, SUPER_ADMIN_PASSWORD, SUPER_ADMIN_USERNAME
 from core.exceptions import AuthenticationError
 from core.session_manager import clear_active_account, get_active_account, normalize_account_data, set_active_account
 from models.account import Account
+from models.employer import Employer
 from repositories.account_repository import AccountRepository
+from repositories.employer_repository import EmployerRepository
 from services.auth_service import AuthService
 from storage.sqlite import initialize_database
 
@@ -42,6 +44,23 @@ def _get_auth_service() -> AuthService:
     if _auth_service is None:
         _auth_service = AuthService(_get_account_repository())
     return _auth_service
+
+
+def _resolve_employer_id(employer_id: int | None, employer_name: str) -> int | None:
+    if employer_id is not None:
+        return int(employer_id)
+
+    normalized_name = employer_name.strip()
+    if not normalized_name:
+        return None
+
+    repository = EmployerRepository(database_path())
+    existing = repository.get_by_name(normalized_name)
+    if existing is not None:
+        return existing.id
+
+    created = repository.save(Employer(name=normalized_name, status="active"))
+    return created.id
 
 
 def account_folder_path(username: str) -> str:
@@ -123,6 +142,7 @@ def load_accounts() -> list[dict[str, str]]:
             "sss_number": account.sss_number,
             "philhealth_number": account.philhealth_number,
             "hdmf_number": account.hdmf_number,
+            "employer_id": account.employer_id,
             "employer_name": account.employer_name,
         }
         for account in list_accounts()
@@ -142,6 +162,7 @@ def save_accounts(accounts: list[dict[str, Any]]) -> None:
                 sss_number=normalized["sss_number"],
                 philhealth_number=normalized["philhealth_number"],
                 hdmf_number=normalized["hdmf_number"],
+                employer_id=normalized.get("employer_id"),
                 employer_name=normalized["employer_name"],
             )
         )
@@ -163,6 +184,7 @@ def get_account(username: str) -> dict[str, str] | None:
         "sss_number": account.sss_number,
         "philhealth_number": account.philhealth_number,
         "hdmf_number": account.hdmf_number,
+        "employer_id": account.employer_id,
         "employer_name": account.employer_name,
     }
 
@@ -174,6 +196,7 @@ def register_account(
     philhealth_number: str = "",
     hdmf_number: str = "",
     employer_name: str = "",
+    employer_id: int | None = None,
 ) -> Account:
     username = username.strip()
     password = password.strip()
@@ -184,13 +207,16 @@ def register_account(
     if get_account(username):
         raise ValueError("Username already exists.")
 
+    employer_name = employer_name.strip()
+    resolved_employer_id = _resolve_employer_id(employer_id, employer_name)
     account = Account(
         username=username,
         password_hash="",
         sss_number=digits_only(sss_number),
         philhealth_number=digits_only(philhealth_number),
         hdmf_number=digits_only(hdmf_number),
-        employer_name=employer_name.strip(),
+        employer_id=resolved_employer_id,
+        employer_name=employer_name,
     )
     saved = _get_auth_service().register(account, password)
     account_folder(saved.username)
@@ -211,6 +237,7 @@ def authenticate(username: str, password: str) -> str:
                 "sss_number": "",
                 "philhealth_number": "",
                 "hdmf_number": "",
+                "employer_id": None,
                 "employer_name": "",
             }
         )
@@ -231,6 +258,7 @@ def authenticate(username: str, password: str) -> str:
             "sss_number": account.sss_number,
             "philhealth_number": account.philhealth_number,
             "hdmf_number": account.hdmf_number,
+            "employer_id": account.employer_id,
             "employer_name": account.employer_name,
         }
     )
@@ -267,6 +295,7 @@ def update_account(username: str, **fields: Any) -> None:
             sss_number=merged["sss_number"],
             philhealth_number=merged["philhealth_number"],
             hdmf_number=merged["hdmf_number"],
+            employer_id=merged.get("employer_id"),
             employer_name=merged["employer_name"],
         )
     )

@@ -7,6 +7,12 @@ Architecture\
 **Database:** SQLite\
 **Language:** Python 3
 
+## Core Domain Model
+
+- Accounts are authenticated users and may be linked to a normalized employer record through `employer_id`.
+- Employers are canonical records for company-level metadata such as name, address, and contribution numbers.
+- Account-level employer data remains available as compatibility fields while the app moves toward employer-first persistence.
+
 ------------------------------------------------------------------------
 
 # Overview
@@ -39,6 +45,8 @@ SQLite Database
 ```
 
 The UI never communicates directly with repositories or the database.
+
+Authentication and registration flow through the controller/service/repository layers, where employer resolution happens before the account is persisted.
 
 ------------------------------------------------------------------------
 

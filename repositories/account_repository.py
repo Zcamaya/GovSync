@@ -13,7 +13,12 @@ class AccountRepository:
         connection = connect(self.database_path)
         try:
             row = connection.execute(
-                "SELECT * FROM accounts WHERE username = ?",
+                """
+                SELECT a.*, e.name AS employer_name
+                FROM accounts a
+                LEFT JOIN employers e ON e.id = a.employer_id
+                WHERE a.username = ?
+                """,
                 (username,),
             ).fetchone()
         finally:
@@ -27,6 +32,7 @@ class AccountRepository:
             sss_number=row["sss_number"],
             philhealth_number=row["philhealth_number"],
             hdmf_number=row["hdmf_number"],
+            employer_id=row["employer_id"],
             employer_name=row["employer_name"],
             created_at=row["created_at"],
             updated_at=row["updated_at"],
@@ -36,7 +42,12 @@ class AccountRepository:
         connection = connect(self.database_path)
         try:
             rows = connection.execute(
-                "SELECT * FROM accounts ORDER BY username COLLATE NOCASE"
+                """
+                SELECT a.*, e.name AS employer_name
+                FROM accounts a
+                LEFT JOIN employers e ON e.id = a.employer_id
+                ORDER BY a.username COLLATE NOCASE
+                """
             ).fetchall()
         finally:
             connection.close()
@@ -50,6 +61,7 @@ class AccountRepository:
                     sss_number=row["sss_number"],
                     philhealth_number=row["philhealth_number"],
                     hdmf_number=row["hdmf_number"],
+                    employer_id=row["employer_id"],
                     employer_name=row["employer_name"],
                     created_at=row["created_at"],
                     updated_at=row["updated_at"],
@@ -74,8 +86,8 @@ class AccountRepository:
             connection.execute("DELETE FROM accounts")
             connection.executemany(
                 """
-                INSERT INTO accounts (username, password_hash, sss_number, philhealth_number, hdmf_number, employer_name)
-                VALUES (?, ?, ?, ?, ?, ?)
+                INSERT INTO accounts (username, password_hash, sss_number, philhealth_number, hdmf_number, employer_id, employer_name)
+                VALUES (?, ?, ?, ?, ?, ?, ?)
                 """,
                 [
                     (
@@ -84,6 +96,7 @@ class AccountRepository:
                         account.sss_number,
                         account.philhealth_number,
                         account.hdmf_number,
+                        account.employer_id,
                         account.employer_name,
                     )
                     for account in accounts
@@ -98,13 +111,14 @@ class AccountRepository:
         try:
             connection.execute(
                 """
-                INSERT INTO accounts (username, password_hash, sss_number, philhealth_number, hdmf_number, employer_name)
-                VALUES (?, ?, ?, ?, ?, ?)
+                INSERT INTO accounts (username, password_hash, sss_number, philhealth_number, hdmf_number, employer_id, employer_name)
+                VALUES (?, ?, ?, ?, ?, ?, ?)
                 ON CONFLICT(username) DO UPDATE SET
                     password_hash = excluded.password_hash,
                     sss_number = excluded.sss_number,
                     philhealth_number = excluded.philhealth_number,
                     hdmf_number = excluded.hdmf_number,
+                    employer_id = excluded.employer_id,
                     employer_name = excluded.employer_name,
                     updated_at = CURRENT_TIMESTAMP
                 """,
@@ -114,6 +128,7 @@ class AccountRepository:
                     account.sss_number,
                     account.philhealth_number,
                     account.hdmf_number,
+                    account.employer_id,
                     account.employer_name,
                 ),
             )

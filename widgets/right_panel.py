@@ -1,394 +1,38 @@
 import calendar as cal_lib
 import json
 import os
-import re
 import uuid
 from datetime import datetime
 
-from PySide6.QtCore import QPoint, QTimer, Qt, Signal, QSize
-from PySide6.QtGui import QFont, QTextCursor, QTextListFormat
+from PySide6.QtCore import QTimer, Qt
+from PySide6.QtGui import QFont
 from PySide6.QtWidgets import (
     QDialog,
-    QCheckBox,
     QFrame,
-    QGridLayout,
     QHBoxLayout,
     QLabel,
-    QLineEdit,
-    QListWidgetItem,
     QPushButton,
     QScrollArea,
-    QTextEdit,
-    QToolButton,
-    QVBoxLayout,
     QSizePolicy,
+    QVBoxLayout,
     QWidget,
+    QLayout,
 )
 
 from constants.styles import AppStyles
+from widgets.activity_row import ActivityRowWidget
+from widgets.custom_reference_calendar import CustomReferenceCalendar
 from widgets.glass_panel import TrueGlassPanel
+from widgets.note_editor import NoteEditorDialog
+from widgets.note_row import NoteRowWidget
 from services.auth_manager import account_json_path
 from shared.ui import set_exit_icon
-
-
-class RichNotesEditor(QTextEdit):
-    def keyPressEvent(self, event):
-        if event.modifiers() & Qt.ControlModifier:
-            key = event.key()
-            if key == Qt.Key_B:
-                self._toggle_format("bold")
-                return
-            if key == Qt.Key_I:
-                self._toggle_format("italic")
-                return
-            if key == Qt.Key_U:
-                self._toggle_format("underline")
-                return
-
-        if event.key() in (Qt.Key_Return, Qt.Key_Enter):
-            cursor = self.textCursor()
-            if cursor.currentList() is not None:
-                super().keyPressEvent(event)
-                cursor = self.textCursor()
-                if cursor.currentList() is not None and not cursor.block().text().strip():
-                    return
-                return
-
-        super().keyPressEvent(event)
-
-    def _toggle_format(self, mode):
-        if mode == "bold":
-            self.setFontWeight(QFont.Normal if self.fontWeight() == QFont.Bold else QFont.Bold)
-        elif mode == "italic":
-            self.setFontItalic(not self.fontItalic())
-        elif mode == "underline":
-            self.setFontUnderline(not self.fontUnderline())
-
-
-class NoteEditorDialog(QDialog):
-    title_changed = Signal(str)
-    content_changed = Signal(str)
-
-    def __init__(self, note, parent=None):
-        super().__init__(parent)
-        self.note = note
-        self.setWindowTitle("Note Editor")
-        self.setWindowFlags(Qt.Dialog | Qt.FramelessWindowHint)
-        self.setAttribute(Qt.WA_TranslucentBackground)
-        self.setModal(True)
-        self.setMinimumSize(640, 500)
-        self.drag_pos = QPoint()
-        self._building = True
-        self._setup_ui()
-        self._building = False
-
-    def _setup_ui(self):
-        self.setStyleSheet(AppStyles.DIALOG_BASE)
-
-        outer = QVBoxLayout(self)
-        outer.setContentsMargins(1, 1, 1, 1)
-        outer.setSpacing(0)
-
-        card = QFrame()
-        card.setObjectName("DialogCard")
-        outer.addWidget(card)
-
-        layout = QVBoxLayout(card)
-        layout.setContentsMargins(18, 16, 18, 16)
-        layout.setSpacing(12)
-
-        title_row = QHBoxLayout()
-        title_row.setSpacing(10)
-        close_btn = QPushButton()
-        close_btn.setFixedSize(28, 28)
-        close_btn.setCursor(Qt.PointingHandCursor)
-        set_exit_icon(close_btn, "#ffffff", 11)
-        close_btn.clicked.connect(self.reject)
-        close_btn.setStyleSheet("""
-            QPushButton {
-                background: #ef4444;
-                border: none;
-                border-radius: 8px;
-            }
-            QPushButton:hover {
-                background: #f87171;
-            }
-        """)
-        title = QLabel("Edit Note")
-        title.setObjectName("DialogTitle")
-        title_row.addStretch()
-        title_row.addWidget(title)
-        title_row.addStretch()
-        title_row.addWidget(close_btn, alignment=Qt.AlignRight)
-        layout.addLayout(title_row)
-
-        self.title_input = QLineEdit()
-        self.title_input.setPlaceholderText("Title")
-        self.title_input.setText(self.note.get("title", ""))
-        self.title_input.textChanged.connect(
-            lambda text: self.title_changed.emit(text)
-        )
-        layout.addWidget(self.title_input)
-
-        toolbar = QHBoxLayout()
-        toolbar.setSpacing(6)
-        for label, callback in [
-            ("B", lambda: self._toggle_editor("bold")),
-            ("I", lambda: self._toggle_editor("italic")),
-            ("U", lambda: self._toggle_editor("underline")),
-            ("Bullets", lambda: self._insert_list(QTextListFormat.ListDisc)),
-        ]:
-            button = QToolButton()
-            button.setText(label)
-            button.clicked.connect(callback)
-            if label == "Bullets":
-                button.setMinimumWidth(58)
-            toolbar.addWidget(button)
-        toolbar.addStretch()
-        layout.addLayout(toolbar)
-
-        self.content_input = RichNotesEditor()
-        self.content_input.setAcceptRichText(True)
-        self.content_input.setHtml(self.note.get("content", ""))
-        self.content_input.textChanged.connect(
-            lambda: self.content_changed.emit(self.content_input.toHtml())
-        )
-        layout.addWidget(self.content_input, stretch=1)
-
-        actions = QHBoxLayout()
-        actions.addStretch()
-        cancel_btn = QPushButton("Cancel")
-        cancel_btn.clicked.connect(self.reject)
-        save_btn = QPushButton("Save")
-        save_btn.setObjectName("PrimaryButton")
-        save_btn.clicked.connect(self.accept)
-        cancel_btn.setFixedHeight(38)
-        save_btn.setFixedHeight(38)
-        actions.addWidget(cancel_btn)
-        actions.addWidget(save_btn)
-        layout.addLayout(actions)
-
-    def _toggle_editor(self, mode):
-        editor = self.content_input
-        if mode == "bold":
-            editor.setFontWeight(QFont.Normal if editor.fontWeight() == QFont.Bold else QFont.Bold)
-        elif mode == "italic":
-            editor.setFontItalic(not editor.fontItalic())
-        elif mode == "underline":
-            editor.setFontUnderline(not editor.fontUnderline())
-
-    def _insert_list(self, style):
-        cursor = self.content_input.textCursor()
-        cursor.beginEditBlock()
-        list_format = QTextListFormat()
-        list_format.setStyle(style)
-        cursor.createList(list_format)
-        cursor.endEditBlock()
-        self.content_input.setTextCursor(cursor)
-
-    def get_note_state(self):
-        return {
-            "id": self.note["id"],
-            "title": self.title_input.text().strip() or "Untitled",
-            "content": self.content_input.toHtml(),
-        }
-
-    def mousePressEvent(self, event):
-        if event.button() == Qt.LeftButton:
-            self.drag_pos = event.globalPosition().toPoint()
-        super().mousePressEvent(event)
-
-    def mouseMoveEvent(self, event):
-        if event.buttons() == Qt.LeftButton and not self.drag_pos.isNull():
-            next_pos = self.pos() + event.globalPosition().toPoint() - self.drag_pos
-            self.move(next_pos)
-            self.drag_pos = event.globalPosition().toPoint()
-        super().mouseMoveEvent(event)
-
-
-class NoteRowWidget(QFrame):
-    delete_requested = Signal(str)
-    clicked = Signal(str)
-
-    def __init__(self, note, parent=None):
-        super().__init__(parent)
-        self.note = note
-        self.setCursor(Qt.PointingHandCursor)
-        self.setObjectName("NoteRow")
-        self._setup_ui()
-
-    def _setup_ui(self):
-        self.setStyleSheet(AppStyles.NOTE_ROW)
-        layout = QHBoxLayout(self)
-        layout.setContentsMargins(10, 0, 0, 0)
-        layout.setSpacing(4)
-        layout.setAlignment(Qt.AlignVCenter)
-        self.setFixedHeight(38)
-        self.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed)
-        self.setAttribute(Qt.WA_StyledBackground, True)
-
-        self.title_label = QLabel(self.note.get("title", "Untitled"))
-        self.title_label.setStyleSheet("color: #f8fafc; font: 800 12px 'Segoe UI';")
-        self.title_label.setAlignment(Qt.AlignVCenter | Qt.AlignLeft)
-        self.title_label.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed)
-
-        delete_btn = QToolButton()
-        delete_btn.setFixedSize(36, 36)
-        delete_btn.setCursor(Qt.PointingHandCursor)
-        delete_btn.setStyleSheet("""
-            QToolButton {
-                background: rgba(244, 63, 94, 0.96);
-                border: none;
-                border-top-right-radius: 10px;
-                border-bottom-right-radius: 10px;
-                color: #ffffff;
-                padding: 0;
-                margin: 0;
-            }
-            QToolButton:hover {
-                background: rgba(251, 113, 133, 0.98);
-            }
-        """)
-        set_exit_icon(delete_btn, "#ffffff", 14)
-        delete_btn.setIconSize(QSize(14, 14))
-        delete_btn.setToolButtonStyle(Qt.ToolButtonIconOnly)
-        delete_btn.clicked.connect(lambda: self.delete_requested.emit(self.note["id"]))
-
-        layout.addWidget(self.title_label)
-        layout.addWidget(delete_btn, alignment=Qt.AlignCenter)
-
-    def _preview_text(self):
-        content = self.note.get("content", "")
-        stripped = re.sub(r"<style.*?>.*?</style>", " ", content, flags=re.S | re.I)
-        stripped = re.sub(r"<head.*?>.*?</head>", " ", stripped, flags=re.S | re.I)
-        stripped = stripped.replace("<br>", " ").replace("<p>", " ").replace("</p>", " ")
-        stripped = stripped.replace("&nbsp;", " ")
-        stripped = re.sub(r"<[^>]+>", " ", stripped)
-        compact = " ".join(stripped.split())
-        return compact[:120] + ("..." if len(compact) > 120 else "")
-
-    def mousePressEvent(self, event):
-        if event.button() == Qt.LeftButton:
-            self.clicked.emit(self.note["id"])
-        super().mousePressEvent(event)
-
-    def update_note(self, title=None, content=None):
-        if title is not None:
-            self.note["title"] = title.strip() or "Untitled"
-            self.title_label.setText(self.note["title"])
-        if content is not None:
-            self.note["content"] = content
-
-
-class CustomReferenceCalendar(QFrame):
-    def __init__(self):
-        super().__init__()
-        self.setStyleSheet("""
-            CustomReferenceCalendar {
-                background: rgba(30, 41, 59, 0.6);
-                border: 1px solid rgba(255, 255, 255, 0.1);
-                border-radius: 20px;
-            }
-            QLabel { color: #f8fafc; background: transparent; }
-            QPushButton {
-                background: transparent;
-                color: #94a3b8;
-                border: none;
-                font-weight: bold;
-            }
-            QPushButton:hover { color: #ffffff; }
-        """)
-
-        self.now = datetime.now()
-        self.current_year = self.now.year
-        self.current_month = self.now.month
-
-        layout = QVBoxLayout(self)
-        layout.setContentsMargins(15, 15, 15, 15)
-        layout.setSpacing(10)
-
-        header_layout = QHBoxLayout()
-        self.lbl_month_year = QLabel()
-        self.lbl_month_year.setFont(QFont("Segoe UI", 11, QFont.Bold))
-
-        btn_prev = QPushButton("<")
-        btn_prev.setFixedSize(20, 20)
-        btn_prev.clicked.connect(lambda: self.change_month(-1))
-
-        btn_next = QPushButton(">")
-        btn_next.setFixedSize(20, 20)
-        btn_next.clicked.connect(lambda: self.change_month(1))
-
-        header_layout.addWidget(btn_prev)
-        header_layout.addWidget(self.lbl_month_year, alignment=Qt.AlignCenter)
-        header_layout.addWidget(btn_next)
-
-        self.grid_container = QWidget()
-        self.grid_layout = QGridLayout(self.grid_container)
-        self.grid_layout.setSpacing(5)
-
-        layout.addLayout(header_layout)
-        layout.addWidget(self.grid_container)
-        self.rebuild_calendar()
-
-    def change_month(self, delta):
-        self.current_month += delta
-
-        if self.current_month > 12:
-            self.current_month = 1
-            self.current_year += 1
-        elif self.current_month < 1:
-            self.current_month = 12
-            self.current_year -= 1
-
-        self.rebuild_calendar()
-
-    def rebuild_calendar(self):
-        for index in reversed(range(self.grid_layout.count())):
-            widget = self.grid_layout.itemAt(index).widget()
-            if widget is not None:
-                widget.setParent(None)
-
-        month_label = datetime(self.current_year, self.current_month, 1).strftime("%B %Y")
-        self.lbl_month_year.setText(month_label)
-
-        for column, day_name in enumerate(["M", "T", "W", "T", "F", "S", "S"]):
-            label = QLabel(day_name)
-            label.setFont(QFont("Segoe UI", 8, QFont.Bold))
-            label.setStyleSheet("color: #64748b;")
-            label.setAlignment(Qt.AlignCenter)
-            self.grid_layout.addWidget(label, 0, column)
-
-        month_matrix = cal_lib.monthcalendar(self.current_year, self.current_month)
-        for row_index, week in enumerate(month_matrix, start=1):
-            for column_index, day in enumerate(week):
-                if day == 0:
-                    continue
-
-                label = QLabel(str(day))
-                label.setAlignment(Qt.AlignCenter)
-                label.setFixedSize(25, 25)
-
-                is_today = (
-                    day == self.now.day
-                    and self.current_month == self.now.month
-                    and self.current_year == self.now.year
-                )
-                if is_today:
-                    label.setStyleSheet(
-                        "background-color: #f43f5e; border-radius: 12px; "
-                        "color: white; font-weight: bold;"
-                    )
-                else:
-                    label.setStyleSheet("color: #e2e8f0;")
-
-                self.grid_layout.addWidget(label, row_index, column_index)
 
 
 class RightPanelWidget(QWidget):
     MAX_NOTES = 30
     UNDO_SECONDS = 3
-    NOTE_ROW_HEIGHT = 44
+    NOTE_ROW_HEIGHT = 38
     NOTE_ROW_GAP = 3
     NOTES_VIEWPORT_HEIGHT = 150
 
@@ -407,6 +51,7 @@ class RightPanelWidget(QWidget):
         right_panel_layout.setSpacing(14)
 
         self.calendar_view = CustomReferenceCalendar()
+        self.calendar_view.setFixedWidth(300)
 
         log_card = TrueGlassPanel(border_radius=20)
         log_card_layout = QVBoxLayout(log_card)
@@ -432,10 +77,16 @@ class RightPanelWidget(QWidget):
         activity_scroll.setWidgetResizable(True)
         activity_scroll.setFrameShape(QFrame.NoFrame)
         activity_scroll.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
+        activity_scroll.setVerticalScrollBarPolicy(Qt.ScrollBarAsNeeded)
         activity_scroll.setWidget(self.activity_container)
         activity_scroll.setStyleSheet(self._scrollable_style())
+        activity_scroll.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
+        activity_scroll.setMinimumHeight(150)
+        activity_scroll.setMinimumHeight(140)
 
         notes_card = TrueGlassPanel(border_radius=20)
+        notes_card.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Preferred)
+        notes_card.setMaximumHeight(220)
         notes_layout = QVBoxLayout(notes_card)
         notes_layout.setContentsMargins(16, 16, 16, 16)
         notes_layout.setSpacing(8)
@@ -464,9 +115,9 @@ class RightPanelWidget(QWidget):
         notes_scroll.setWidgetResizable(True)
         notes_scroll.setFrameShape(QFrame.NoFrame)
         notes_scroll.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
-        notes_scroll.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOn)
+        notes_scroll.setVerticalScrollBarPolicy(Qt.ScrollBarAsNeeded)
         notes_scroll.setWidget(self.notes_container)
-        notes_scroll.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
+        notes_scroll.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Preferred)
         notes_scroll.setStyleSheet(self._scrollable_style())
         notes_scroll.setMinimumHeight(self.NOTES_VIEWPORT_HEIGHT)
 
@@ -482,11 +133,32 @@ class RightPanelWidget(QWidget):
         log_card_layout.addWidget(activity_scroll, stretch=1)
         notes_layout.addLayout(notes_header_row)
         notes_layout.addWidget(notes_scroll, stretch=1)
-        notes_card.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
+        notes_card.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Preferred)
 
-        right_panel_layout.addWidget(self.calendar_view)
-        right_panel_layout.addWidget(log_card, stretch=2)
-        right_panel_layout.addWidget(notes_card, stretch=1)
+        # Keep calendar fixed and prevent overlap by enforcing layout minimums
+        log_card.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
+        # ensure the log area has a usable minimum so it won't be squashed under the calendar
+        log_card.setMinimumHeight(160)
+        # keep notes compact and prevent it stretching to take available space
+        notes_card.setMaximumHeight(220)
+
+        # keep references for runtime resizing logic
+        self.log_card = log_card
+        self.notes_card = notes_card
+        self.activity_scroll = activity_scroll
+
+        # Make the layout respect children's minimum sizes
+        right_panel_layout.setSizeConstraint(QLayout.SetMinimumSize)
+
+        # Set a conservative minimum height for the whole panel so the calendar + gap
+        # + activity area fit without overlapping when window is compacted
+        total_min = self.calendar_view.height() + 12 + log_card.minimumHeight() + min(notes_card.maximumHeight(), self.NOTES_VIEWPORT_HEIGHT)
+        self.setMinimumHeight(total_min)
+
+        right_panel_layout.addWidget(self.calendar_view, stretch=0)
+        right_panel_layout.addSpacing(12)
+        right_panel_layout.addWidget(log_card, stretch=1)
+        right_panel_layout.addWidget(notes_card, stretch=0)
         self._load_notes_items()
 
     def set_account(self, username):
@@ -510,6 +182,29 @@ class RightPanelWidget(QWidget):
             self._add_activity_row(task, now)
         self.activity_layout.addStretch()
 
+    def resizeEvent(self, event):
+        super().resizeEvent(event)
+        try:
+            gap = 12
+            cal_h = self.calendar_view.height()
+            avail = max(0, self.height() - cal_h - gap)
+
+            activity_min = max(100, self.log_card.minimumHeight())
+            notes_max = self.notes_card.maximumHeight()
+
+            # allocate notes height but preserve activity_min
+            notes_height = min(notes_max, max(0, avail - activity_min))
+
+            # if no room for notes, collapse notes and allow activity to take available space
+            if notes_height <= 0:
+                self.notes_card.setMaximumHeight(0)
+                self.log_card.setMinimumHeight(max(0, avail))
+            else:
+                self.notes_card.setMaximumHeight(notes_height)
+                self.log_card.setMinimumHeight(min(activity_min, max(0, avail - notes_height)))
+        except Exception:
+            pass
+
     def _monthly_tasks(self, now):
         _, last_day = cal_lib.monthrange(now.year, now.month)
         return [
@@ -524,138 +219,18 @@ class RightPanelWidget(QWidget):
         name, due_day = task
         due_date = datetime(now.year, now.month, due_day)
         days_left = (due_date.date() - now.date()).days
-        color = self._due_color(days_left)
         month_key = now.strftime("%Y-%m")
         checked = self.state.get("checks", {}).get(month_key, {}).get(name, False)
 
-        row = QFrame()
-        row.setCursor(Qt.PointingHandCursor)
-        self._style_activity_row(row, color, checked)
-        row.mousePressEvent = lambda event, name=name, due_date=due_date, days_left=days_left: (
-            self._show_activity_detail(name, due_date, days_left)
-            if event.button() == Qt.LeftButton
-            else None
+        row = ActivityRowWidget(name, due_date, days_left, checked)
+        row.clicked.connect(
+            lambda name=name, due_date=due_date, days_left=days_left: self._show_activity_detail(name, due_date, days_left)
+        )
+        row.checked_changed.connect(
+            lambda name, due_date, days_left, checked_state, month_key=month_key: self._save_check(month_key, name, checked_state)
         )
 
-        row_layout = QHBoxLayout(row)
-        row_layout.setContentsMargins(9, 6, 9, 6)
-        row_layout.setSpacing(7)
-
-        checkbox = QCheckBox()
-        checkbox.setChecked(checked)
-        checkbox.setCursor(Qt.PointingHandCursor)
-        checkbox.setStyleSheet(f"""
-            QCheckBox {{
-                border: none;
-                background: transparent;
-                spacing: 0;
-            }}
-            QCheckBox::indicator {{
-                width: 15px;
-                height: 15px;
-                border-radius: 5px;
-                border: 1px solid rgba(148, 163, 184, 0.55);
-                background: rgba(15, 23, 42, 0.84);
-            }}
-            QCheckBox::indicator:hover {{
-                border-color: {color["accent"]};
-            }}
-            QCheckBox::indicator:checked {{
-                background: {color["accent"]};
-                border-color: {color["accent"]};
-            }}
-        """)
-        text_container = QWidget()
-        text_container.setStyleSheet("background: transparent; border: none;")
-        text_layout = QVBoxLayout(text_container)
-        text_layout.setContentsMargins(0, 0, 0, 0)
-        text_layout.setSpacing(2)
-
-        title = QLabel(name)
-        title.setFont(QFont("Segoe UI", 9, QFont.Bold))
-        title.setStyleSheet("color: #f8fafc;")
-
-        detail = QLabel(f"{due_date.strftime('%b')} {due_day} - {self._due_text(days_left)}")
-        detail.setFont(QFont("Segoe UI", 8))
-        self._style_activity_text(title, detail, color, checked, days_left, due_date, due_day)
-
-        checkbox.toggled.connect(
-            lambda checked_state, row=row, title=title, detail=detail,
-            color=color, days_left=days_left, due_date=due_date, due_day=due_day: (
-                self._save_check(month_key, name, checked_state),
-                self._style_activity_row(row, color, checked_state),
-                self._style_activity_text(
-                    title,
-                    detail,
-                    color,
-                    checked_state,
-                    days_left,
-                    due_date,
-                    due_day,
-                ),
-            )
-        )
-
-        text_layout.addWidget(title)
-        text_layout.addWidget(detail)
-
-        row_layout.addWidget(checkbox)
-        row_layout.addWidget(text_container, stretch=1)
         self.activity_layout.addWidget(row)
-
-    def _style_activity_row(self, row, color, checked):
-        accent = "#3b82f6" if checked else color["accent"]
-        border = "rgba(59, 130, 246, 0.42)" if checked else color["border"]
-        background = "rgba(30, 64, 175, 0.22)" if checked else "rgba(2, 6, 23, 0.38)"
-
-        row.setStyleSheet(f"""
-            QFrame {{
-                background: {background};
-                border: 1px solid {border};
-                border-left: 4px solid {accent};
-                border-radius: 9px;
-            }}
-            QLabel {{
-                border: none;
-                background: transparent;
-            }}
-        """)
-
-    def _style_activity_text(self, title, detail, color, checked, days_left, due_date, due_day):
-        if checked:
-            title.setStyleSheet("color: #bfdbfe;")
-            detail.setText("Complete")
-            detail.setStyleSheet("color: #93c5fd;")
-            return
-
-        title.setStyleSheet("color: #f8fafc;")
-        detail.setText(f"{due_date.strftime('%b')} {due_day} - {self._due_text(days_left)}")
-        detail.setStyleSheet(f"color: {color['text']};")
-
-    def _due_color(self, days_left):
-        if days_left < 0:
-            return {
-                "accent": "#ef4444",
-                "border": "rgba(239, 68, 68, 0.35)",
-                "text": "#fecaca",
-            }
-        if days_left <= 3:
-            return {
-                "accent": "#f43f5e",
-                "border": "rgba(244, 63, 94, 0.36)",
-                "text": "#fecdd3",
-            }
-        if days_left <= 7:
-            return {
-                "accent": "#f59e0b",
-                "border": "rgba(245, 158, 11, 0.32)",
-                "text": "#fde68a",
-            }
-        return {
-            "accent": "#10b981",
-            "border": "rgba(16, 185, 129, 0.28)",
-            "text": "#a7f3d0",
-        }
 
     def _due_text(self, days_left):
         if days_left < 0:
@@ -1097,32 +672,4 @@ class RightPanelWidget(QWidget):
         """ + self._scrollbar_style()
 
     def _scrollbar_style(self):
-        return """
-            QScrollBar:vertical {
-                background: rgba(2, 6, 23, 0.18);
-                border: none;
-                border-radius: 6px;
-                width: 12px;
-                margin: 3px;
-            }
-            QScrollBar::handle:vertical {
-                background: rgba(148, 163, 184, 0.46);
-                border-radius: 6px;
-                min-height: 24px;
-            }
-            QScrollBar::handle:vertical:hover {
-                background: rgba(20, 184, 166, 0.72);
-            }
-            QScrollBar::add-line:vertical,
-            QScrollBar::sub-line:vertical,
-            QScrollBar::add-page:vertical,
-            QScrollBar::sub-page:vertical {
-                background: transparent;
-                border: none;
-                height: 0;
-            }
-            QScrollBar:horizontal {
-                background: transparent;
-                height: 0;
-            }
-        """
+        return AppStyles.SCROLLBAR

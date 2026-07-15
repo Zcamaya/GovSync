@@ -27,7 +27,6 @@ from PySide6.QtWidgets import (
 from constants.styles import AppStyles
 from services.auth_manager import account_json_path, get_active_account
 from controllers.sss_controller import SSSController
-from services.dashboard_service import record_upload
 from services.sss_service import (
     SSSService,
     TXT_COLUMNS,
@@ -96,9 +95,10 @@ class SSSWorker(QThread):
 
 
 class SSSPanel(QWidget):
-    def __init__(self, parent=None, controller=None):
+    def __init__(self, parent=None, controller=None, dashboard_service=None):
         super().__init__(parent)
         self.controller = controller or SSSController()
+        self.dashboard_service = dashboard_service
         self.current_username = (get_active_account() or {}).get("username") or "default"
         self._persist_enabled = False
         self.source_file_path = ""
@@ -117,7 +117,7 @@ class SSSPanel(QWidget):
 
         main_layout = QVBoxLayout(self)
         main_layout.setContentsMargins(0, 0, 0, 0)
-        main_layout.setSpacing(14)
+        main_layout.setSpacing(AppStyles.PANEL_SPACING)
 
         title = QLabel("SSS TXT Automation")
         title.setFont(QFont("Segoe UI", 17, QFont.Bold))
@@ -163,21 +163,22 @@ class SSSPanel(QWidget):
         generate_tab = QWidget()
         generate_tab.setStyleSheet("background: transparent; border: none;")
         generate_layout = QVBoxLayout(generate_tab)
-        generate_layout.setContentsMargins(16, 16, 16, 16)
-        generate_layout.setSpacing(14)
+        generate_layout.setContentsMargins(AppStyles.SECTION_PADDING, AppStyles.SECTION_PADDING, AppStyles.SECTION_PADDING, AppStyles.SECTION_PADDING)
+        generate_layout.setSpacing(AppStyles.PANEL_SPACING)
 
         viewer_tab = QWidget()
         viewer_tab.setStyleSheet("background: transparent; border: none;")
         viewer_layout = QVBoxLayout(viewer_tab)
-        viewer_layout.setContentsMargins(16, 16, 16, 16)
-        viewer_layout.setSpacing(12)
+        viewer_layout.setContentsMargins(AppStyles.SECTION_PADDING, AppStyles.SECTION_PADDING, AppStyles.SECTION_PADDING, AppStyles.SECTION_PADDING)
+        viewer_layout.setSpacing(AppStyles.INNER_PADDING)
 
         self.tabs.addTab(generate_tab, "Generate TXT")
         self.tabs.addTab(viewer_tab, "TXT Viewer")
         main_layout.addWidget(self.tabs, stretch=1)
 
         form_holder = QWidget()
-        form_holder.setStyleSheet("""
+        form_holder.setStyleSheet(
+            """
             QWidget {
                 background: rgba(20, 43, 37, 0.64);
                 border: 1px solid rgba(148, 163, 184, 0.22);
@@ -219,25 +220,9 @@ class SSSPanel(QWidget):
                 min-height: 28px;
                 padding: 6px 10px;
             }
-            QScrollBar:vertical {
-                background: #071512;
-                border: none;
-                border-radius: 6px;
-                width: 12px;
-                margin: 3px;
-            }
-            QScrollBar::handle:vertical {
-                background: rgba(148, 163, 184, 0.70);
-                border-radius: 6px;
-                min-height: 24px;
-            }
-            QScrollBar::add-line:vertical,
-            QScrollBar::sub-line:vertical {
-                height: 0;
-                border: none;
-                background: transparent;
-            }
-        """)
+            """
+            + AppStyles.SCROLLBAR
+        )
         form_layout = QFormLayout(form_holder)
         form_layout.setContentsMargins(22, 22, 22, 22)
         form_layout.setSpacing(14)
@@ -375,33 +360,17 @@ class SSSPanel(QWidget):
         self.txt_table.verticalHeader().setVisible(False)
         self.txt_table.setAlternatingRowColors(False)
         self.txt_table.setEditTriggers(QAbstractItemView.AllEditTriggers)
-        self.txt_table.setStyleSheet("""
-            QTableWidget {
-                background: rgba(20, 43, 37, 0.64);
-                border: 1px solid rgba(148, 163, 184, 0.22);
-                border-radius: 10px;
-                color: #dbeafe;
-                gridline-color: rgba(148, 163, 184, 0.16);
-                font: 11px 'Segoe UI';
-                outline: none;
-            }
-            QHeaderView::section {
-                background: rgba(2, 6, 23, 0.74);
-                border: none;
-                border-right: 1px solid rgba(148, 163, 184, 0.18);
-                color: #cbd5e1;
-                font: 700 11px 'Segoe UI';
-                padding: 7px 8px;
-            }
-            QTableWidget::item {
-                border: none;
-                padding: 5px 7px;
-            }
-            QTableWidget::item:selected {
-                background: rgba(20, 184, 166, 0.28);
-                color: #ffffff;
-            }
-        """)
+        self.txt_table.setStyleSheet(
+            AppStyles.TABLE_BASE
+            + AppStyles.TABLE_SCROLLBAR
+            + """
+            QTableWidget { border: none; border-radius: 14px; }
+            QTableWidget::viewport { border-radius: 14px; }
+            QHeaderView::section { background: rgba(2,6,23,0.74); border: none; border-right: 1px solid rgba(148,163,184,0.18); color: #cbd5e1; font: 700 11px 'Segoe UI'; padding: 7px 8px; }
+            QTableWidget::item { border: none; padding: 5px 7px; }
+            QTableWidget::item:selected { background: rgba(20, 184, 166, 0.28); color: #ffffff; }
+        """
+        )
         viewer_layout.addWidget(self.txt_table, stretch=1)
 
         self.progress_bar = QProgressBar()
@@ -760,12 +729,13 @@ class SSSPanel(QWidget):
         self._set_enabled(True)
         self.status_label.setText("Finished." if success else "Finished with errors.")
         self.progress_percent_label.setText("100%" if success else self.progress_percent_label.text())
-        if success and total_rows > 0:
-            record_upload(
+        if success and total_rows > 0 and self.dashboard_service is not None:
+            self.dashboard_service.record_upload(
                 "sss",
                 total_rows,
                 self.month_combo.currentText(),
                 self.year_combo.currentText(),
+                account_username=self.current_username,
             )
         GlassDialog(
             self,
@@ -785,12 +755,14 @@ class SSSPanel(QWidget):
                 self._populate_txt_table(rows)
                 self.tabs.setCurrentIndex(1)
                 self.status_label.setText(f"Generated and loaded {len(rows)} TXT row(s).")
-                record_upload(
-                    "sss",
-                    len(rows),
-                    self.month_combo.currentText(),
-                    self.year_combo.currentText(),
-                )
+                if self.dashboard_service is not None:
+                    self.dashboard_service.record_upload(
+                        "sss",
+                        len(rows),
+                        self.month_combo.currentText(),
+                        self.year_combo.currentText(),
+                        account_username=self.current_username,
+                    )
                 self._save_state()
             except Exception as exc:
                 message = f"{message}\n\nViewer load failed: {exc}"

@@ -4,6 +4,7 @@ from PySide6.QtCore import QPoint, Qt, Signal
 from PySide6.QtGui import QFont, QImage, QPainter, QPixmap
 from PySide6.QtSvg import QSvgRenderer
 from PySide6.QtWidgets import (
+    QComboBox,
     QDialog,
     QFrame,
     QHBoxLayout,
@@ -21,6 +22,8 @@ from PySide6.QtWidgets import (
 )
 
 from widgets.glass_dialog import GlassDialog
+from widgets.employer_admin_panel import EmployerAdminPanel
+from widgets.right_panel import RightPanelWidget
 from controllers.auth_controller import AuthController
 from services.auth_manager import (
     authenticate,
@@ -31,6 +34,7 @@ from services.auth_manager import (
 )
 from shared.resources import asset_path
 from shared.ui import set_exit_icon
+from constants.styles import AppStyles
 
 
 def logo_pixmap(size):
@@ -168,7 +172,7 @@ SHELL_STYLE = """
         background: #f43f5e;
         color: #ffffff;
     }
-    QListWidget, QTableWidget {
+    QListWidget {
         background: rgba(2, 6, 23, 0.50);
         border: 1px solid rgba(148, 163, 184, 0.18);
         border-radius: 10px;
@@ -266,9 +270,11 @@ class AuthShellMixin:
 
 
 class LoginDialog(QDialog, AuthShellMixin):
-    def __init__(self):
+    def __init__(self, controller=None, employer_controller=None):
         super().__init__()
         self.account_role = ""
+        self.controller = controller
+        self.employer_controller = employer_controller
         self.setWindowTitle("GovSync Login")
         self._setup_ui()
 
@@ -282,6 +288,9 @@ class LoginDialog(QDialog, AuthShellMixin):
         self.stack.setStyleSheet("background: transparent; border: none;")
         self.stack.addWidget(self._login_page())
         self.stack.addWidget(self._register_page())
+
+        # when switching to the register page, refresh employer list
+        self.stack.currentChanged.connect(lambda idx: self._populate_employer_combo() if idx == 1 else None)
 
         shell_layout.addStretch()
         shell_layout.addWidget(self.stack)
@@ -367,37 +376,14 @@ class LoginDialog(QDialog, AuthShellMixin):
         self.register_password.setStyleSheet("color: #0f172a; background: #ffffff;")
         panel_layout.addWidget(self.register_password)
 
-        employer_label = QLabel("Employer Name:")
+        employer_label = QLabel("Employer:")
         employer_label.setStyleSheet("color: #475569; font: 700 10px 'Segoe UI'; text-transform: uppercase;")
-        self.register_employer_name = QLineEdit()
-        self.register_employer_name.setPlaceholderText("Employer Name")
-        self.register_employer_name.setStyleSheet("color: #0f172a; background: #ffffff;")
+        self.register_employer_combo = QComboBox()
+        self.register_employer_combo.setStyleSheet("color: #0f172a; background: #ffffff;")
+        self.register_employer_combo.setPlaceholderText("Select employer")
         panel_layout.addWidget(employer_label)
-        panel_layout.addWidget(self.register_employer_name)
-
-        sss_label = QLabel("SSS Number:")
-        sss_label.setStyleSheet("color: #475569; font: 700 10px 'Segoe UI'; text-transform: uppercase;")
-        self.register_sss_number = QLineEdit()
-        self.register_sss_number.setInputMask("00-0000000-0;_")
-        self.register_sss_number.setStyleSheet("color: #0f172a; background: #ffffff;")
-        panel_layout.addWidget(sss_label)
-        panel_layout.addWidget(self.register_sss_number)
-
-        ph_label = QLabel("PhilHealth Number:")
-        ph_label.setStyleSheet("color: #475569; font: 700 10px 'Segoe UI'; text-transform: uppercase;")
-        self.register_philhealth_number = QLineEdit()
-        self.register_philhealth_number.setInputMask("00-000000000-0;_")
-        self.register_philhealth_number.setStyleSheet("color: #0f172a; background: #ffffff;")
-        panel_layout.addWidget(ph_label)
-        panel_layout.addWidget(self.register_philhealth_number)
-
-        hdmf_label = QLabel("HDMF Number:")
-        hdmf_label.setStyleSheet("color: #475569; font: 700 10px 'Segoe UI'; text-transform: uppercase;")
-        self.register_hdmf_number = QLineEdit()
-        self.register_hdmf_number.setInputMask("0000-0000-0000;_")
-        self.register_hdmf_number.setStyleSheet("color: #0f172a; background: #ffffff;")
-        panel_layout.addWidget(hdmf_label)
-        panel_layout.addWidget(self.register_hdmf_number)
+        panel_layout.addWidget(self.register_employer_combo)
+        self._populate_employer_combo()
 
         self.register_message = QLabel("")
         self.register_message.setStyleSheet("color: #fb7185; font: 700 11px 'Segoe UI';")
@@ -494,15 +480,30 @@ class LoginDialog(QDialog, AuthShellMixin):
         self.account_role = role
         self.accept()
 
+    def _populate_employer_combo(self):
+        self.register_employer_combo.clear()
+        self.register_employer_combo.addItem("", None)
+        if self.employer_controller is None:
+            return
+        try:
+            employers = self.employer_controller.list_active_employers() or []
+        except Exception:
+            employers = []
+        for employer in employers:
+            self.register_employer_combo.addItem(employer.name, employer.id)
+
     def _create_account(self):
         try:
+            employer_name = self.register_employer_combo.currentText().strip()
+            employer_id = self.register_employer_combo.currentData()
             register_account(
                 self.register_username.text(),
                 self.register_password.text(),
-                self.register_sss_number.text(),
-                self.register_philhealth_number.text(),
-                self.register_hdmf_number.text(),
-                self.register_employer_name.text(),
+                "",
+                "",
+                "",
+                employer_name,
+                employer_id,
             )
         except ValueError as exc:
             self.register_message.setStyleSheet(
@@ -523,9 +524,10 @@ class LoginDialog(QDialog, AuthShellMixin):
 class LoginPage(QWidget):
     authenticated = Signal(str, str)
 
-    def __init__(self, parent=None, controller=None):
+    def __init__(self, parent=None, controller=None, employer_controller=None):
         super().__init__(parent)
         self.controller = controller
+        self.employer_controller = employer_controller
         self._setup_ui()
 
     def _setup_ui(self):
@@ -575,6 +577,8 @@ class LoginPage(QWidget):
         self.stack.setStyleSheet("background: transparent; border: none;")
         self.stack.addWidget(self._login_page())
         self.stack.addWidget(self._register_page())
+        # refresh employer list when register page becomes visible
+        self.stack.currentChanged.connect(lambda idx: self._populate_employer_combo() if idx == 1 else None)
         card_layout.addWidget(brand)
         card_layout.addWidget(self.stack)
         layout.addWidget(auth_card, alignment=Qt.AlignCenter)
@@ -676,37 +680,14 @@ class LoginPage(QWidget):
         self.register_password.setStyleSheet("color: #0f172a; background: #ffffff;")
         panel_layout.addWidget(self.register_password)
 
-        employer_label = QLabel("Employer Name:")
+        employer_label = QLabel("Employer:")
         employer_label.setStyleSheet("color: #475569; font: 700 10px 'Segoe UI'; text-transform: uppercase;")
-        self.register_employer_name = QLineEdit()
-        self.register_employer_name.setPlaceholderText("Employer Name")
-        self.register_employer_name.setStyleSheet("color: #0f172a; background: #ffffff;")
+        self.register_employer_combo = QComboBox()
+        self.register_employer_combo.setStyleSheet("color: #0f172a; background: #ffffff;")
+        self.register_employer_combo.setPlaceholderText("Select employer")
         panel_layout.addWidget(employer_label)
-        panel_layout.addWidget(self.register_employer_name)
-
-        sss_label = QLabel("SSS Number:")
-        sss_label.setStyleSheet("color: #475569; font: 700 10px 'Segoe UI'; text-transform: uppercase;")
-        self.register_sss_number = QLineEdit()
-        self.register_sss_number.setInputMask("00-0000000-0;_")
-        self.register_sss_number.setStyleSheet("color: #0f172a; background: #ffffff;")
-        panel_layout.addWidget(sss_label)
-        panel_layout.addWidget(self.register_sss_number)
-
-        ph_label = QLabel("PhilHealth Number:")
-        ph_label.setStyleSheet("color: #475569; font: 700 10px 'Segoe UI'; text-transform: uppercase;")
-        self.register_philhealth_number = QLineEdit()
-        self.register_philhealth_number.setInputMask("00-000000000-0;_")
-        self.register_philhealth_number.setStyleSheet("color: #0f172a; background: #ffffff;")
-        panel_layout.addWidget(ph_label)
-        panel_layout.addWidget(self.register_philhealth_number)
-
-        hdmf_label = QLabel("HDMF Number:")
-        hdmf_label.setStyleSheet("color: #475569; font: 700 10px 'Segoe UI'; text-transform: uppercase;")
-        self.register_hdmf_number = QLineEdit()
-        self.register_hdmf_number.setInputMask("0000-0000-0000;_")
-        self.register_hdmf_number.setStyleSheet("color: #0f172a; background: #ffffff;")
-        panel_layout.addWidget(hdmf_label)
-        panel_layout.addWidget(self.register_hdmf_number)
+        panel_layout.addWidget(self.register_employer_combo)
+        self._populate_employer_combo()
 
         self.register_message = QLabel("")
         self.register_message.setStyleSheet("color: #fb7185; font: 700 11px 'Segoe UI';")
@@ -819,25 +800,41 @@ class LoginPage(QWidget):
         self.login_message.clear()
         self.authenticated.emit(role, username)
 
+    def _populate_employer_combo(self):
+        self.register_employer_combo.clear()
+        self.register_employer_combo.addItem("", None)
+        if self.employer_controller is None:
+            return
+        try:
+            employers = self.employer_controller.list_active_employers() or []
+        except Exception:
+            employers = []
+        for employer in employers:
+            self.register_employer_combo.addItem(employer.name, employer.id)
+
     def _create_account(self):
         try:
+            employer_name = self.register_employer_combo.currentText().strip()
+            employer_id = self.register_employer_combo.currentData()
             if self.controller:
                 self.controller.register(
                     self.register_username.text(),
                     self.register_password.text(),
-                    self.register_sss_number.text(),
-                    self.register_philhealth_number.text(),
-                    self.register_hdmf_number.text(),
-                    self.register_employer_name.text(),
+                    "",
+                    "",
+                    "",
+                    employer_name,
+                    employer_id,
                 )
             else:
                 register_account(
                     self.register_username.text(),
                     self.register_password.text(),
-                    self.register_sss_number.text(),
-                    self.register_philhealth_number.text(),
-                    self.register_hdmf_number.text(),
-                    self.register_employer_name.text(),
+                    "",
+                    "",
+                    "",
+                    employer_name,
+                    employer_id,
                 )
         except ValueError as exc:
             self.register_message.setStyleSheet(
@@ -858,81 +855,130 @@ class LoginPage(QWidget):
 class SuperAdminPage(QWidget):
     logout_requested = Signal()
 
-    def __init__(self, parent=None, controller=None):
+    def __init__(self, parent=None, controller=None, employer_controller=None):
         super().__init__(parent)
         self.controller = controller
+        self.employer_controller = employer_controller
+        self.accounts = []
         self._setup_ui()
         self._load_accounts()
 
     def _setup_ui(self):
         self.setStyleSheet(SHELL_STYLE)
         layout = QHBoxLayout(self)
-        layout.setContentsMargins(42, 34, 42, 34)
-        layout.setSpacing(24)
+        layout.setContentsMargins(20, 20, 20, 20)
+        layout.setSpacing(18)
 
-        brand = QFrame()
-        brand.setObjectName("BrandPanel")
-        brand.setFixedWidth(220)
-        brand_layout = QVBoxLayout(brand)
-        brand_layout.addStretch()
-        logo = QLabel()
-        logo.setPixmap(logo_pixmap(150))
-        logo.setAlignment(Qt.AlignCenter)
-        brand_layout.addWidget(logo)
-        name = QLabel("GovSync")
-        name.setObjectName("BrandName")
-        name.setAlignment(Qt.AlignCenter)
-        brand_layout.addWidget(name)
-        brand_layout.addStretch()
+        sidebar = QFrame()
+        sidebar.setObjectName("ContentPanel")
+        sidebar.setFixedWidth(240)
+        sidebar_layout = QVBoxLayout(sidebar)
+        sidebar_layout.setContentsMargins(14, 14, 14, 14)
+        sidebar_layout.setSpacing(10)
 
-        admin_panel = QFrame()
-        admin_panel.setObjectName("ContentPanel")
-        admin_layout = QHBoxLayout(admin_panel)
-        admin_layout.setContentsMargins(22, 22, 22, 22)
-        admin_layout.setSpacing(18)
+        title = QLabel("Admin")
+        title.setObjectName("Title")
+        title.setStyleSheet("font: 800 18px 'Segoe UI';")
+        sidebar_layout.addWidget(title)
 
-        sidebar = QVBoxLayout()
-        sidebar.setSpacing(10)
-        title = QLabel("Account List")
-        title.setFont(QFont("Segoe UI", 14, QFont.Bold))
-        self.account_count_label = QLabel("0 accounts")
-        self.account_count_label.setStyleSheet("color: #94a3b8; font: 600 10px 'Segoe UI';")
-        self.account_list = QListWidget()
-        self.account_list.currentRowChanged.connect(self._select_account)
-        self.account_list.setMinimumWidth(260)
-        self.account_list.setMinimumHeight(360)
-        self.account_list.setStyleSheet("""
-            QListWidget {
-                padding: 6px;
-            }
-            QListWidget::item {
-                padding: 8px 10px;
-                margin: 2px 0;
-            }
+        sub = QLabel("Manage employers and user accounts")
+        sub.setWordWrap(True)
+        sub.setStyleSheet("color: #94a3b8; font: 600 11px 'Segoe UI';")
+        sidebar_layout.addWidget(sub)
+
+        self.nav_list = QListWidget()
+        self.nav_list.addItems(["Dashboard", "Employer Creation", "Account List"])
+        self.nav_list.setCurrentRow(0)
+        self.nav_list.currentRowChanged.connect(self._change_view)
+        self.nav_list.setStyleSheet("""
+            QListWidget { background: transparent; border: none; padding: 4px; }
+            QListWidget::item { padding: 10px 12px; border-radius: 8px; color: #cbd5e1; }
+            QListWidget::item:selected { background: rgba(16, 185, 129, 0.18); color: #f8fafc; }
         """)
+        sidebar_layout.addWidget(self.nav_list, stretch=1)
 
         logout_btn = QPushButton("Log Out")
         logout_btn.setObjectName("DangerButton")
         logout_btn.clicked.connect(self.logout_requested.emit)
+        sidebar_layout.addWidget(logout_btn)
 
-        sidebar.addWidget(title)
-        sidebar.addWidget(self.account_count_label)
-        sidebar.addWidget(self.account_list, stretch=1)
-        sidebar.addWidget(logout_btn)
+        self.content_stack = QStackedWidget()
+        self.content_stack.setStyleSheet("background: transparent; border: none;")
+        self.content_stack.addWidget(self._dashboard_page())
+        self.content_stack.addWidget(self._employer_page())
+        self.content_stack.addWidget(self._account_page())
 
-        content = QVBoxLayout()
-        header = QLabel("Registered Accounts")
+        self.right_panel = RightPanelWidget(self)
+        self.right_panel.setFixedWidth(300)
+
+        layout.addWidget(sidebar)
+        layout.addWidget(self.content_stack, stretch=1)
+        layout.addWidget(self.right_panel)
+
+    def _dashboard_page(self):
+        page = QWidget()
+        page_layout = QVBoxLayout(page)
+        page_layout.setContentsMargins(0, 0, 0, 0)
+        page_layout.setSpacing(16)
+
+        header = QLabel("Dashboard")
         header.setObjectName("Title")
-        sub = QLabel("Super admin can view and delete registered user accounts.")
-        sub.setStyleSheet("color: #94a3b8;")
+        page_layout.addWidget(header)
 
-        self.table = QTableWidget(0, 6)
+        summary = QFrame()
+        summary.setObjectName("ContentPanel")
+        summary_layout = QVBoxLayout(summary)
+        summary_layout.setContentsMargins(20, 20, 20, 20)
+        summary_layout.addWidget(QLabel("Overview"))
+        summary_layout.addWidget(QLabel("Monitor employer records and accounts from one place."))
+        summary_layout.addWidget(QLabel(f"Accounts: {len(self.accounts)}"))
+        page_layout.addWidget(summary)
+        page_layout.addStretch()
+        return page
+
+    def _employer_page(self):
+        page = QWidget()
+        layout = QVBoxLayout(page)
+        layout.setContentsMargins(0, 0, 0, 0)
+        layout.setSpacing(12)
+        header = QLabel("Employer Creation")
+        header.setObjectName("Title")
+        layout.addWidget(header)
+        layout.addWidget(QLabel("Create and maintain employer records with SSS, PhilHealth, and Pagibig numbers."))
+        self.employer_panel = EmployerAdminPanel(controller=self.employer_controller, parent=self)
+        layout.addWidget(self.employer_panel, stretch=1)
+        return page
+
+    def _account_page(self):
+        page = QWidget()
+        layout = QVBoxLayout(page)
+        layout.setContentsMargins(0, 0, 0, 0)
+        layout.setSpacing(12)
+
+        header = QLabel("Account List")
+        header.setObjectName("Title")
+        sub = QLabel("Review registered accounts and remove them when needed.")
+        sub.setStyleSheet("color: #94a3b8;")
+        layout.addWidget(header)
+        layout.addWidget(sub)
+
+        self.account_count_label = QLabel("0 accounts")
+        self.account_count_label.setStyleSheet("color: #94a3b8; font: 600 10px 'Segoe UI';")
+        layout.addWidget(self.account_count_label)
+
+        self.account_list = QListWidget()
+        self.account_list.currentRowChanged.connect(self._select_account)
+        self.account_list.setMinimumHeight(220)
+        self.account_list.setStyleSheet("""
+            QListWidget { padding: 6px; }
+            QListWidget::item { padding: 8px 10px; margin: 2px 0; }
+        """)
+        layout.addWidget(self.account_list, stretch=1)
+
+        self.table = QTableWidget(0, 3)
         self.table.setHorizontalHeaderLabels([
             "Username",
             "Password",
-            "SSS Number",
-            "PhilHealth Number",
-            "HDMF Number",
             "Employer Name",
         ])
         table_header = self.table.horizontalHeader()
@@ -943,16 +989,19 @@ class SuperAdminPage(QWidget):
         self.table.setTextElideMode(Qt.ElideNone)
         self.table.verticalHeader().setVisible(False)
         self.table.setEditTriggers(QTableWidget.NoEditTriggers)
-        self.table.setMinimumHeight(380)
         self.table.setAlternatingRowColors(True)
-        self.table.setStyleSheet("""
-            QTableWidget {
-                background: rgba(2, 6, 23, 0.50);
-            }
-            QTableWidget::item {
-                padding: 8px 6px;
-            }
-        """)
+        self.table.setSelectionBehavior(QTableWidget.SelectRows)
+        self.table.setSelectionMode(QTableWidget.SingleSelection)
+        self.table.setShowGrid(False)
+        self.table.setStyleSheet(
+            AppStyles.TABLE_BASE
+            + AppStyles.TABLE_SCROLLBAR
+            + """
+            QTableWidget { border: none; border-radius: 14px; }
+            QTableWidget::viewport { border-radius: 14px; }
+        """
+        )
+        layout.addWidget(self.table, stretch=1)
 
         buttons = QHBoxLayout()
         refresh_btn = QPushButton("Refresh")
@@ -963,44 +1012,46 @@ class SuperAdminPage(QWidget):
         buttons.addStretch()
         buttons.addWidget(refresh_btn)
         buttons.addWidget(delete_btn)
+        layout.addLayout(buttons)
+        return page
 
-        content.addWidget(header)
-        content.addWidget(sub)
-        content.addWidget(self.table, stretch=1)
-        content.addLayout(buttons)
-
-        sidebar_widget = QWidget()
-        sidebar_widget.setLayout(sidebar)
-        sidebar_widget.setFixedWidth(290)
-        admin_layout.addWidget(sidebar_widget)
-        admin_layout.addLayout(content, stretch=1)
-
-        layout.addWidget(brand)
-        layout.addWidget(admin_panel, stretch=1)
+    def _change_view(self, index):
+        self.content_stack.setCurrentIndex(index)
 
     def _load_accounts(self):
         self.accounts = self.controller.list_accounts() if self.controller else load_accounts()
-        self.account_list.clear()
-        for account in self.accounts:
-            username = account.username if hasattr(account, "username") else account.get("username", "")
-            self.account_list.addItem(username)
-        self.account_count_label.setText(f"{len(self.accounts)} account{'s' if len(self.accounts) != 1 else ''}")
-        self._render_table(self.accounts)
+        if hasattr(self, "account_list"):
+            self.account_list.clear()
+            for account in self.accounts:
+                username = account.username if hasattr(account, "username") else account.get("username", "")
+                self.account_list.addItem(username)
+        if hasattr(self, "account_count_label"):
+            self.account_count_label.setText(f"{len(self.accounts)} account{'s' if len(self.accounts) != 1 else ''}")
+        if hasattr(self, "table"):
+            self._render_table(self.accounts)
+        if hasattr(self, "employer_panel"):
+            self.employer_panel.refresh_employers()
+        if hasattr(self, "content_stack"):
+            self._refresh_dashboard_summary()
+
+    def _refresh_dashboard_summary(self):
+        if not hasattr(self, "content_stack"):
+            return
+        dashboard_page = self.content_stack.widget(0)
+        if dashboard_page is None:
+            return
+        for child in dashboard_page.findChildren(QLabel):
+            if child.text().startswith("Accounts:"):
+                child.setText(f"Accounts: {len(self.accounts)}")
 
     def _render_table(self, accounts):
         self.table.setRowCount(len(accounts))
         for row, account in enumerate(accounts):
             username = account.username if hasattr(account, "username") else account.get("username", "")
-            sss_number = account.sss_number if hasattr(account, "sss_number") else account.get("sss_number", "")
-            philhealth_number = account.philhealth_number if hasattr(account, "philhealth_number") else account.get("philhealth_number", "")
-            hdmf_number = account.hdmf_number if hasattr(account, "hdmf_number") else account.get("hdmf_number", "")
             employer_name = account.employer_name if hasattr(account, "employer_name") else account.get("employer_name", "")
             self.table.setItem(row, 0, QTableWidgetItem(username))
             self.table.setItem(row, 1, QTableWidgetItem("Protected"))
-            self.table.setItem(row, 2, QTableWidgetItem(sss_number))
-            self.table.setItem(row, 3, QTableWidgetItem(philhealth_number))
-            self.table.setItem(row, 4, QTableWidgetItem(hdmf_number))
-            self.table.setItem(row, 5, QTableWidgetItem(employer_name))
+            self.table.setItem(row, 2, QTableWidgetItem(employer_name))
 
     def _select_account(self, row):
         if row < 0 or row >= len(self.accounts):
@@ -1038,9 +1089,10 @@ class SuperAdminPage(QWidget):
 
 
 class RegisterDialog(QDialog, AuthShellMixin):
-    def __init__(self, parent=None, controller=None):
+    def __init__(self, parent=None, controller=None, employer_controller=None):
         super().__init__(parent)
         self.controller = controller
+        self.employer_controller = employer_controller
         self.setWindowTitle("Create Account")
         self._setup_ui()
 
@@ -1073,25 +1125,14 @@ class RegisterDialog(QDialog, AuthShellMixin):
         panel_layout.addWidget(self.username)
         panel_layout.addWidget(self.password)
 
-        employer_label = QLabel("Employer Name:")
-        self.employer_name = QLineEdit()
+        employer_label = QLabel("Employer:")
+        self.employer_combo = QComboBox()
+        self.employer_combo.setEditable(True)
+        self.employer_combo.setInsertPolicy(QComboBox.NoInsert)
+        self.employer_combo.setPlaceholderText("Select employer")
         panel_layout.addWidget(employer_label)
-        panel_layout.addWidget(self.employer_name)
-
-        panel_layout.addWidget(QLabel("SSS Number:"))
-        self.sss_number = QLineEdit()
-        self.sss_number.setInputMask("00-0000000-0;_")
-        panel_layout.addWidget(self.sss_number)
-
-        panel_layout.addWidget(QLabel("PhilHealth Number:"))
-        self.philhealth_number = QLineEdit()
-        self.philhealth_number.setInputMask("00-000000000-0;_")
-        panel_layout.addWidget(self.philhealth_number)
-
-        panel_layout.addWidget(QLabel("HDMF Number:"))
-        self.hdmf_number = QLineEdit()
-        self.hdmf_number.setInputMask("0000-0000-0000;_")
-        panel_layout.addWidget(self.hdmf_number)
+        panel_layout.addWidget(self.employer_combo)
+        self._populate_employer_combo()
 
         create_btn = QPushButton("Create Account")
         create_btn.setObjectName("PrimaryButton")
@@ -1107,25 +1148,49 @@ class RegisterDialog(QDialog, AuthShellMixin):
         shell_layout.addWidget(panel)
         shell_layout.addStretch()
 
+    def _populate_employer_combo(self):
+        self.employer_combo.clear()
+        self.employer_combo.addItem("", None)
+        if self.employer_controller is None:
+            return
+        try:
+            employers = self.employer_controller.list_active_employers() or []
+        except Exception:
+            employers = []
+        for employer in employers:
+            self.employer_combo.addItem(employer.name, employer.id)
+
+    def showEvent(self, event):
+        # refresh employers each time the dialog is shown
+        try:
+            self._populate_employer_combo()
+        except Exception:
+            pass
+        super().showEvent(event)
+
     def _create(self):
         try:
+            employer_name = self.employer_combo.currentText().strip()
+            employer_id = self.employer_combo.currentData()
             if self.controller:
                 self.controller.register(
                     self.username.text(),
                     self.password.text(),
-                    self.sss_number.text(),
-                    self.philhealth_number.text(),
-                    self.hdmf_number.text(),
-                    self.employer_name.text(),
+                    "",
+                    "",
+                    "",
+                    employer_name,
+                    employer_id,
                 )
             else:
                 register_account(
                     self.username.text(),
                     self.password.text(),
-                    self.sss_number.text(),
-                    self.philhealth_number.text(),
-                    self.hdmf_number.text(),
-                    self.employer_name.text(),
+                    "",
+                    "",
+                    "",
+                    employer_name,
+                    employer_id,
                 )
         except ValueError as exc:
             QMessageBox.warning(self, "Invalid Account", str(exc))
@@ -1210,14 +1275,13 @@ class SuperAdminWindow(QWidget, AuthShellMixin):
         self.table.setEditTriggers(QTableWidget.NoEditTriggers)
         self.table.setMinimumHeight(380)
         self.table.setAlternatingRowColors(True)
-        self.table.setStyleSheet("""
-            QTableWidget {
-                background: rgba(2, 6, 23, 0.50);
-            }
-            QTableWidget::item {
-                padding: 8px 6px;
-            }
-        """)
+        self.table.setStyleSheet(
+            AppStyles.TABLE_BASE + AppStyles.TABLE_SCROLLBAR + """
+            QTableWidget { border: none; border-radius: 14px; }
+            QTableWidget::viewport { border-radius: 14px; }
+            QTableWidget::item { padding: 8px 6px; }
+        """
+        )
 
         buttons = QHBoxLayout()
         refresh_btn = QPushButton("Refresh")
@@ -1255,16 +1319,10 @@ class SuperAdminWindow(QWidget, AuthShellMixin):
         self.table.setRowCount(len(accounts))
         for row, account in enumerate(accounts):
             username = account.username if hasattr(account, "username") else account.get("username", "")
-            sss_number = account.sss_number if hasattr(account, "sss_number") else account.get("sss_number", "")
-            philhealth_number = account.philhealth_number if hasattr(account, "philhealth_number") else account.get("philhealth_number", "")
-            hdmf_number = account.hdmf_number if hasattr(account, "hdmf_number") else account.get("hdmf_number", "")
             employer_name = account.employer_name if hasattr(account, "employer_name") else account.get("employer_name", "")
             self.table.setItem(row, 0, QTableWidgetItem(username))
             self.table.setItem(row, 1, QTableWidgetItem("Protected"))
-            self.table.setItem(row, 2, QTableWidgetItem(sss_number))
-            self.table.setItem(row, 3, QTableWidgetItem(philhealth_number))
-            self.table.setItem(row, 4, QTableWidgetItem(hdmf_number))
-            self.table.setItem(row, 5, QTableWidgetItem(employer_name))
+            self.table.setItem(row, 2, QTableWidgetItem(employer_name))
 
     def _select_account(self, row):
         if row < 0 or row >= len(self.accounts):

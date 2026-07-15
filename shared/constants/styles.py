@@ -2,12 +2,22 @@ class AppStyles:
     PANEL_TITLE = "color: #f8fafc; border: none; background: transparent; font: 800 16px 'Segoe UI';"
     SECTION_HEADER = "color: #f8fafc; border: none; background: transparent; font: 800 18px 'Segoe UI';"
     CARD_HEADER = "color: #f8fafc; border: none; background: transparent; font: 800 16px 'Segoe UI';"
+    BODY_TEXT = "color: #cbd5e1; border: none; background: transparent; font: 600 12px 'Segoe UI';"
+    MUTED_TEXT = "color: #94a3b8; border: none; background: transparent; font: 600 11px 'Segoe UI';"
+
+    CARD_RADIUS = 14
+    CONTROL_RADIUS = 10
+    SMALL_RADIUS = 8
+
+    PANEL_SPACING = 14
+    SECTION_PADDING = 16
+    INNER_PADDING = 12
 
     GLASS_PANEL = """
         QFrame {
             background-color: rgba(20, 30, 45, 0.65);
             border: 1px solid rgba(255, 255, 255, 0.12);
-            border-radius: 15px;
+            border-radius: 14px;
         }
         QLabel {
             background: transparent;
@@ -147,6 +157,29 @@ class AppStyles:
             background: rgba(8, 20, 18, 0.96);
             border: 1px solid rgba(20, 184, 166, 0.20);
             border-radius: 14px;
+        }
+        QScrollBar:vertical {
+            background: rgba(2, 6, 23, 0.24);
+            border: none;
+            border-radius: 14px;
+            width: 10px;
+            margin: 2px;
+        }
+        QScrollBar::handle:vertical {
+            background: rgba(148, 163, 184, 0.42);
+            border-radius: 14px;
+            min-height: 20px;
+        }
+        QScrollBar::handle:vertical:hover {
+            background: rgba(20, 184, 166, 0.72);
+        }
+        QScrollBar::add-line:vertical,
+        QScrollBar::sub-line:vertical,
+        QScrollBar::add-page:vertical,
+        QScrollBar::sub-page:vertical {
+            background: transparent;
+            border: none;
+            height: 0;
         }
         QTabWidget::pane {
             background: rgba(2, 6, 23, 0.30);
@@ -291,7 +324,7 @@ class AppStyles:
         QFrame#NoteRow {
             background: rgba(8, 14, 26, 0.95);
             border: 1px solid rgba(56, 75, 114, 0.36);
-            border-radius: 12px;
+            border-radius: 10px;
         }
         QFrame#NoteRow:hover {
             border-color: rgba(59, 130, 246, 0.48);
@@ -362,5 +395,148 @@ class AppStyles:
         }
         QComboBox QAbstractItemView::item:hover {
             background: rgba(59, 130, 246, 0.34);
+        }
+    """
+
+    SCROLLBAR = """
+        QScrollBar:vertical {
+            background: rgba(10, 20, 30, 0.82);
+            border: none;
+            border-radius: 14px;
+            width: 10px;
+        }
+        QScrollBar::handle:vertical {
+            background: rgba(107, 175, 141, 1);
+            border-radius: 14px;
+            min-height: 28px;
+        }
+        QScrollBar::handle:vertical:hover {
+            background: rgba(107, 175, 141, 0.84);
+        }
+        QScrollBar::add-line:vertical,
+        QScrollBar::sub-line:vertical,
+        QScrollBar::add-page:vertical,
+        QScrollBar::sub-page:vertical {
+            background: transparent;
+            border: none;
+            height: 0;
+        }
+        QScrollBar:horizontal {
+            background: rgba(10, 20, 30, 0.82);
+            height: 10px;
+            border-radius: 14px;
+        }
+        QScrollBar::handle:horizontal {
+            background: rgba(107, 175, 141, 1);
+            border-radius: 14px;
+            min-width: 28px;
+        }
+        QScrollBar::handle:horizontal:hover {
+            background: rgba(107, 175, 141, 0.84);
+        }
+        QScrollBar::add-line:horizontal,
+        QScrollBar::sub-line:horizontal,
+        QScrollBar::add-page:horizontal,
+        QScrollBar::sub-page:horizontal {
+            background: transparent;
+            border: none;
+            width: 0;
+        }
+    """
+
+    TABLE_SCROLLBAR = """
+        QTableWidget QScrollBar:vertical {
+            background: rgba(10, 20, 30, 0.82);
+            border: none;
+            border-radius: 14px;
+            width: 10px;
+            margin: 44px 0 14px 0;
+        }
+        QTableWidget QScrollBar::handle:vertical {
+            background: rgba(107, 175, 141, 1);
+            border-radius: 14px;
+            min-height: 28px;
+        }
+        QTableWidget QScrollBar::handle:vertical:hover {
+            background: rgba(107, 175, 141, 0.84);
+        }
+        QTableWidget QScrollBar::add-line:vertical,
+        QTableWidget QScrollBar::sub-line:vertical,
+        QTableWidget QScrollBar::add-page:vertical,
+        QTableWidget QScrollBar::sub-page:vertical {
+            background: transparent;
+            border: none;
+            height: 0;
+        }
+        QTableWidget QScrollBar:horizontal {
+            background: rgba(10, 20, 30, 0.82);
+            height: 10px;
+            border-radius: 14px;
+            margin: 0 12px 12px 12px;
+        }
+        QTableWidget QScrollBar::handle:horizontal {
+            background: rgba(107, 175, 141, 1);
+            border-radius: 14px;
+            min-width: 28px;
+        }
+        QTableWidget QScrollBar::handle:horizontal:hover {
+            background: rgba(107, 175, 141, 0.84);
+        }
+        QTableWidget QScrollBar::add-line:horizontal,
+        QTableWidget QScrollBar::sub-line:horizontal,
+        QTableWidget QScrollBar::add-page:horizontal,
+        QTableWidget QScrollBar::sub-page:horizontal {
+            background: transparent;
+            border: none;
+            width: 0;
+        }
+    """
+
+    TABLE_BASE = """
+        QTableWidget {
+            background: rgba(8, 18, 28, 0.96);
+            alternate-background-color: rgba(10, 20, 30, 0.84);
+            color: #e5e7eb;
+            gridline-color: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(59, 130, 246, 0.10);
+            border-radius: 16px;
+            font: 11px 'Segoe UI';
+        }
+        QTableWidget::viewport {
+            border-radius: 16px;
+            background: transparent;
+        }
+        QTableWidget::pane {
+            border-radius: 16px;
+            background: transparent;
+        }
+        QTableWidget QTableCornerButton {
+            background: transparent;
+            border: none;
+        }
+        QHeaderView::section {
+            background: rgba(8, 18, 28, 0.98);
+            color: #f8fafc;
+            font: 700 12px 'Segoe UI';
+            padding: 14px 16px;
+            border: none;
+            text-align: left;
+        }
+        QHeaderView::section:first-of-type {
+            border-top-left-radius: 16px;
+        }
+        QHeaderView::section:last-of-type {
+            border-top-right-radius: 16px;
+        }
+        QTableWidget::item {
+            padding: 12px 16px;
+            border: none;
+        }
+        QTableWidget::item:alternate {
+            background: rgba(10, 20, 30, 0.82);
+        }
+        QTableWidget::item:selected {
+            background: rgba(20, 184, 166, 0.24);
+            color: #ffffff;
         }
     """

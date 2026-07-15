@@ -124,7 +124,7 @@ class PayrollImportService:
         progress_callback=None,
     ) -> PayrollImportPlan:
         account = get_active_account() or {}
-        employer_id = str(account.get("employer_name") or account.get("username") or "default")
+        employer_id = str(account.get("employer_id") or account.get("employer_name") or account.get("username") or "default")
         employer_name = str(account.get("employer_name") or "")
         account_username = get_account_username()
         frame, _ = self.inspect_workbook(file_path)

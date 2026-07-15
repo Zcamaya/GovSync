@@ -4,7 +4,7 @@ GovSync is a desktop payroll compliance workspace for Philippine government cont
 
 ## Highlights
 
-- Account registration and persistence now capture an employer name for multi-employer support.
+- Account registration now associates each account with a normalized employer record instead of duplicating employer details in the account payload.
 - SSS, HDMF, and PhilHealth panels reset their state when switching accounts to prevent stale or cross-account data from leaking into the UI.
 - PhilHealth history and deletion actions are scoped to the active account.
 - The existing UI is preserved while the underlying logic and persistence are improved.

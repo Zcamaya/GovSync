@@ -11,14 +11,24 @@ class AuthController:
     def login(self, username: str, password: str):
         return auth_manager.authenticate(username, password)
 
-    def register(self, username: str, password: str, sss_number="", philhealth_number="", hdmf_number="", employer_name=""):
+    def register(
+        self,
+        username: str,
+        password: str,
+        sss_number="",
+        philhealth_number="",
+        hdmf_number="",
+        employer_name="",
+        employer_id=None,
+    ):
         return auth_manager.register_account(
             username,
             password,
             sss_number,
             philhealth_number,
             hdmf_number,
-            employer_name,
+            employer_name=employer_name,
+            employer_id=employer_id,
         )
 
     def list_accounts(self):

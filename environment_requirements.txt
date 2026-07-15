@@ -1,0 +1,14 @@
+GovSync environment requirements
+==============================
+
+Python version:
+- Python 3.10+ recommended
+
+Install with:
+- pip install -r requirements.txt
+
+Packages included:
+- PySide6==6.11.1
+- pandas==3.0.3
+- openpyxl==3.1.5
+- bcrypt==4.2.1

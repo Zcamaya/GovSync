@@ -11,6 +11,16 @@ def normalize_account_data(account: Any) -> dict[str, Any] | None:
         return None
 
     password_value = account.get("password_hash", account.get("password", ""))
+    employer_id = account.get("employer_id")
+    if employer_id in ("", None):
+        employer_id = None
+    elif isinstance(employer_id, str) and employer_id.isdigit():
+        employer_id = int(employer_id)
+    elif isinstance(employer_id, int):
+        employer_id = employer_id
+    else:
+        employer_id = None
+
     return {
         "username": str(account.get("username", "")).strip(),
         "password": str(password_value),
@@ -18,6 +28,7 @@ def normalize_account_data(account: Any) -> dict[str, Any] | None:
         "sss_number": SessionManager._digits_only(account.get("sss_number", "")),
         "philhealth_number": SessionManager._digits_only(account.get("philhealth_number", "")),
         "hdmf_number": SessionManager._digits_only(account.get("hdmf_number", "")),
+        "employer_id": employer_id,
         "employer_name": str(account.get("employer_name", "")).strip(),
     }
 
@@ -31,6 +42,7 @@ class SessionManager:
         "sss_number",
         "philhealth_number",
         "hdmf_number",
+        "employer_id",
         "employer_name",
     )
 

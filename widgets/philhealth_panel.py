@@ -62,7 +62,6 @@ class SingleTablePopup(QDialog):
 
         if tabs:
             tab_widget = QTabWidget()
-            tab_widget.setStyleSheet(AppStyles.HISTORY_SURFACE)
             for label, rows in tabs:
                 tab_widget.addTab(self._create_table(rows), label)
             layout.addWidget(tab_widget)
@@ -80,7 +79,30 @@ class SingleTablePopup(QDialog):
         table.setEditTriggers(QAbstractItemView.NoEditTriggers)
         self._apply_table_widths(table)
         table.setAlternatingRowColors(True)
-        table.setStyleSheet(AppStyles.HISTORY_SURFACE)
+        table.setStyleSheet(
+            AppStyles.TABLE_BASE
+            + AppStyles.TABLE_SCROLLBAR
+            + """
+            QTableWidget::item { color: #e5e7eb; padding: 5px 8px; }
+            QHeaderView::section {
+                background: rgba(2, 6, 23, 0.74);
+                border: none;
+                border-right: 1px solid rgba(148, 163, 184, 0.18);
+                color: #cbd5e1;
+                font: 700 11px 'Segoe UI';
+                padding: 7px 8px;
+            }
+            QTableWidget::item:selected {
+                background: rgba(20, 184, 166, 0.26);
+                color: #ffffff;
+            }
+            QTableWidget::item:alternate {
+                background: rgba(15, 23, 42, 0.52);
+            }
+            QTableWidget::viewport { border-radius: 16px; }
+            QTableWidget { border-radius: 16px; }
+        """
+        )
         self._populate_table(table, data)
         return table
 
@@ -199,13 +221,13 @@ class HistoryCardWidget(QFrame):
 
         def make_row(label, val, color):
             row = QHBoxLayout()
-            row_lbl = QLabel(label)
-            row_lbl.setStyleSheet("color: #94a3b8; font: 11px 'Segoe UI';")
-            row_val = QLabel(str(val))
-            row_val.setStyleSheet(f"color: {color}; font: 700 12px 'Segoe UI';")
-            row.addWidget(row_lbl)
+            label_widget = QLabel(label)
+            label_widget.setStyleSheet("color: #94a3b8; font-size: 11px; border: none; background: transparent;")
+            value_widget = QLabel(str(val))
+            value_widget.setStyleSheet(f"color: {color}; font-weight: bold; font-size: 12px; border: none; background: transparent;")
+            row.addWidget(label_widget)
             row.addStretch()
-            row.addWidget(row_val)
+            row.addWidget(value_widget)
             return row
 
         metrics_layout.addLayout(make_row("Total Employees:", self.record.get("total_count", 0), "#3b82f6"))
@@ -240,7 +262,7 @@ class HistoryDetailCard(QFrame):
                 color: #e5e7eb;
                 padding: 5px 8px;
             }
-        """ + AppStyles.HISTORY_SURFACE)
+        """ + AppStyles.TABLE_BASE + AppStyles.TABLE_SCROLLBAR)
 
         layout = QVBoxLayout(self)
         layout.setContentsMargins(14, 14, 14, 14)
@@ -261,7 +283,6 @@ class HistoryDetailCard(QFrame):
         layout.addLayout(header)
 
         self.tabs = QTabWidget()
-        self.tabs.setStyleSheet(AppStyles.HISTORY_SURFACE)
         self.tabs.setDocumentMode(True)
         self.tabs.addTab(self._create_table(self.record.get("data_total", [])), "Active")
         self.tabs.addTab(self._create_table(self.record.get("data_missing", [])), "Missing")
@@ -291,11 +312,38 @@ class HistoryDetailCard(QFrame):
         table.setSelectionBehavior(QAbstractItemView.SelectRows)
         table.setSelectionMode(QAbstractItemView.SingleSelection)
         table.setDragDropMode(QAbstractItemView.NoDragDrop)
-        table.setEditTriggers(QAbstractItemView.NoEditTriggers)
+        table.setEditTriggers(QTableWidget.NoEditTriggers)
         table.setAlternatingRowColors(True)
         table.setMinimumHeight(320)
         table.setMinimumWidth(760)
         self._apply_table_widths(table)
+        table.setStyleSheet(
+            AppStyles.TABLE_BASE
+            + AppStyles.TABLE_SCROLLBAR
+            + """
+            QHeaderView::section {
+                background: rgba(2, 6, 23, 0.74);
+                border: none;
+                border-right: 1px solid rgba(148, 163, 184, 0.18);
+                color: #cbd5e1;
+                font: 700 11px 'Segoe UI';
+                padding: 7px 8px;
+            }
+            QTableWidget::item {
+                border: none;
+                padding: 5px 8px;
+            }
+            QTableWidget::item:selected {
+                background: rgba(20, 184, 166, 0.26);
+                color: #ffffff;
+            }
+            QTableWidget::item:alternate {
+                background: rgba(15, 23, 42, 0.52);
+            }
+            QTableWidget::viewport { border-radius: 16px; }
+            QTableWidget { border-radius: 16px; }
+        """
+        )
         self._populate_table(table, data)
         return table
 
@@ -573,21 +621,8 @@ class PhilHealthPanel(QWidget):
                 border-color: rgba(244, 63, 94, 0.88);
                 color: #ffffff;
             }
-            QTableWidget {
-                background: rgba(2, 6, 23, 0.48);
-                alternate-background-color: rgba(15, 23, 42, 0.55);
-                border: 1px solid rgba(148, 163, 184, 0.20);
-                border-radius: 10px;
-                color: #e5e7eb;
-                gridline-color: rgba(148, 163, 184, 0.16);
-                selection-background-color: rgba(20, 184, 166, 0.34);
-                selection-color: #ffffff;
-                font: 11px 'Segoe UI';
-            }
-            QTableWidget::item {
-                color: #e5e7eb;
-                padding: 5px 8px;
-            }
+        """ + AppStyles.TABLE_BASE + AppStyles.TABLE_SCROLLBAR + """
+            QTableWidget::item { color: #e5e7eb; padding: 5px 8px; }
             QHeaderView::section {
                 background: rgba(2, 6, 23, 0.86);
                 border: none;
@@ -595,29 +630,6 @@ class PhilHealthPanel(QWidget):
                 color: #f8fafc;
                 font: 800 11px 'Segoe UI';
                 padding: 8px;
-            }
-            QScrollBar:vertical {
-                background: rgba(2, 6, 23, 0.18);
-                border: none;
-                border-radius: 6px;
-                width: 12px;
-                margin: 3px;
-            }
-            QScrollBar::handle:vertical {
-                background: rgba(148, 163, 184, 0.46);
-                border-radius: 6px;
-                min-height: 24px;
-            }
-            QScrollBar::handle:vertical:hover {
-                background: rgba(20, 184, 166, 0.72);
-            }
-            QScrollBar::add-line:vertical,
-            QScrollBar::sub-line:vertical,
-            QScrollBar::add-page:vertical,
-            QScrollBar::sub-page:vertical {
-                background: transparent;
-                border: none;
-                height: 0;
             }
         """
 
@@ -965,14 +977,7 @@ class PhilHealthPanel(QWidget):
                 color: #e5e7eb;
                 border-color: rgba(20, 184, 166, 0.34);
             }
-            QTableWidget {
-                background: rgba(2, 6, 23, 0.46);
-                border: 1px solid rgba(148, 163, 184, 0.18);
-                border-radius: 10px;
-                color: #e5e7eb;
-                gridline-color: rgba(148, 163, 184, 0.16);
-                selection-background-color: rgba(20, 184, 166, 0.34);
-            }
+            """ + AppStyles.TABLE_BASE + AppStyles.TABLE_SCROLLBAR + """
             QHeaderView::section {
                 background: rgba(2, 6, 23, 0.74);
                 border: none;
@@ -993,13 +998,13 @@ class PhilHealthPanel(QWidget):
             QScrollBar:vertical {
                 background: rgba(2, 6, 23, 0.18);
                 border: none;
-                border-radius: 6px;
+                border-radius: 14px;
                 width: 12px;
                 margin: 3px;
             }
             QScrollBar::handle:vertical {
                 background: rgba(148, 163, 184, 0.46);
-                border-radius: 6px;
+                border-radius: 14px;
                 min-height: 24px;
             }
             QScrollBar::handle:vertical:hover {
@@ -1016,13 +1021,13 @@ class PhilHealthPanel(QWidget):
             QScrollBar:horizontal {
                 background: rgba(2, 6, 23, 0.18);
                 border: none;
-                border-radius: 6px;
+                border-radius: 14px;
                 height: 12px;
                 margin: 3px;
             }
             QScrollBar::handle:horizontal {
                 background: rgba(148, 163, 184, 0.46);
-                border-radius: 6px;
+                border-radius: 14px;
                 min-width: 24px;
             }
             QScrollBar::handle:horizontal:hover {

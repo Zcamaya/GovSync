@@ -205,6 +205,15 @@ class HistoryDetailPopup(QFrame):
         table.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
         table.verticalHeader().setVisible(False)
         table.setEditTriggers(QTableWidget.NoEditTriggers)
+        table.setStyleSheet(
+            AppStyles.TABLE_BASE
+            + AppStyles.TABLE_SCROLLBAR
+            + """
+            QTableWidget { border: none; border-radius: 14px; }
+            QTableWidget::viewport { border-radius: 14px; }
+            QTableWidget::item { border: none; }
+            """
+        )
         
         table.setRowCount(len(data))
         for row, items in enumerate(data):
@@ -263,6 +272,16 @@ class DetailPopup(QFrame):
         self.table.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
         self.table.verticalHeader().setVisible(False)
         self.table.setEditTriggers(QTableWidget.NoEditTriggers)
+        self.table.setStyleSheet(
+            AppStyles.TABLE_BASE
+            + AppStyles.TABLE_SCROLLBAR
+            + """
+            QTableWidget { border: none; border-radius: 14px; }
+            QTableWidget::viewport { border-radius: 14px; }
+            QHeaderView::section { background: rgba(8, 18, 28, 0.98); color: #f8fafc; padding: 14px 16px; border: none; font: 700 12px 'Segoe UI'; }
+            QTableWidget::item { border: none; }
+            """
+        )
         
         self.table.setRowCount(len(self.data_list))
         for row, items in enumerate(self.data_list):
@@ -340,7 +359,7 @@ class PhicExtractorApp(QWidget):
             QTableWidget { background-color: #0b0f19; border: none; gridline-color: #1e293b; color: #e2e8f0; }
             QHeaderView::section { background-color: #111827; color: #3b82f6; padding: 8px; font-weight: bold; border: 1px solid #1e293b; }
             QScrollBar:vertical { border: none; background: #0f172a; width: 10px; margin: 0px 0px 0px 0px; }
-            QScrollBar::handle:vertical { background: #334155; min-height: 20px; border-radius: 5px; }
+            QScrollBar::handle:vertical { background: #334155; min-height: 20px; border-radius: 14px; }
             QScrollBar::add-line:vertical, QScrollBar::sub-line:vertical { height: 0px; }
         """)
 
@@ -586,6 +605,16 @@ class PhicExtractorApp(QWidget):
         table.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
         table.verticalHeader().setVisible(False)
         table.setEditTriggers(QTableWidget.NoEditTriggers)
+        table.setStyleSheet(
+            AppStyles.TABLE_BASE
+            + AppStyles.TABLE_SCROLLBAR
+            + """
+            QTableWidget { border: none; border-radius: 14px; }
+            QTableWidget::viewport { border-radius: 14px; }
+            QHeaderView::section { background: rgba(8, 18, 28, 0.98); color: #f8fafc; padding: 14px 16px; border: none; font: 700 12px 'Segoe UI'; }
+            QTableWidget::item { border: none; }
+            """
+        )
 
     def browse_source(self):
         dir_path = QFileDialog.getExistingDirectory(self, "Select Source Directory")

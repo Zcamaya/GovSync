@@ -58,13 +58,13 @@ class MainWindow(QMainWindow):
             QScrollBar:vertical {
                 background: rgba(2, 6, 23, 0.18);
                 border: none;
-                border-radius: 6px;
+                border-radius: 14px;
                 width: 12px;
                 margin: 3px;
             }
             QScrollBar::handle:vertical {
                 background: rgba(148, 163, 184, 0.46);
-                border-radius: 6px;
+                border-radius: 14px;
                 min-height: 24px;
             }
             QScrollBar::handle:vertical:hover {
@@ -81,13 +81,13 @@ class MainWindow(QMainWindow):
             QScrollBar:horizontal {
                 background: rgba(2, 6, 23, 0.18);
                 border: none;
-                border-radius: 6px;
+                border-radius: 14px;
                 height: 12px;
                 margin: 3px;
             }
             QScrollBar::handle:horizontal {
                 background: rgba(148, 163, 184, 0.46);
-                border-radius: 6px;
+                border-radius: 14px;
                 min-width: 24px;
             }
             QScrollBar::handle:horizontal:hover {
