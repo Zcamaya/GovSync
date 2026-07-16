@@ -35,6 +35,7 @@ from services.auth_manager import (
 from shared.resources import asset_path
 from shared.ui import set_exit_icon
 from constants.styles import AppStyles
+from widgets.shared_table import SharedTable
 
 
 def logo_pixmap(size):
@@ -61,7 +62,7 @@ SHELL_STYLE = """
     }
     QFrame#AuthCard {
         background: rgba(2, 6, 23, 0.54);
-        border: 1px solid rgba(148, 163, 184, 0.16);
+        border: 1px solid rgba(148, 163, 184, 0.18);
         border-radius: 16px;
     }
     QFrame#AuthArtPanel {
@@ -76,32 +77,33 @@ SHELL_STYLE = """
         border-radius: 12px;
     }
     QFrame#AuthCard QFrame#FormPanel {
-        background: rgba(248, 250, 252, 0.96);
-        border: none;
-        border-radius: 8px;
+        background: rgba(15, 23, 42, 0.82);
+        border: 1px solid rgba(148, 163, 184, 0.16);
+        border-radius: 12px;
     }
     QFrame#AuthCard QFrame#FormPanel QLabel {
-        color: #334155;
+        color: #cbd5e1;
     }
     QFrame#AuthCard QFrame#FormPanel QLabel#Title {
-        color: #0f172a;
+        color: #f8fafc;
         font: 800 20px 'Segoe UI';
     }
     QFrame#AuthCard QFrame#FormPanel QLineEdit {
-        background: #ffffff;
-        border: 1px solid #dbe3ee;
-        border-radius: 4px;
-        color: #0f172a;
-        min-height: 30px;
-        font: 11px 'Segoe UI';
+        background: rgba(2, 6, 23, 0.62);
+        border: 1px solid rgba(148, 163, 184, 0.24);
+        border-radius: 10px;
+        color: #e5e7eb;
+        min-height: 38px;
+        padding: 0 12px;
+        font: 12px 'Segoe UI';
     }
     QFrame#AuthCard QFrame#FormPanel QLineEdit:focus {
-        border-color: #3b82f6;
+        border-color: rgba(45, 212, 191, 0.65);
     }
     QFrame#AuthCard QFrame#FormPanel QPushButton {
-        border-radius: 4px;
-        min-height: 32px;
-        font: 700 11px 'Segoe UI';
+        border-radius: 10px;
+        min-height: 38px;
+        font: 700 12px 'Segoe UI';
     }
     QFrame#InfoPanel {
         background: rgba(2, 6, 23, 0.34);
@@ -123,9 +125,9 @@ SHELL_STYLE = """
         font: 800 26px 'Segoe UI';
     }
     QLineEdit {
-        background: rgba(2, 6, 23, 0.62);
-        border: 1px solid rgba(148, 163, 184, 0.26);
-        border-radius: 9px;
+        background: rgba(15, 23, 42, 0.82);
+        border: 1px solid rgba(148, 163, 184, 0.24);
+        border-radius: 10px;
         color: #e5e7eb;
         min-height: 40px;
         padding: 0 12px;
@@ -135,9 +137,9 @@ SHELL_STYLE = """
         border-color: rgba(20, 184, 166, 0.72);
     }
     QPushButton {
-        background: rgba(30, 41, 59, 0.76);
+        background: rgba(15, 23, 42, 0.82);
         border: 1px solid rgba(148, 163, 184, 0.24);
-        border-radius: 9px;
+        border-radius: 10px;
         color: #e5e7eb;
         min-height: 40px;
         font: 700 12px 'Segoe UI';
@@ -146,12 +148,14 @@ SHELL_STYLE = """
     QPushButton:hover {
         background: rgba(51, 65, 85, 0.88);
         border-color: rgba(20, 184, 166, 0.36);
+        color: #ffffff;
     }
     QPushButton#PrimaryButton {
         background: qlineargradient(x1:0, y1:0, x2:1, y2:0,
                                     stop:0 #14b8c8, stop:1 #3b82f6);
         border: none;
         color: #ffffff;
+        font-weight: 800;
     }
     QPushButton#DangerButton:hover {
         background: rgba(244, 63, 94, 0.78);
@@ -975,32 +979,13 @@ class SuperAdminPage(QWidget):
         """)
         layout.addWidget(self.account_list, stretch=1)
 
-        self.table = QTableWidget(0, 3)
-        self.table.setHorizontalHeaderLabels([
-            "Username",
-            "Password",
-            "Employer Name",
-        ])
+        self.table = SharedTable(["Username", "Password", "Employer Name"], self)
         table_header = self.table.horizontalHeader()
         table_header.setDefaultAlignment(Qt.AlignLeft | Qt.AlignVCenter)
         table_header.setSectionResizeMode(QHeaderView.Stretch)
         table_header.setStretchLastSection(True)
         self.table.setWordWrap(False)
         self.table.setTextElideMode(Qt.ElideNone)
-        self.table.verticalHeader().setVisible(False)
-        self.table.setEditTriggers(QTableWidget.NoEditTriggers)
-        self.table.setAlternatingRowColors(True)
-        self.table.setSelectionBehavior(QTableWidget.SelectRows)
-        self.table.setSelectionMode(QTableWidget.SingleSelection)
-        self.table.setShowGrid(False)
-        self.table.setStyleSheet(
-            AppStyles.TABLE_BASE
-            + AppStyles.TABLE_SCROLLBAR
-            + """
-            QTableWidget { border: none; border-radius: 14px; }
-            QTableWidget::viewport { border-radius: 14px; }
-        """
-        )
         layout.addWidget(self.table, stretch=1)
 
         buttons = QHBoxLayout()
@@ -1256,32 +1241,21 @@ class SuperAdminWindow(QWidget, AuthShellMixin):
         sub = QLabel("Super admin can view and delete registered user accounts.")
         sub.setStyleSheet("color: #94a3b8;")
 
-        self.table = QTableWidget(0, 6)
-        self.table.setHorizontalHeaderLabels([
+        self.table = SharedTable([
             "Username",
             "Password",
             "SSS Number",
             "PhilHealth Number",
             "HDMF Number",
             "Employer Name",
-        ])
+        ], self)
         table_header = self.table.horizontalHeader()
         table_header.setDefaultAlignment(Qt.AlignLeft | Qt.AlignVCenter)
         table_header.setSectionResizeMode(QHeaderView.Stretch)
         table_header.setStretchLastSection(True)
         self.table.setWordWrap(False)
         self.table.setTextElideMode(Qt.ElideNone)
-        self.table.verticalHeader().setVisible(False)
-        self.table.setEditTriggers(QTableWidget.NoEditTriggers)
         self.table.setMinimumHeight(380)
-        self.table.setAlternatingRowColors(True)
-        self.table.setStyleSheet(
-            AppStyles.TABLE_BASE + AppStyles.TABLE_SCROLLBAR + """
-            QTableWidget { border: none; border-radius: 14px; }
-            QTableWidget::viewport { border-radius: 14px; }
-            QTableWidget::item { padding: 8px 6px; }
-        """
-        )
 
         buttons = QHBoxLayout()
         refresh_btn = QPushButton("Refresh")

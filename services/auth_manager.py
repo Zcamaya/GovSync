@@ -87,6 +87,35 @@ def normalize_account(account: Any) -> dict[str, str] | None:
     return normalize_account_data(account)
 
 
+def _account_to_dict(account: Account) -> dict[str, Any]:
+    return {
+        "username": account.username,
+        "password": account.password_hash,
+        "password_hash": account.password_hash,
+        "sss_number": account.sss_number,
+        "philhealth_number": account.philhealth_number,
+        "hdmf_number": account.hdmf_number,
+        "employer_id": account.employer_id,
+        "employer_name": account.employer_name,
+    }
+
+
+def _account_from_dict(account_data: dict[str, Any]) -> Account:
+    normalized = normalize_account(account_data)
+    if normalized is None:
+        raise ValueError("Invalid account payload.")
+
+    return Account(
+        username=normalized["username"],
+        password_hash=normalized["password"],
+        sss_number=normalized["sss_number"],
+        philhealth_number=normalized["philhealth_number"],
+        hdmf_number=normalized["hdmf_number"],
+        employer_id=normalized.get("employer_id"),
+        employer_name=normalized["employer_name"],
+    )
+
+
 def digits_only(value: Any) -> str:
     return "".join(re.findall(r"\d", str(value)))
 
@@ -134,19 +163,7 @@ def list_accounts() -> list[Account]:
 
 
 def load_accounts() -> list[dict[str, str]]:
-    return [
-        {
-            "username": account.username,
-            "password": account.password_hash,
-            "password_hash": account.password_hash,
-            "sss_number": account.sss_number,
-            "philhealth_number": account.philhealth_number,
-            "hdmf_number": account.hdmf_number,
-            "employer_id": account.employer_id,
-            "employer_name": account.employer_name,
-        }
-        for account in list_accounts()
-    ]
+    return [_account_to_dict(account) for account in list_accounts()]
 
 
 def save_accounts(accounts: list[dict[str, Any]]) -> None:
@@ -155,17 +172,7 @@ def save_accounts(accounts: list[dict[str, Any]]) -> None:
         normalized = normalize_account(account)
         if normalized is None:
             continue
-        normalized_accounts.append(
-            Account(
-                username=normalized["username"],
-                password_hash=normalized["password"],
-                sss_number=normalized["sss_number"],
-                philhealth_number=normalized["philhealth_number"],
-                hdmf_number=normalized["hdmf_number"],
-                employer_id=normalized.get("employer_id"),
-                employer_name=normalized["employer_name"],
-            )
-        )
+        normalized_accounts.append(_account_from_dict(normalized))
     _get_account_repository().replace_all(normalized_accounts)
 
 
@@ -177,16 +184,7 @@ def get_account(username: str) -> dict[str, str] | None:
     account = _get_account_repository().get_by_username(username)
     if account is None:
         return None
-    return {
-        "username": account.username,
-        "password": account.password_hash,
-        "password_hash": account.password_hash,
-        "sss_number": account.sss_number,
-        "philhealth_number": account.philhealth_number,
-        "hdmf_number": account.hdmf_number,
-        "employer_id": account.employer_id,
-        "employer_name": account.employer_name,
-    }
+    return _account_to_dict(account)
 
 
 def register_account(
@@ -288,17 +286,7 @@ def update_account(username: str, **fields: Any) -> None:
             else:
                 merged[key] = str(value).strip()
 
-    _get_account_repository().save(
-        Account(
-            username=merged["username"],
-            password_hash=merged["password"],
-            sss_number=merged["sss_number"],
-            philhealth_number=merged["philhealth_number"],
-            hdmf_number=merged["hdmf_number"],
-            employer_id=merged.get("employer_id"),
-            employer_name=merged["employer_name"],
-        )
-    )
+    _get_account_repository().save(_account_from_dict(merged))
     active = get_active_account() or {}
     if active.get("username", "").lower() == username.strip().lower():
         _save_active_account(merged)

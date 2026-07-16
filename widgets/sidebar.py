@@ -5,6 +5,7 @@ from PySide6.QtGui import QImage, QPainter, QPixmap
 from PySide6.QtSvg import QSvgRenderer
 from PySide6.QtWidgets import QHBoxLayout, QLabel, QListWidget, QPushButton, QVBoxLayout, QWidget
 
+from constants.styles import AppStyles
 from shared.resources import asset_path
 
 
@@ -45,10 +46,7 @@ class SidebarWidget(QWidget):
             logo_label.setPixmap(QPixmap.fromImage(image))
 
         title_label = QLabel("GovSync")
-        title_label.setStyleSheet(
-            "color: white; font-size: 20px; font-weight: bold; "
-            "background: transparent; border: none;"
-        )
+        title_label.setStyleSheet(AppStyles.SCREEN_TITLE)
 
         header.addWidget(logo_label)
         header.addWidget(title_label)
@@ -70,31 +68,9 @@ class SidebarWidget(QWidget):
         )
         nav.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
         nav.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
-        nav.setStyleSheet("""
-            QListWidget {
-                background: transparent;
-                border: none;
-                outline: none;
-            }
-            QListWidget::item {
-                color: #94a3b8;
-                padding: 12px 16px;
-                font-size: 13px;
-                font-weight: 600;
-                border-radius: 12px;
-                margin-bottom: 4px;
-            }
-            QListWidget::item:hover {
-                background-color: rgba(255, 255, 255, 0.04);
-                color: #f1f5f9;
-            }
-            QListWidget::item:selected {
-                background-color: rgba(16, 185, 129, 0.15);
-                color: #34d399;
-                border: 1px solid rgba(16, 185, 129, 0.4);
-            }
-        """)
+        nav.setStyleSheet(AppStyles.NAV_LIST)
         nav.setCurrentRow(0)
+        nav.setAlternatingRowColors(False)
         return nav
 
     def _create_logout_button(self):
@@ -102,13 +78,9 @@ class SidebarWidget(QWidget):
         button.setCursor(Qt.PointingHandCursor)
         button.setMinimumHeight(42)
         button.clicked.connect(self.logout_requested.emit)
-        button.setStyleSheet("""
+        button.setStyleSheet(AppStyles.SECONDARY_BUTTON + """
             QPushButton {
-                background: rgba(30, 41, 59, 0.72);
-                border: 1px solid rgba(148, 163, 184, 0.24);
-                border-radius: 10px;
-                color: #e5e7eb;
-                font: 700 12px 'Segoe UI';
+                min-height: 42px;
             }
             QPushButton:hover {
                 background: rgba(244, 63, 94, 0.20);

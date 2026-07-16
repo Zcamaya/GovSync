@@ -25,6 +25,7 @@ from PySide6.QtWidgets import (
 )
 
 from constants.styles import AppStyles
+from widgets.shared_table import SharedTable
 from services.auth_manager import account_json_path, get_active_account
 from controllers.sss_controller import SSSController
 from services.sss_service import (
@@ -132,33 +133,7 @@ class SSSPanel(QWidget):
         main_layout.addWidget(self.account_banner)
 
         self.tabs = QTabWidget()
-        self.tabs.setStyleSheet("""
-            QTabWidget::pane {
-                border: 1px solid rgba(148, 163, 184, 0.18);
-                border-radius: 10px;
-                background: rgba(8, 20, 18, 0.32);
-                top: -1px;
-            }
-            QTabBar::tab {
-                background: rgba(15, 23, 42, 0.62);
-                border: 1px solid rgba(148, 163, 184, 0.16);
-                border-bottom: none;
-                border-top-left-radius: 8px;
-                border-top-right-radius: 8px;
-                color: #94a3b8;
-                min-width: 130px;
-                padding: 9px 16px;
-                font: 700 12px 'Segoe UI';
-            }
-            QTabBar::tab:selected {
-                background: rgba(20, 43, 37, 0.82);
-                color: #e5e7eb;
-                border-color: rgba(20, 184, 166, 0.34);
-            }
-            QTabBar::tab:hover {
-                color: #e5e7eb;
-            }
-        """)
+        self.tabs.setStyleSheet(AppStyles.UNIFIED_TAB_STYLE)
 
         generate_tab = QWidget()
         generate_tab.setStyleSheet("background: transparent; border: none;")
@@ -190,18 +165,6 @@ class SSSPanel(QWidget):
                 background: transparent;
                 font: 600 12px 'Segoe UI';
             }
-            QLineEdit, QComboBox {
-                background: rgba(2, 6, 23, 0.56);
-                border: 1px solid rgba(148, 163, 184, 0.24);
-                border-radius: 7px;
-                color: #e5e7eb;
-                min-height: 34px;
-                padding: 0 10px;
-                font: 12px 'Segoe UI';
-            }
-            QLineEdit:focus, QComboBox:focus {
-                border-color: rgba(20, 184, 166, 0.72);
-            }
             QComboBox::drop-down {
                 border: none;
                 width: 28px;
@@ -221,6 +184,7 @@ class SSSPanel(QWidget):
                 padding: 6px 10px;
             }
             """
+            + AppStyles.FIELD_INPUT
             + AppStyles.SCROLLBAR
         )
         form_layout = QFormLayout(form_holder)
@@ -287,9 +251,7 @@ class SSSPanel(QWidget):
         queue_header = QHBoxLayout()
         queue_header.setSpacing(8)
         queue_label = QLabel("Bulk Source Queue")
-        queue_label.setStyleSheet(
-            "color: #cbd5e1; font: 700 12px 'Segoe UI'; border: none; background: transparent;"
-        )
+        queue_label.setStyleSheet(AppStyles.SECTION_TITLE)
         queue_header.addWidget(queue_label)
         queue_header.addStretch()
         self.btn_add_sources = self._secondary_button("Add Files")
@@ -339,9 +301,7 @@ class SSSPanel(QWidget):
         viewer_header.setSpacing(8)
 
         viewer_title = QLabel("Partial List TXT Viewer")
-        viewer_title.setStyleSheet(
-            "color: #cbd5e1; font: 700 12px 'Segoe UI'; border: none; background: transparent;"
-        )
+        viewer_title.setStyleSheet(AppStyles.SECTION_TITLE)
         viewer_header.addWidget(viewer_title, stretch=1)
 
         self.btn_import_txt = self._secondary_button("Import TXT")
@@ -353,24 +313,13 @@ class SSSPanel(QWidget):
         viewer_header.addWidget(self.btn_save_txt)
         viewer_layout.addLayout(viewer_header)
 
-        self.txt_table = QTableWidget(0, len(TXT_COLUMNS))
-        self.txt_table.setHorizontalHeaderLabels(TXT_COLUMNS)
+        self.txt_table = SharedTable(TXT_COLUMNS, self)
         self.txt_table.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeToContents)
         self.txt_table.horizontalHeader().setStretchLastSection(True)
-        self.txt_table.verticalHeader().setVisible(False)
         self.txt_table.setAlternatingRowColors(False)
+        self.txt_table.set_row_height(36)
         self.txt_table.setEditTriggers(QAbstractItemView.AllEditTriggers)
-        self.txt_table.setStyleSheet(
-            AppStyles.TABLE_BASE
-            + AppStyles.TABLE_SCROLLBAR
-            + """
-            QTableWidget { border: none; border-radius: 14px; }
-            QTableWidget::viewport { border-radius: 14px; }
-            QHeaderView::section { background: rgba(2,6,23,0.74); border: none; border-right: 1px solid rgba(148,163,184,0.18); color: #cbd5e1; font: 700 11px 'Segoe UI'; padding: 7px 8px; }
-            QTableWidget::item { border: none; padding: 5px 7px; }
-            QTableWidget::item:selected { background: rgba(20, 184, 166, 0.28); color: #ffffff; }
-        """
-        )
+        self.txt_table.setStyleSheet(AppStyles.TABLE_CANONICAL)
         viewer_layout.addWidget(self.txt_table, stretch=1)
 
         self.progress_bar = QProgressBar()

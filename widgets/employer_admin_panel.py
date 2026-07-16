@@ -17,6 +17,7 @@ from PySide6.QtWidgets import (
 
 from constants.styles import AppStyles
 from widgets.glass_dialog import GlassDialog
+from widgets.shared_table import SharedTable
 
 
 class EmployerFormDialog(QDialog):
@@ -64,13 +65,19 @@ class EmployerFormDialog(QDialog):
         form.setSpacing(10)
 
         self.name_input = QLineEdit()
+        self.name_input.setStyleSheet(AppStyles.FIELD_INPUT)
         self.address_input = QLineEdit()
+        self.address_input.setStyleSheet(AppStyles.FIELD_INPUT)
         self.tin_input = QLineEdit()
+        self.tin_input.setStyleSheet(AppStyles.FIELD_INPUT)
         self.sss_input = QLineEdit()
+        self.sss_input.setStyleSheet(AppStyles.FIELD_INPUT)
         self.sss_input.setInputMask("00-0000000-0;_")
         self.philhealth_input = QLineEdit()
+        self.philhealth_input.setStyleSheet(AppStyles.FIELD_INPUT)
         self.philhealth_input.setInputMask("00-000000000-0;_")
         self.hdmf_input = QLineEdit()
+        self.hdmf_input.setStyleSheet(AppStyles.FIELD_INPUT)
         self.hdmf_input.setInputMask("0000-0000-0000;_")
         self.status_combo = QComboBox()
         self.status_combo.addItems(["active", "inactive"])
@@ -189,8 +196,7 @@ class EmployerAdminPanel(QWidget):
         layout.addWidget(header)
         layout.addWidget(sub)
 
-        self.table = QTableWidget(0, 7)
-        self.table.setHorizontalHeaderLabels([
+        self.table = SharedTable([
             "Name",
             "Address",
             "TIN",
@@ -198,31 +204,14 @@ class EmployerAdminPanel(QWidget):
             "PhilHealth",
             "HDMF",
             "Status",
-        ])
-        self.table.setAlternatingRowColors(True)
-        self.table.setSelectionBehavior(QTableWidget.SelectRows)
-        self.table.setSelectionMode(QTableWidget.SingleSelection)
-        self.table.setShowGrid(False)
-        self.table.setEditTriggers(QTableWidget.NoEditTriggers)
-        self.table.verticalHeader().setVisible(False)
+        ], self)
         self.table.setWordWrap(True)
-        self.table.setStyleSheet(
-            AppStyles.TABLE_BASE
-            + AppStyles.TABLE_SCROLLBAR
-            + """
-            QTableWidget { border: none; border-radius: 14px; }
-            QTableWidget::viewport { border-radius: 14px; }
-            QHeaderView::section { background: rgba(2,6,23,0.78); color: #f8fafc; padding: 8px; border: none; font-weight: 700; }
-            QTableWidget::item:selected { background: rgba(20,184,166,0.24); color: #ffffff; }
-            QTableWidget::item:alternate { background: rgba(2,6,23,0.34); }
-        """
-        )
         table_header = self.table.horizontalHeader()
         table_header.setDefaultAlignment(Qt.AlignLeft | Qt.AlignVCenter)
         table_header.setStretchLastSection(True)
         table_header.setSectionResizeMode(QHeaderView.Stretch)
         self.table.setMinimumHeight(360)
-        self.table.verticalHeader().setDefaultSectionSize(38)
+        self.table.set_row_height(38)
         layout.addWidget(self.table, stretch=1)
 
         buttons = QHBoxLayout()

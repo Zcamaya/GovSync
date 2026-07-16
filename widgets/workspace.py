@@ -1,5 +1,6 @@
 from PySide6.QtWidgets import QHBoxLayout, QLabel, QVBoxLayout, QWidget
 
+from constants.styles import AppStyles
 from widgets.glass_panel import TrueGlassPanel
 
 
@@ -20,13 +21,9 @@ class WorkspaceWidget(QWidget):
         self.banner_layout.setSpacing(6)
 
         self.welcome_title = QLabel()
-        self.welcome_title.setStyleSheet(
-            "color: #34d399; font-size: 24px; font-weight: 800; border: none; background: transparent;"
-        )
+        self.welcome_title.setStyleSheet("color: #34d399; font: 800 24px 'Segoe UI'; border: none; background: transparent;")
         self.welcome_subtitle = QLabel("Your compliance workspace is ready.")
-        self.welcome_subtitle.setStyleSheet(
-            "color: #cbd5e1; font-size: 12px; border: none; background: transparent;"
-        )
+        self.welcome_subtitle.setStyleSheet(AppStyles.SECTION_SUBTITLE)
         self.banner_layout.addStretch()
         self.banner_layout.addWidget(self.welcome_title)
         self.banner_layout.addWidget(self.welcome_subtitle)
@@ -37,29 +34,29 @@ class WorkspaceWidget(QWidget):
 
         self.philhealth_box = TrueGlassPanel(border_radius=15)
         philhealth_layout = QVBoxLayout(self.philhealth_box)
-        philhealth_layout.addWidget(QLabel("Philhealth (Past Month Total)"))
+        philhealth_label = QLabel("Philhealth (Past Month Total)")
+        philhealth_label.setStyleSheet(AppStyles.SECTION_SUBTITLE)
+        philhealth_layout.addWidget(philhealth_label)
         self.lbl_ph_count = QLabel("0")
-        self.lbl_ph_count.setStyleSheet(
-            "color: #34d399; font-size: 28px; font-weight: 800; border: none; background: transparent;"
-        )
+        self.lbl_ph_count.setStyleSheet(AppStyles.METRIC_VALUE)
         philhealth_layout.addWidget(self.lbl_ph_count)
 
         self.hdmf_box = TrueGlassPanel(border_radius=15)
         hdmf_layout = QVBoxLayout(self.hdmf_box)
-        hdmf_layout.addWidget(QLabel("HDMF (Past Month Total)"))
+        hdmf_label = QLabel("HDMF (Past Month Total)")
+        hdmf_label.setStyleSheet(AppStyles.SECTION_SUBTITLE)
+        hdmf_layout.addWidget(hdmf_label)
         self.lbl_hd_count = QLabel("0")
-        self.lbl_hd_count.setStyleSheet(
-            "color: #34d399; font-size: 28px; font-weight: 800; border: none; background: transparent;"
-        )
+        self.lbl_hd_count.setStyleSheet(AppStyles.METRIC_VALUE)
         hdmf_layout.addWidget(self.lbl_hd_count)
 
         self.sss_box = TrueGlassPanel(border_radius=15)
         sss_layout = QVBoxLayout(self.sss_box)
-        sss_layout.addWidget(QLabel("SSS (Past Month Total)"))
+        sss_label = QLabel("SSS (Past Month Total)")
+        sss_label.setStyleSheet(AppStyles.SECTION_SUBTITLE)
+        sss_layout.addWidget(sss_label)
         self.lbl_sss_count = QLabel("0")
-        self.lbl_sss_count.setStyleSheet(
-            "color: #34d399; font-size: 28px; font-weight: 800; border: none; background: transparent;"
-        )
+        self.lbl_sss_count.setStyleSheet(AppStyles.METRIC_VALUE)
         sss_layout.addWidget(self.lbl_sss_count)
 
         stats_container.addWidget(self.philhealth_box)

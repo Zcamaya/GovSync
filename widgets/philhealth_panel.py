@@ -26,6 +26,7 @@ from PySide6.QtWidgets import (
 from constants.styles import AppStyles
 from controllers.philhealth_controller import PhilHealthController
 from widgets.glass_dialog import GlassDialog
+from widgets.shared_table import SharedTable
 from repositories.history_repository import HistoryRepository
 from repositories.statistics_repository import StatisticsRepository
 from services.philhealth_service import PhilHealthService
@@ -49,7 +50,7 @@ class SingleTablePopup(QDialog):
 
         title_row = QHBoxLayout()
         title_label = QLabel(title)
-        title_label.setStyleSheet("color: #f8fafc; font: 800 16px 'Segoe UI';")
+        title_label.setStyleSheet(AppStyles.SECTION_TITLE)
         close_btn = QPushButton()
         close_btn.setFixedSize(28, 28)
         set_exit_icon(close_btn, "#93c5fd", 11)
@@ -62,6 +63,7 @@ class SingleTablePopup(QDialog):
 
         if tabs:
             tab_widget = QTabWidget()
+            tab_widget.setStyleSheet(AppStyles.UNIFIED_TAB_STYLE)
             for label, rows in tabs:
                 tab_widget.addTab(self._create_table(rows), label)
             layout.addWidget(tab_widget)
@@ -69,40 +71,15 @@ class SingleTablePopup(QDialog):
             layout.addWidget(self._create_table(data))
 
     def _create_table(self, data):
-        table = DraggableTableWidget()
-        table.setColumnCount(len(self.headers) + 1)
-        table.setHorizontalHeaderLabels(["No."] + self.headers)
-        table.verticalHeader().setVisible(False)
+        table = DraggableTableWidget(["No."] + self.headers)
         table.setSelectionBehavior(QAbstractItemView.SelectRows)
         table.setSelectionMode(QAbstractItemView.SingleSelection)
         table.setDragDropMode(QAbstractItemView.NoDragDrop)
         table.setEditTriggers(QAbstractItemView.NoEditTriggers)
         self._apply_table_widths(table)
         table.setAlternatingRowColors(True)
-        table.setStyleSheet(
-            AppStyles.TABLE_BASE
-            + AppStyles.TABLE_SCROLLBAR
-            + """
-            QTableWidget::item { color: #e5e7eb; padding: 5px 8px; }
-            QHeaderView::section {
-                background: rgba(2, 6, 23, 0.74);
-                border: none;
-                border-right: 1px solid rgba(148, 163, 184, 0.18);
-                color: #cbd5e1;
-                font: 700 11px 'Segoe UI';
-                padding: 7px 8px;
-            }
-            QTableWidget::item:selected {
-                background: rgba(20, 184, 166, 0.26);
-                color: #ffffff;
-            }
-            QTableWidget::item:alternate {
-                background: rgba(15, 23, 42, 0.52);
-            }
-            QTableWidget::viewport { border-radius: 16px; }
-            QTableWidget { border-radius: 16px; }
-        """
-        )
+        table.setStyleSheet(AppStyles.TABLE_CANONICAL)
+        table.set_row_height(AppStyles.TABLE_ROW_HEIGHT)
         self._populate_table(table, data)
         return table
 
@@ -141,7 +118,10 @@ class SingleTablePopup(QDialog):
                 table.setItem(row_index - 1, column_index, item)
 
 
-class DraggableTableWidget(QTableWidget):
+class DraggableTableWidget(SharedTable):
+    def __init__(self, columns=None, parent=None):
+        super().__init__(columns or [], parent)
+
     def dropEvent(self, event):
         super().dropEvent(event)
         for row_index in range(self.rowCount()):
@@ -186,7 +166,7 @@ class HistoryCardWidget(QFrame):
         header = QHBoxLayout()
         header.setSpacing(6)
         title = QLabel(self.record.get("month_year", "Unknown"))
-        title.setStyleSheet("color: #f8fafc; font: 800 14px 'Segoe UI';")
+        title.setStyleSheet(AppStyles.SECTION_TITLE)
         header.addWidget(title)
         header.addStretch()
         delete_btn = QPushButton()
@@ -258,11 +238,7 @@ class HistoryDetailCard(QFrame):
                 background: transparent;
                 border: none;
             }
-            QTableWidget::item {
-                color: #e5e7eb;
-                padding: 5px 8px;
-            }
-        """ + AppStyles.TABLE_BASE + AppStyles.TABLE_SCROLLBAR)
+        """)
 
         layout = QVBoxLayout(self)
         layout.setContentsMargins(14, 14, 14, 14)
@@ -299,16 +275,13 @@ class HistoryDetailCard(QFrame):
         header.setSectionResizeMode(3, QHeaderView.Stretch)
 
     def _create_table(self, data):
-        table = QTableWidget()
-        table.setColumnCount(5)
-        table.setHorizontalHeaderLabels([
+        table = SharedTable([
             "No.",
             "Client",
             "PhilHealth No",
             "Employee Name",
             "Birthdate",
         ])
-        table.verticalHeader().setVisible(False)
         table.setSelectionBehavior(QAbstractItemView.SelectRows)
         table.setSelectionMode(QAbstractItemView.SingleSelection)
         table.setDragDropMode(QAbstractItemView.NoDragDrop)
@@ -317,33 +290,7 @@ class HistoryDetailCard(QFrame):
         table.setMinimumHeight(320)
         table.setMinimumWidth(760)
         self._apply_table_widths(table)
-        table.setStyleSheet(
-            AppStyles.TABLE_BASE
-            + AppStyles.TABLE_SCROLLBAR
-            + """
-            QHeaderView::section {
-                background: rgba(2, 6, 23, 0.74);
-                border: none;
-                border-right: 1px solid rgba(148, 163, 184, 0.18);
-                color: #cbd5e1;
-                font: 700 11px 'Segoe UI';
-                padding: 7px 8px;
-            }
-            QTableWidget::item {
-                border: none;
-                padding: 5px 8px;
-            }
-            QTableWidget::item:selected {
-                background: rgba(20, 184, 166, 0.26);
-                color: #ffffff;
-            }
-            QTableWidget::item:alternate {
-                background: rgba(15, 23, 42, 0.52);
-            }
-            QTableWidget::viewport { border-radius: 16px; }
-            QTableWidget { border-radius: 16px; }
-        """
-        )
+        table.setStyleSheet(AppStyles.TABLE_CANONICAL)
         self._populate_table(table, data)
         return table
 
@@ -621,17 +568,7 @@ class PhilHealthPanel(QWidget):
                 border-color: rgba(244, 63, 94, 0.88);
                 color: #ffffff;
             }
-        """ + AppStyles.TABLE_BASE + AppStyles.TABLE_SCROLLBAR + """
-            QTableWidget::item { color: #e5e7eb; padding: 5px 8px; }
-            QHeaderView::section {
-                background: rgba(2, 6, 23, 0.86);
-                border: none;
-                border-right: 1px solid rgba(148, 163, 184, 0.18);
-                color: #f8fafc;
-                font: 800 11px 'Segoe UI';
-                padding: 8px;
-            }
-        """
+        """ + AppStyles.TABLE_CANONICAL
 
     def _setup_ui(self):
         self.setStyleSheet(self._style())
@@ -977,15 +914,7 @@ class PhilHealthPanel(QWidget):
                 color: #e5e7eb;
                 border-color: rgba(20, 184, 166, 0.34);
             }
-            """ + AppStyles.TABLE_BASE + AppStyles.TABLE_SCROLLBAR + """
-            QHeaderView::section {
-                background: rgba(2, 6, 23, 0.74);
-                border: none;
-                border-right: 1px solid rgba(148, 163, 184, 0.18);
-                color: #cbd5e1;
-                font: 700 11px 'Segoe UI';
-                padding: 7px 8px;
-            }
+            """ + AppStyles.TABLE_CANONICAL + """
             MetricCard, HistoryCard {
                 background: rgba(20, 43, 37, 0.64);
                 border: 1px solid rgba(148, 163, 184, 0.22);
@@ -995,48 +924,48 @@ class PhilHealthPanel(QWidget):
                 background: transparent;
                 border: none;
             }
-            QScrollBar:vertical {
+            QScrollArea QScrollBar:vertical {
                 background: rgba(2, 6, 23, 0.18);
                 border: none;
                 border-radius: 14px;
                 width: 12px;
                 margin: 3px;
             }
-            QScrollBar::handle:vertical {
+            QScrollArea QScrollBar::handle:vertical {
                 background: rgba(148, 163, 184, 0.46);
                 border-radius: 14px;
                 min-height: 24px;
             }
-            QScrollBar::handle:vertical:hover {
+            QScrollArea QScrollBar::handle:vertical:hover {
                 background: rgba(20, 184, 166, 0.72);
             }
-            QScrollBar::add-line:vertical,
-            QScrollBar::sub-line:vertical,
-            QScrollBar::add-page:vertical,
-            QScrollBar::sub-page:vertical {
+            QScrollArea QScrollBar::add-line:vertical,
+            QScrollArea QScrollBar::sub-line:vertical,
+            QScrollArea QScrollBar::add-page:vertical,
+            QScrollArea QScrollBar::sub-page:vertical {
                 background: transparent;
                 border: none;
                 height: 0;
             }
-            QScrollBar:horizontal {
+            QScrollArea QScrollBar:horizontal {
                 background: rgba(2, 6, 23, 0.18);
                 border: none;
                 border-radius: 14px;
                 height: 12px;
                 margin: 3px;
             }
-            QScrollBar::handle:horizontal {
+            QScrollArea QScrollBar::handle:horizontal {
                 background: rgba(148, 163, 184, 0.46);
                 border-radius: 14px;
                 min-width: 24px;
             }
-            QScrollBar::handle:horizontal:hover {
+            QScrollArea QScrollBar::handle:horizontal:hover {
                 background: rgba(20, 184, 166, 0.72);
             }
-            QScrollBar::add-line:horizontal,
-            QScrollBar::sub-line:horizontal,
-            QScrollBar::add-page:horizontal,
-            QScrollBar::sub-page:horizontal {
+            QScrollArea QScrollBar::add-line:horizontal,
+            QScrollArea QScrollBar::sub-line:horizontal,
+            QScrollArea QScrollBar::add-page:horizontal,
+            QScrollArea QScrollBar::sub-page:horizontal {
                 background: transparent;
                 border: none;
                 width: 0;

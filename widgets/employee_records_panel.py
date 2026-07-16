@@ -1,13 +1,16 @@
+import re
+from datetime import datetime
+
 from PySide6.QtCore import Qt, QTimer
 from PySide6.QtGui import QColor
 from PySide6.QtWidgets import (
+    QComboBox,
     QDialog,
     QFrame,
     QHBoxLayout,
     QLabel,
     QPushButton,
     QScrollArea,
-    QTableWidget,
     QTableWidgetItem,
     QVBoxLayout,
     QWidget,
@@ -20,8 +23,43 @@ from widgets.employee_records_paginator import EmployeeRecordsPaginator
 from widgets.employee_records_table import EmployeeRecordsTable
 from widgets.glass_panel import TrueGlassPanel
 from widgets.glass_dialog import GlassDialog
+from widgets.shared_table import SharedTable
 from core.session_manager import get_active_account
 from shared.ui import set_exit_icon
+
+
+def _parse_period_value(value):
+    text = str(value or "").strip()
+    if not text:
+        return (0, 0, 0, 0, "")
+
+    for pattern in ("%Y-%m-%d", "%Y/%m/%d", "%Y-%m", "%Y/%m", "%d/%m/%Y", "%m/%d/%Y", "%d-%m-%Y"):
+        try:
+            parsed = datetime.strptime(text, pattern)
+            return (1, parsed.year, parsed.month, parsed.day, text)
+        except ValueError:
+            continue
+
+    match = re.fullmatch(r"(\d{4})[-/](\d{1,2})(?:[-/](\d{1,2}))?", text)
+    if match:
+        year, month, day = match.groups()
+        day_value = int(day or 1)
+        return (1, int(year), int(month), day_value, text)
+
+    return (2, 0, 0, 0, text.lower())
+
+
+def sort_payroll_history_for_display(history):
+    def sort_key(item):
+        if item.get("applicable_month"):
+            return (2, _parse_period_value(item.get("applicable_month")))
+        if item.get("from_date"):
+            return (1, _parse_period_value(item.get("from_date")))
+        if item.get("to_date"):
+            return (1, _parse_period_value(item.get("to_date")))
+        return (0, _parse_period_value(""))
+
+    return sorted(history, key=sort_key, reverse=True)
 
 
 class EmployeeRecordsPanel(QWidget):
@@ -46,14 +84,7 @@ class EmployeeRecordsPanel(QWidget):
 
         self.table = EmployeeRecordsTable(self)
         self.table.cellDoubleClicked.connect(self._on_cell_double_clicked)
-        self.table.setStyleSheet(
-            AppStyles.TABLE_BASE
-            + AppStyles.TABLE_SCROLLBAR
-            + """
-            QTableWidget { border: none; border-radius: 14px; }
-            QTableWidget::viewport { border-radius: 14px; }
-        """
-        )
+        self.table.setMinimumHeight(320)
         layout.addWidget(self.table, stretch=1)
 
         self.paginator = EmployeeRecordsPaginator(self)
@@ -62,7 +93,7 @@ class EmployeeRecordsPanel(QWidget):
         self.loading_label = QLabel("Loading employees...")
         self.loading_label.setAlignment(Qt.AlignCenter)
         self.loading_label.setStyleSheet(
-            "color: #f8fafc; font-size: 13px; font-weight: 600; background: rgba(15, 23, 42, 0.68); border-radius: 8px; padding: 8px 12px;"
+            "color: #f8fafc; font: 600 13px 'Segoe UI'; background: rgba(15, 23, 42, 0.72); border: 1px solid rgba(148, 163, 184, 0.16); border-radius: 10px; padding: 8px 12px;"
         )
         self.loading_label.hide()
         layout.addWidget(self.loading_label)
@@ -275,7 +306,6 @@ class EmployeeDetailsDialog(QDialog):
                 ("Birthdate", employee.get("birthdate", "")),
                 ("Position", employee.get("position", "")),
                 ("Date Hired", employee.get("date_hired", "")),
-                ("Client", employee.get("client", "")),
             ]:
                 row = QHBoxLayout()
                 row.setSpacing(10)
@@ -392,85 +422,128 @@ class EmployeeDetailsDialog(QDialog):
 
             # Payroll History Panel
             if history:
-                # sort history so latest month is on top; prefer from_date then applicable_month
-                try:
-                    sorted_history = sorted(
-                        history,
-                        key=lambda i: (i.get("from_date") or i.get("applicable_month") or ""),
-                        reverse=True,
-                    )
-                except Exception:
-                    sorted_history = list(reversed(history))
+                sorted_history = sort_payroll_history_for_display(history)
+                
+                # Extract years from history
+                years = set()
+                for item in sorted_history:
+                    month_str = item.get("applicable_month", "")
+                    if month_str:
+                        try:
+                            # Try to extract year from month string (e.g., "MAY 2026" -> 2026)
+                            parts = month_str.split()
+                            if parts:
+                                year = parts[-1]
+                                if year.isdigit():
+                                    years.add(int(year))
+                        except Exception:
+                            pass
+                
+                years_list = sorted(list(years), reverse=True)
+                default_year = years_list[0] if years_list else None
 
                 history_panel = TrueGlassPanel(border_radius=12)
                 history_layout = QVBoxLayout(history_panel)
                 history_layout.setContentsMargins(14, 12, 14, 12)
                 history_layout.setSpacing(10)
 
-                history_title = QLabel("Payroll History")
+                # Title and year filter
+                title_filter_layout = QHBoxLayout()
+                title_filter_layout.setSpacing(10)
+                history_title = QLabel("Monthly Payroll")
                 history_title.setStyleSheet(AppStyles.CARD_HEADER)
-                history_layout.addWidget(history_title)
-
-                # Columns: Month, FDATE, TDATE, SSS, PHILHEALTH, PAGIBIG, PAGIBIG LOANS, SSS LOANS
-                history_table = QTableWidget(0, 8)
-                history_table.setColumnCount(8)
-                history_table.setHorizontalHeaderLabels([
-                    "Month", "FDATE", "TDATE", "SSS", "PHILHEALTH", "PAGIBIG", "PAGIBIG LOANS", "SSS LOANS"
-                ])
-                history_table.setEditTriggers(QTableWidget.NoEditTriggers)
-                history_table.setAlternatingRowColors(True)
-                history_table.setMinimumHeight(220)
-                history_table.verticalHeader().setVisible(False)
-                history_table.setSelectionBehavior(QTableWidget.SelectRows)
-                history_table.setSelectionMode(QTableWidget.SingleSelection)
-                history_table.setStyleSheet(
-                    AppStyles.TABLE_BASE
-                    + AppStyles.TABLE_SCROLLBAR
-                    + """
-                    QHeaderView::section {
-                        background: rgba(2, 6, 23, 0.78);
-                        color: #f8fafc;
-                        padding: 8px;
+                title_filter_layout.addWidget(history_title)
+                title_filter_layout.addStretch()
+                
+                year_label = QLabel("Year:")
+                year_label.setStyleSheet("color: #cbd5e1; font: 600 11px 'Segoe UI';")
+                title_filter_layout.addWidget(year_label)
+                
+                year_combo = QComboBox()
+                year_combo.setStyleSheet("""
+                    QComboBox {
+                        background: rgba(30, 41, 59, 0.8);
+                        color: #e5e7eb;
+                        border: 1px solid rgba(148, 163, 184, 0.2);
+                        border-radius: 6px;
+                        padding: 4px 8px;
+                        font: 11px 'Segoe UI';
+                        min-width: 100px;
+                    }
+                    QComboBox::drop-down {
                         border: none;
-                        font-weight: 700;
                     }
-                    QTableWidget::item:selected {
-                        background: rgba(20, 184, 166, 0.24);
-                        color: #ffffff;
+                    QComboBox QAbstractItemView {
+                        background: rgba(15, 23, 42, 0.95);
+                        color: #e5e7eb;
+                        selection-background-color: rgba(59, 130, 246, 0.4);
+                        border: 1px solid rgba(148, 163, 184, 0.2);
                     }
-                    QTableWidget::item:alternate {
-                        background: rgba(2, 6, 23, 0.34);
-                    }
-                """
-                )
+                """)
+                for year in years_list:
+                    year_combo.addItem(str(year), year)
+                title_filter_layout.addWidget(year_combo)
+                
+                history_layout.addLayout(title_filter_layout)
 
-                history_table.setRowCount(len(sorted_history))
-                for row_idx, item in enumerate(sorted_history):
-                    values = [
-                        item.get("applicable_month", ""),
-                        item.get("from_date", ""),
-                        item.get("to_date", ""),
-                        item.get("sss", ""),
-                        item.get("philhealth", ""),
-                        item.get("pagibig", ""),
-                        item.get("pagibig_loan", ""),
-                        item.get("sss_loan", ""),
-                    ]
-                    for col_idx, value in enumerate(values):
-                        table_item = QTableWidgetItem(str(value) if value else "")
-                        table_item.setFlags(table_item.flags() & ~Qt.ItemIsEditable)
-                        history_table.setItem(row_idx, col_idx, table_item)
-                    history_table.setRowHeight(row_idx, 30)
+                history_table = SharedTable([
+                    "Applicable month",
+                    "fdate",
+                    "tdate",
+                    "company",
+                    "sss",
+                    "philhealth",
+                    "pagibig",
+                    "pagibig loans",
+                    "sss loans",
+                ])
+                history_table.setMinimumHeight(220)
+                
+                # Filter history by selected year
+                def update_table_for_year():
+                    selected_year = year_combo.currentData()
+                    filtered_history = []
+                    for item in sorted_history:
+                        month_str = item.get("applicable_month", "")
+                        if month_str:
+                            try:
+                                parts = month_str.split()
+                                if parts and parts[-1].isdigit() and int(parts[-1]) == selected_year:
+                                    filtered_history.append(item)
+                            except Exception:
+                                pass
+                    
+                    history_table.setRowCount(len(filtered_history))
+                    for row_idx, item in enumerate(filtered_history):
+                        values = [
+                            item.get("applicable_month", ""),
+                            item.get("from_date", ""),
+                            item.get("to_date", ""),
+                            item.get("company", "") or item.get("client", ""),
+                            item.get("sss", ""),
+                            item.get("philhealth", ""),
+                            item.get("pagibig", ""),
+                            item.get("pagibig_loan", ""),
+                            item.get("sss_loan", ""),
+                        ]
+                        for col_idx, value in enumerate(values):
+                            table_item = QTableWidgetItem(str(value) if value else "")
+                            table_item.setFlags(table_item.flags() & ~Qt.ItemIsEditable)
+                            history_table.setItem(row_idx, col_idx, table_item)
+                        history_table.setRowHeight(row_idx, 30)
+                
+                year_combo.currentIndexChanged.connect(update_table_for_year)
+                update_table_for_year()
 
-                # Adjust column widths
-                history_table.setColumnWidth(0, 120)  # Month
-                history_table.setColumnWidth(1, 100)  # FDATE
-                history_table.setColumnWidth(2, 100)  # TDATE
-                history_table.setColumnWidth(3, 100)  # SSS
-                history_table.setColumnWidth(4, 100)  # PHILHEALTH
-                history_table.setColumnWidth(5, 100)  # PAGIBIG
-                history_table.setColumnWidth(6, 120)  # PAGIBIG LOANS
-                history_table.setColumnWidth(7, 100)  # SSS LOANS
+                history_table.setColumnWidth(0, 110)  # Applicable month
+                history_table.setColumnWidth(1, 95)   # fdate
+                history_table.setColumnWidth(2, 95)   # tdate
+                history_table.setColumnWidth(3, 130)  # company
+                history_table.setColumnWidth(4, 90)   # sss
+                history_table.setColumnWidth(5, 100)  # philhealth
+                history_table.setColumnWidth(6, 90)   # pagibig
+                history_table.setColumnWidth(7, 110)  # pagibig loans
+                history_table.setColumnWidth(8, 90)   # sss loans
 
                 history_layout.addWidget(history_table, stretch=1)
                 content_layout.addWidget(history_panel)

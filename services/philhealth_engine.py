@@ -20,6 +20,7 @@ from services.auth_manager import database_path, get_active_account
 from services.dashboard_service import get_account_username
 from shared.ui import set_exit_icon
 from constants.styles import AppStyles
+from widgets.shared_table import SharedTable
 
 
 # ---------------------------------------------------------
@@ -190,6 +191,7 @@ class HistoryDetailPopup(QFrame):
         layout.addLayout(header_layout)
         
         self.tabs = QTabWidget()
+        self.tabs.setStyleSheet(AppStyles.UNIFIED_TAB_STYLE)
         headers = ["Client", "PhilHealth No", "Employee Name", "Birthdate"]
         
         self.tabs.addTab(self.create_table(headers, self.record.get("data_total", [])), "Total Active")
@@ -199,21 +201,10 @@ class HistoryDetailPopup(QFrame):
         layout.addWidget(self.tabs)
 
     def create_table(self, headers, data):
-        table = QTableWidget()
-        table.setColumnCount(len(headers))
-        table.setHorizontalHeaderLabels(headers)
+        table = SharedTable(headers)
         table.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
-        table.verticalHeader().setVisible(False)
         table.setEditTriggers(QTableWidget.NoEditTriggers)
-        table.setStyleSheet(
-            AppStyles.TABLE_BASE
-            + AppStyles.TABLE_SCROLLBAR
-            + """
-            QTableWidget { border: none; border-radius: 14px; }
-            QTableWidget::viewport { border-radius: 14px; }
-            QTableWidget::item { border: none; }
-            """
-        )
+        table.setStyleSheet(AppStyles.TABLE_CANONICAL)
         
         table.setRowCount(len(data))
         for row, items in enumerate(data):
@@ -266,22 +257,10 @@ class DetailPopup(QFrame):
         header_layout.addWidget(close_btn)
         layout.addLayout(header_layout)
         
-        self.table = QTableWidget()
-        self.table.setColumnCount(len(self.headers))
-        self.table.setHorizontalHeaderLabels(self.headers)
+        self.table = SharedTable(self.headers)
         self.table.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
-        self.table.verticalHeader().setVisible(False)
         self.table.setEditTriggers(QTableWidget.NoEditTriggers)
-        self.table.setStyleSheet(
-            AppStyles.TABLE_BASE
-            + AppStyles.TABLE_SCROLLBAR
-            + """
-            QTableWidget { border: none; border-radius: 14px; }
-            QTableWidget::viewport { border-radius: 14px; }
-            QHeaderView::section { background: rgba(8, 18, 28, 0.98); color: #f8fafc; padding: 14px 16px; border: none; font: 700 12px 'Segoe UI'; }
-            QTableWidget::item { border: none; }
-            """
-        )
+        self.table.setStyleSheet(AppStyles.TABLE_CANONICAL)
         
         self.table.setRowCount(len(self.data_list))
         for row, items in enumerate(self.data_list):
@@ -356,8 +335,6 @@ class PhicExtractorApp(QWidget):
                 border-top-left-radius: 6px; border-top-right-radius: 6px; font-weight: bold;
             }
             QTabBar::tab:selected { background-color: #0b0f19; color: #3b82f6; border-bottom: 2px solid #3b82f6; }
-            QTableWidget { background-color: #0b0f19; border: none; gridline-color: #1e293b; color: #e2e8f0; }
-            QHeaderView::section { background-color: #111827; color: #3b82f6; padding: 8px; font-weight: bold; border: 1px solid #1e293b; }
             QScrollBar:vertical { border: none; background: #0f172a; width: 10px; margin: 0px 0px 0px 0px; }
             QScrollBar::handle:vertical { background: #334155; min-height: 20px; border-radius: 14px; }
             QScrollBar::add-line:vertical, QScrollBar::sub-line:vertical { height: 0px; }
@@ -451,15 +428,15 @@ class PhicExtractorApp(QWidget):
         # TABS 
         self.tab_container = QTabWidget()
         
-        self.missing_table = QTableWidget()
+        self.missing_table = SharedTable(["Client Handle", "PhilHealth No", "Employee Name", "Birthdate"])
         self.setup_table_headers(self.missing_table, ["Client Handle", "PhilHealth No", "Employee Name", "Birthdate"])
         self.tab_container.addTab(self.missing_table, "Missing Names")
 
-        self.newly_hired_table = QTableWidget()
+        self.newly_hired_table = SharedTable(["Client Handle", "PhilHealth No", "Employee Name", "Birthdate"])
         self.setup_table_headers(self.newly_hired_table, ["Client Handle", "PhilHealth No", "Employee Name", "Birthdate"])
         self.tab_container.addTab(self.newly_hired_table, "Newly Hired")
 
-        self.summary_table = QTableWidget()
+        self.summary_table = SharedTable(["Metric Indicator Description", "Headcount Figures"])
         self.setup_table_headers(self.summary_table, ["Metric Indicator Description", "Headcount Figures"])
         self.tab_container.addTab(self.summary_table, "Total Summary Metrics")
 
@@ -600,21 +577,10 @@ class PhicExtractorApp(QWidget):
         popup.raise_()
 
     def setup_table_headers(self, table, headers):
-        table.setColumnCount(len(headers))
-        table.setHorizontalHeaderLabels(headers)
+        table.set_columns(headers)
         table.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
-        table.verticalHeader().setVisible(False)
         table.setEditTriggers(QTableWidget.NoEditTriggers)
-        table.setStyleSheet(
-            AppStyles.TABLE_BASE
-            + AppStyles.TABLE_SCROLLBAR
-            + """
-            QTableWidget { border: none; border-radius: 14px; }
-            QTableWidget::viewport { border-radius: 14px; }
-            QHeaderView::section { background: rgba(8, 18, 28, 0.98); color: #f8fafc; padding: 14px 16px; border: none; font: 700 12px 'Segoe UI'; }
-            QTableWidget::item { border: none; }
-            """
-        )
+        table.setStyleSheet(AppStyles.TABLE_CANONICAL)
 
     def browse_source(self):
         dir_path = QFileDialog.getExistingDirectory(self, "Select Source Directory")

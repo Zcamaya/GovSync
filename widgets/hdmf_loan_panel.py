@@ -88,7 +88,8 @@ class HDMFLoanPanel(QWidget):
         main_layout.addWidget(title)
 
         form_holder = QWidget()
-        form_holder.setStyleSheet("""
+        form_holder.setStyleSheet(
+            """
             QWidget {
                 background: rgba(20, 43, 37, 0.64);
                 border: 1px solid rgba(148, 163, 184, 0.22);
@@ -100,19 +101,9 @@ class HDMFLoanPanel(QWidget):
                 background: transparent;
                 font: 600 12px 'Segoe UI';
             }
-            QLineEdit {
-                background: rgba(2, 6, 23, 0.56);
-                border: 1px solid rgba(148, 163, 184, 0.24);
-                border-radius: 7px;
-                color: #e5e7eb;
-                min-height: 34px;
-                padding: 0 10px;
-                font: 12px 'Segoe UI';
-            }
-            QLineEdit:focus {
-                border-color: rgba(20, 184, 166, 0.72);
-            }
-        """)
+        """
+            + AppStyles.FIELD_INPUT
+        )
         form_layout = QFormLayout(form_holder)
         form_layout.setContentsMargins(22, 22, 22, 22)
         form_layout.setSpacing(12)

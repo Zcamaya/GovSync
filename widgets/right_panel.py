@@ -59,7 +59,7 @@ class RightPanelWidget(QWidget):
         log_card_layout.setSpacing(12)
 
         log_header = QLabel("Activity Log")
-        log_header.setStyleSheet(AppStyles.CARD_HEADER)
+        log_header.setStyleSheet(AppStyles.SECTION_TITLE)
 
         now = datetime.now()
         self.activity_container = QWidget()
@@ -96,7 +96,7 @@ class RightPanelWidget(QWidget):
         notes_header_row.setSpacing(8)
 
         notes_header = QLabel("Notes")
-        notes_header.setStyleSheet(AppStyles.CARD_HEADER)
+        notes_header.setStyleSheet(AppStyles.SECTION_TITLE)
         notes_header_row.addWidget(notes_header)
         notes_header_row.addStretch()
 

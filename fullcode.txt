@@ -1182,13 +1182,13 @@ class MainWindow(QMainWindow):
             QScrollBar:vertical {
                 background: rgba(2, 6, 23, 0.18);
                 border: none;
-                border-radius: 6px;
+                border-radius: 14px;
                 width: 12px;
                 margin: 3px;
             }
             QScrollBar::handle:vertical {
                 background: rgba(148, 163, 184, 0.46);
-                border-radius: 6px;
+                border-radius: 14px;
                 min-height: 24px;
             }
             QScrollBar::handle:vertical:hover {
@@ -1205,13 +1205,13 @@ class MainWindow(QMainWindow):
             QScrollBar:horizontal {
                 background: rgba(2, 6, 23, 0.18);
                 border: none;
-                border-radius: 6px;
+                border-radius: 14px;
                 height: 12px;
                 margin: 3px;
             }
             QScrollBar::handle:horizontal {
                 background: rgba(148, 163, 184, 0.46);
-                border-radius: 6px;
+                border-radius: 14px;
                 min-width: 24px;
             }
             QScrollBar::handle:horizontal:hover {
@@ -6699,6 +6699,7 @@ from services.auth_manager import database_path, get_active_account
 from services.dashboard_service import get_account_username
 from shared.ui import set_exit_icon
 from constants.styles import AppStyles
+from widgets.shared_table import SharedTable
 
 
 # ---------------------------------------------------------
@@ -6878,12 +6879,10 @@ class HistoryDetailPopup(QFrame):
         layout.addWidget(self.tabs)
 
     def create_table(self, headers, data):
-        table = QTableWidget()
-        table.setColumnCount(len(headers))
-        table.setHorizontalHeaderLabels(headers)
+        table = SharedTable(headers)
         table.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
-        table.verticalHeader().setVisible(False)
         table.setEditTriggers(QTableWidget.NoEditTriggers)
+        table.setStyleSheet(AppStyles.TABLE_CANONICAL)
         
         table.setRowCount(len(data))
         for row, items in enumerate(data):
@@ -6936,12 +6935,10 @@ class DetailPopup(QFrame):
         header_layout.addWidget(close_btn)
         layout.addLayout(header_layout)
         
-        self.table = QTableWidget()
-        self.table.setColumnCount(len(self.headers))
-        self.table.setHorizontalHeaderLabels(self.headers)
+        self.table = SharedTable(self.headers)
         self.table.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
-        self.table.verticalHeader().setVisible(False)
         self.table.setEditTriggers(QTableWidget.NoEditTriggers)
+        self.table.setStyleSheet(AppStyles.TABLE_CANONICAL)
         
         self.table.setRowCount(len(self.data_list))
         for row, items in enumerate(self.data_list):
@@ -7016,10 +7013,8 @@ class PhicExtractorApp(QWidget):
                 border-top-left-radius: 6px; border-top-right-radius: 6px; font-weight: bold;
             }
             QTabBar::tab:selected { background-color: #0b0f19; color: #3b82f6; border-bottom: 2px solid #3b82f6; }
-            QTableWidget { background-color: #0b0f19; border: none; gridline-color: #1e293b; color: #e2e8f0; }
-            QHeaderView::section { background-color: #111827; color: #3b82f6; padding: 8px; font-weight: bold; border: 1px solid #1e293b; }
             QScrollBar:vertical { border: none; background: #0f172a; width: 10px; margin: 0px 0px 0px 0px; }
-            QScrollBar::handle:vertical { background: #334155; min-height: 20px; border-radius: 5px; }
+            QScrollBar::handle:vertical { background: #334155; min-height: 20px; border-radius: 14px; }
             QScrollBar::add-line:vertical, QScrollBar::sub-line:vertical { height: 0px; }
         """)
 
@@ -7111,15 +7106,15 @@ class PhicExtractorApp(QWidget):
         # TABS 
         self.tab_container = QTabWidget()
         
-        self.missing_table = QTableWidget()
+        self.missing_table = SharedTable(["Client Handle", "PhilHealth No", "Employee Name", "Birthdate"])
         self.setup_table_headers(self.missing_table, ["Client Handle", "PhilHealth No", "Employee Name", "Birthdate"])
         self.tab_container.addTab(self.missing_table, "Missing Names")
 
-        self.newly_hired_table = QTableWidget()
+        self.newly_hired_table = SharedTable(["Client Handle", "PhilHealth No", "Employee Name", "Birthdate"])
         self.setup_table_headers(self.newly_hired_table, ["Client Handle", "PhilHealth No", "Employee Name", "Birthdate"])
         self.tab_container.addTab(self.newly_hired_table, "Newly Hired")
 
-        self.summary_table = QTableWidget()
+        self.summary_table = SharedTable(["Metric Indicator Description", "Headcount Figures"])
         self.setup_table_headers(self.summary_table, ["Metric Indicator Description", "Headcount Figures"])
         self.tab_container.addTab(self.summary_table, "Total Summary Metrics")
 
@@ -7260,11 +7255,10 @@ class PhicExtractorApp(QWidget):
         popup.raise_()
 
     def setup_table_headers(self, table, headers):
-        table.setColumnCount(len(headers))
-        table.setHorizontalHeaderLabels(headers)
+        table.set_columns(headers)
         table.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
-        table.verticalHeader().setVisible(False)
         table.setEditTriggers(QTableWidget.NoEditTriggers)
+        table.setStyleSheet(AppStyles.TABLE_CANONICAL)
 
     def browse_source(self):
         dir_path = QFileDialog.getExistingDirectory(self, "Select Source Directory")
@@ -8269,12 +8263,114 @@ class AppStyles:
     PANEL_TITLE = "color: #f8fafc; border: none; background: transparent; font: 800 16px 'Segoe UI';"
     SECTION_HEADER = "color: #f8fafc; border: none; background: transparent; font: 800 18px 'Segoe UI';"
     CARD_HEADER = "color: #f8fafc; border: none; background: transparent; font: 800 16px 'Segoe UI';"
+    BODY_TEXT = "color: #cbd5e1; border: none; background: transparent; font: 600 12px 'Segoe UI';"
+    MUTED_TEXT = "color: #94a3b8; border: none; background: transparent; font: 600 11px 'Segoe UI';"
+
+    TABLE_SURFACE = "#0f172a"
+    TABLE_SURFACE_ALT = "#0b1220"
+    TABLE_BORDER = "rgba(148, 163, 184, 0.18)"
+    TABLE_TEXT = "#e5e7eb"
+    TABLE_MUTED = "#94a3b8"
+    TABLE_ACCENT = "#2dd4bf"
+    TABLE_HOVER = "rgba(59, 130, 246, 0.16)"
+    TABLE_ACTIVE = "rgba(20, 184, 166, 0.24)"
+    TABLE_DISABLED = "rgba(226, 232, 240, 0.38)"
+    TABLE_ROW_HEIGHT = 38
+    TABLE_CELL_PADDING = 12
+    TABLE_SECTION_GAP = 12
+
+    SCREEN_TITLE = "color: #f8fafc; font: 800 22px 'Segoe UI';"
+    SECTION_TITLE = "color: #f8fafc; font: 700 15px 'Segoe UI';"
+    SECTION_SUBTITLE = "color: #94a3b8; font: 600 12px 'Segoe UI';"
+    TABLE_TITLE = "color: #f8fafc; font: 800 14px 'Segoe UI';"
+    TABLE_HEADER_TEXT = "color: #f8fafc; font: 700 12px 'Segoe UI';"
+    TABLE_BODY_TEXT = "color: #e5e7eb; font: 600 12px 'Segoe UI';"
+    TABLE_METADATA_TEXT = "color: #94a3b8; font: 600 11px 'Segoe UI';"
+
+    FIELD_INPUT = """
+        QLineEdit, QComboBox, QTextEdit {
+            background: rgba(15, 23, 42, 0.82);
+            color: #f8fafc;
+            border: 1px solid rgba(148, 163, 184, 0.24);
+            border-radius: 10px;
+            padding: 8px 12px;
+            font: 600 12px 'Segoe UI';
+        }
+        QLineEdit:focus, QComboBox:focus, QTextEdit:focus {
+            border: 1px solid rgba(45, 212, 191, 0.65);
+            background: rgba(15, 23, 42, 0.96);
+        }
+    """
+
+    TABLE_SEARCH_INPUT = FIELD_INPUT
+
+    NAV_LIST = """
+        QListWidget {
+            background: transparent;
+            border: none;
+            outline: none;
+        }
+        QListWidget::item {
+            color: #94a3b8;
+            padding: 12px 16px;
+            font: 600 13px 'Segoe UI';
+            border-radius: 12px;
+            margin-bottom: 4px;
+        }
+        QListWidget::item:hover {
+            background-color: rgba(255, 255, 255, 0.04);
+            color: #f1f5f9;
+        }
+        QListWidget::item:selected {
+            background-color: rgba(16, 185, 129, 0.15);
+            color: #34d399;
+            border: 1px solid rgba(16, 185, 129, 0.4);
+        }
+    """
+
+    TABLE_PAGINATION_BUTTON = """
+        QPushButton {
+            background: rgba(15, 23, 42, 0.82);
+            color: #f8fafc;
+            border: 1px solid rgba(148, 163, 184, 0.24);
+            border-radius: 10px;
+            padding: 8px 14px;
+            font: 700 11px 'Segoe UI';
+            min-height: 34px;
+        }
+        QPushButton:hover:!disabled {
+            background: rgba(51, 65, 85, 0.92);
+            border-color: rgba(148, 163, 184, 0.42);
+            color: #ffffff;
+        }
+        QPushButton:disabled {
+            color: rgba(226, 232, 240, 0.38);
+            background: rgba(15, 23, 42, 0.5);
+            border-color: rgba(148, 163, 184, 0.12);
+        }
+    """
+
+    TABLE_STAT_CARD = """
+        QFrame {
+            background: rgba(15, 23, 42, 0.56);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 14px;
+        }
+    """
+
+    CARD_RADIUS = 14
+    CONTROL_RADIUS = 10
+    SMALL_RADIUS = 8
+
+    PANEL_SPACING = 14
+    SECTION_PADDING = 16
+    INNER_PADDING = 12
 
     GLASS_PANEL = """
         QFrame {
             background-color: rgba(20, 30, 45, 0.65);
             border: 1px solid rgba(255, 255, 255, 0.12);
-            border-radius: 15px;
+            border-radius: 14px;
         }
         QLabel {
             background: transparent;
@@ -8415,6 +8511,29 @@ class AppStyles:
             border: 1px solid rgba(20, 184, 166, 0.20);
             border-radius: 14px;
         }
+        QScrollBar:vertical {
+            background: rgba(2, 6, 23, 0.24);
+            border: none;
+            border-radius: 14px;
+            width: 10px;
+            margin: 2px;
+        }
+        QScrollBar::handle:vertical {
+            background: rgba(148, 163, 184, 0.42);
+            border-radius: 14px;
+            min-height: 20px;
+        }
+        QScrollBar::handle:vertical:hover {
+            background: rgba(20, 184, 166, 0.72);
+        }
+        QScrollBar::add-line:vertical,
+        QScrollBar::sub-line:vertical,
+        QScrollBar::add-page:vertical,
+        QScrollBar::sub-page:vertical {
+            background: transparent;
+            border: none;
+            height: 0;
+        }
         QTabWidget::pane {
             background: rgba(2, 6, 23, 0.30);
             border: 1px solid rgba(148, 163, 184, 0.16);
@@ -8478,6 +8597,14 @@ class AppStyles:
     DIALOG_BASE = """
         QDialog {
             background: transparent;
+        }
+        QLabel#DialogTitle {
+            color: #f8fafc;
+            font: 800 18px 'Segoe UI';
+        }
+        QLabel#DialogSubtitle {
+            color: #94a3b8;
+            font: 600 12px 'Segoe UI';
         }
         QFrame#DialogCard {
             background: qradialgradient(cx:0.2, cy:0.1, radius:1.2,
@@ -8558,7 +8685,7 @@ class AppStyles:
         QFrame#NoteRow {
             background: rgba(8, 14, 26, 0.95);
             border: 1px solid rgba(56, 75, 114, 0.36);
-            border-radius: 12px;
+            border-radius: 10px;
         }
         QFrame#NoteRow:hover {
             border-color: rgba(59, 130, 246, 0.48);
@@ -8629,6 +8756,230 @@ class AppStyles:
         }
         QComboBox QAbstractItemView::item:hover {
             background: rgba(59, 130, 246, 0.34);
+        }
+    """
+
+    SCROLLBAR = """
+        QTableWidget QScrollBar:vertical {
+            background: transparent;
+            border: none;
+            width: 8px;
+            margin: 4px 2px 4px 0px;
+        }
+        QTableWidget QScrollBar::handle:vertical {
+            background: rgba(107, 175, 141, 0.36);
+            border-radius: 6px;
+            min-height: 24px;
+        }
+        QTableWidget QScrollBar::handle:vertical:hover {
+            background: rgba(107, 175, 141, 0.56);
+        }
+        QTableWidget QScrollBar::add-line:vertical,
+        QTableWidget QScrollBar::sub-line:vertical,
+        QTableWidget QScrollBar::add-page:vertical,
+        QTableWidget QScrollBar::sub-page:vertical {
+            background: transparent;
+            border: none;
+            height: 0;
+        }
+        QTableWidget QScrollBar:horizontal {
+            background: transparent;
+            border: none;
+            height: 8px;
+            margin: 0px 4px 2px 4px;
+        }
+        QTableWidget QScrollBar::handle:horizontal {
+            background: rgba(107, 175, 141, 0.36);
+            border-radius: 6px;
+            min-width: 24px;
+        }
+        QTableWidget QScrollBar::handle:horizontal:hover {
+            background: rgba(107, 175, 141, 0.56);
+        }
+        QTableWidget QScrollBar::add-line:horizontal,
+        QTableWidget QScrollBar::sub-line:horizontal,
+        QTableWidget QScrollBar::add-page:horizontal,
+        QTableWidget QScrollBar::sub-page:horizontal {
+            background: transparent;
+            border: none;
+            width: 0;
+        }
+    """
+
+    TABLE_SCROLLBAR = """
+        QTableWidget QScrollBar:vertical {
+            background: transparent;
+            border: none;
+            width: 8px;
+            margin: 0 0 4px 0;
+        }
+        QTableWidget QScrollBar::handle:vertical {
+            background: rgba(107, 175, 141, 0.08);
+            border-radius: 6px;
+            min-height: 24px;
+        }
+        QTableWidget QScrollBar::handle:vertical:hover,
+        QTableWidget QScrollBar::handle:vertical:pressed {
+            background: rgba(107, 175, 141, 0.32);
+        }
+        QTableWidget QScrollBar::add-line:vertical,
+        QTableWidget QScrollBar::sub-line:vertical,
+        QTableWidget QScrollBar::add-page:vertical,
+        QTableWidget QScrollBar::sub-page:vertical {
+            background: transparent;
+            border: none;
+            height: 0;
+        }
+        QTableWidget QScrollBar:horizontal {
+            background: transparent;
+            border: none;
+            height: 8px;
+            margin: 0 4px 4px 4px;
+        }
+        QTableWidget QScrollBar::handle:horizontal {
+            background: rgba(107, 175, 141, 0.08);
+            border-radius: 6px;
+            min-width: 24px;
+        }
+        QTableWidget QScrollBar::handle:horizontal:hover,
+        QTableWidget QScrollBar::handle:horizontal:pressed {
+            background: rgba(107, 175, 141, 0.32);
+        }
+        QTableWidget QScrollBar::add-line:horizontal,
+        QTableWidget QScrollBar::sub-line:horizontal,
+        QTableWidget QScrollBar::add-page:horizontal,
+        QTableWidget QScrollBar::sub-page:horizontal {
+            background: transparent;
+            border: none;
+            width: 0;
+        }
+    """
+
+    TABLE_BASE = """
+        QTableWidget {
+            background: rgba(2, 6, 23, 0.86);
+            alternate-background-color: rgba(7, 15, 27, 0.74);
+            color: #e5e7eb;
+            gridline-color: rgba(148, 163, 184, 0.12);
+            border: 1px solid rgba(148, 163, 184, 0.18);
+            border-radius: 14px;
+            font: 600 12px 'Segoe UI';
+        }
+        QTableWidget::viewport {
+            border-top-left-radius: 0px;
+            border-top-right-radius: 0px;
+            border-bottom-left-radius: 14px;
+            border-bottom-right-radius: 14px;
+            background: transparent;
+        }
+        QTableWidget::pane {
+            border-top-left-radius: 0px;
+            border-top-right-radius: 0px;
+            border-bottom-left-radius: 14px;
+            border-bottom-right-radius: 14px;
+            background: transparent;
+        }
+        QHeaderView {
+            border: none;
+            background: transparent;
+        }
+        QTableWidget QTableCornerButton {
+            background: transparent;
+            border: none;
+        }
+        QHeaderView::section {
+            background: rgba(15, 23, 42, 0.96);
+            color: #f8fafc;
+            font: 700 12px 'Segoe UI';
+            padding: 12px 14px;
+            border: none;
+            border-radius: 0px;
+            margin: 0px;
+            text-align: left;
+        }
+        QHeaderView::section:first-of-type {
+            border-top-left-radius: 0px;
+        }
+        QHeaderView::section:last-of-type {
+            border-top-right-radius: 0px;
+        }
+        QTableWidget::item {
+            padding: 10px 14px;
+            border: none;
+            border-bottom: 1px solid rgba(148, 163, 184, 0.10);
+        }
+        QTableWidget::item:alternate {
+            background: rgba(7, 15, 27, 0.72);
+        }
+        QTableWidget::item:selected {
+            background: rgba(20, 184, 166, 0.24);
+            color: #ffffff;
+        }
+    """
+
+    TABLE_CANONICAL = TABLE_BASE + TABLE_SCROLLBAR + """
+        QTableWidget {
+            border: 1px solid rgba(148, 163, 184, 0.16);
+            border-radius: 14px;
+        }
+        QTableWidget::viewport {
+            border-top-left-radius: 0px;
+            border-top-right-radius: 0px;
+            border-bottom-left-radius: 14px;
+            border-bottom-right-radius: 14px;
+            background: transparent;
+        }
+        QTableWidget QTableCornerButton {
+            background: transparent;
+            border: none;
+        }
+        QTableWidget QHeaderView {
+            border: none;
+            background: transparent;
+        }
+        QTableWidget QHeaderView::section {
+            background: rgba(15, 23, 42, 0.96);
+            color: #f8fafc;
+            padding: 12px 14px;
+            border: none;
+            border-radius: 0px;
+            font: 700 12px 'Segoe UI';
+            text-align: left;
+            margin: 0px;
+        }
+        QTableWidget QHeaderView::section:first-of-type,
+        QTableWidget QHeaderView::section:last-of-type {
+            border-top-left-radius: 0px;
+            border-top-right-radius: 0px;
+        }
+        QTableWidget QScrollBar:vertical {
+            background: transparent;
+            width: 8px;
+            margin: 4px 2px 4px 0px;
+        }
+        QTableWidget QScrollBar::handle:vertical {
+            background: rgba(107, 175, 141, 0.22);
+            border-radius: 6px;
+            min-height: 24px;
+        }
+        QTableWidget QScrollBar::handle:vertical:hover {
+            background: rgba(107, 175, 141, 0.34);
+        }
+        QTableWidget QScrollBar:horizontal {
+            background: transparent;
+            height: 8px;
+            margin: 0px 4px 2px 4px;
+        }
+        QTableWidget QScrollBar::handle:horizontal {
+            background: rgba(107, 175, 141, 0.22);
+            border-radius: 6px;
+            min-width: 24px;
+        }
+        QTableWidget QScrollBar::handle:horizontal:hover {
+            background: rgba(107, 175, 141, 0.34);
+        }
+        QTableWidget::item:alternate {
+            background: rgba(2, 6, 23, 0.34);
         }
     """
 
@@ -9153,6 +9504,8 @@ from services.auth_manager import (
 )
 from shared.resources import asset_path
 from shared.ui import set_exit_icon
+from constants.styles import AppStyles
+from widgets.shared_table import SharedTable
 
 
 def logo_pixmap(size):
@@ -9179,7 +9532,7 @@ SHELL_STYLE = """
     }
     QFrame#AuthCard {
         background: rgba(2, 6, 23, 0.54);
-        border: 1px solid rgba(148, 163, 184, 0.16);
+        border: 1px solid rgba(148, 163, 184, 0.18);
         border-radius: 16px;
     }
     QFrame#AuthArtPanel {
@@ -9194,32 +9547,33 @@ SHELL_STYLE = """
         border-radius: 12px;
     }
     QFrame#AuthCard QFrame#FormPanel {
-        background: rgba(248, 250, 252, 0.96);
-        border: none;
-        border-radius: 8px;
+        background: rgba(15, 23, 42, 0.82);
+        border: 1px solid rgba(148, 163, 184, 0.16);
+        border-radius: 12px;
     }
     QFrame#AuthCard QFrame#FormPanel QLabel {
-        color: #334155;
+        color: #cbd5e1;
     }
     QFrame#AuthCard QFrame#FormPanel QLabel#Title {
-        color: #0f172a;
+        color: #f8fafc;
         font: 800 20px 'Segoe UI';
     }
     QFrame#AuthCard QFrame#FormPanel QLineEdit {
-        background: #ffffff;
-        border: 1px solid #dbe3ee;
-        border-radius: 4px;
-        color: #0f172a;
-        min-height: 30px;
-        font: 11px 'Segoe UI';
+        background: rgba(2, 6, 23, 0.62);
+        border: 1px solid rgba(148, 163, 184, 0.24);
+        border-radius: 10px;
+        color: #e5e7eb;
+        min-height: 38px;
+        padding: 0 12px;
+        font: 12px 'Segoe UI';
     }
     QFrame#AuthCard QFrame#FormPanel QLineEdit:focus {
-        border-color: #3b82f6;
+        border-color: rgba(45, 212, 191, 0.65);
     }
     QFrame#AuthCard QFrame#FormPanel QPushButton {
-        border-radius: 4px;
-        min-height: 32px;
-        font: 700 11px 'Segoe UI';
+        border-radius: 10px;
+        min-height: 38px;
+        font: 700 12px 'Segoe UI';
     }
     QFrame#InfoPanel {
         background: rgba(2, 6, 23, 0.34);
@@ -9241,9 +9595,9 @@ SHELL_STYLE = """
         font: 800 26px 'Segoe UI';
     }
     QLineEdit {
-        background: rgba(2, 6, 23, 0.62);
-        border: 1px solid rgba(148, 163, 184, 0.26);
-        border-radius: 9px;
+        background: rgba(15, 23, 42, 0.82);
+        border: 1px solid rgba(148, 163, 184, 0.24);
+        border-radius: 10px;
         color: #e5e7eb;
         min-height: 40px;
         padding: 0 12px;
@@ -9253,9 +9607,9 @@ SHELL_STYLE = """
         border-color: rgba(20, 184, 166, 0.72);
     }
     QPushButton {
-        background: rgba(30, 41, 59, 0.76);
+        background: rgba(15, 23, 42, 0.82);
         border: 1px solid rgba(148, 163, 184, 0.24);
-        border-radius: 9px;
+        border-radius: 10px;
         color: #e5e7eb;
         min-height: 40px;
         font: 700 12px 'Segoe UI';
@@ -9264,12 +9618,14 @@ SHELL_STYLE = """
     QPushButton:hover {
         background: rgba(51, 65, 85, 0.88);
         border-color: rgba(20, 184, 166, 0.36);
+        color: #ffffff;
     }
     QPushButton#PrimaryButton {
         background: qlineargradient(x1:0, y1:0, x2:1, y2:0,
                                     stop:0 #14b8c8, stop:1 #3b82f6);
         border: none;
         color: #ffffff;
+        font-weight: 800;
     }
     QPushButton#DangerButton:hover {
         background: rgba(244, 63, 94, 0.78);
@@ -9290,7 +9646,7 @@ SHELL_STYLE = """
         background: #f43f5e;
         color: #ffffff;
     }
-    QListWidget, QTableWidget {
+    QListWidget {
         background: rgba(2, 6, 23, 0.50);
         border: 1px solid rgba(148, 163, 184, 0.18);
         border-radius: 10px;
@@ -10093,24 +10449,13 @@ class SuperAdminPage(QWidget):
         """)
         layout.addWidget(self.account_list, stretch=1)
 
-        self.table = QTableWidget(0, 6)
-        self.table.setHorizontalHeaderLabels([
-            "Username",
-            "Password",
-            "SSS Number",
-            "PhilHealth Number",
-            "Pagibig Number",
-            "Employer Name",
-        ])
+        self.table = SharedTable(["Username", "Password", "Employer Name"], self)
         table_header = self.table.horizontalHeader()
         table_header.setDefaultAlignment(Qt.AlignLeft | Qt.AlignVCenter)
         table_header.setSectionResizeMode(QHeaderView.Stretch)
         table_header.setStretchLastSection(True)
         self.table.setWordWrap(False)
         self.table.setTextElideMode(Qt.ElideNone)
-        self.table.verticalHeader().setVisible(False)
-        self.table.setEditTriggers(QTableWidget.NoEditTriggers)
-        self.table.setAlternatingRowColors(True)
         layout.addWidget(self.table, stretch=1)
 
         buttons = QHBoxLayout()
@@ -10158,16 +10503,10 @@ class SuperAdminPage(QWidget):
         self.table.setRowCount(len(accounts))
         for row, account in enumerate(accounts):
             username = account.username if hasattr(account, "username") else account.get("username", "")
-            sss_number = account.sss_number if hasattr(account, "sss_number") else account.get("sss_number", "")
-            philhealth_number = account.philhealth_number if hasattr(account, "philhealth_number") else account.get("philhealth_number", "")
-            hdmf_number = account.hdmf_number if hasattr(account, "hdmf_number") else account.get("hdmf_number", "")
             employer_name = account.employer_name if hasattr(account, "employer_name") else account.get("employer_name", "")
             self.table.setItem(row, 0, QTableWidgetItem(username))
             self.table.setItem(row, 1, QTableWidgetItem("Protected"))
-            self.table.setItem(row, 2, QTableWidgetItem(sss_number))
-            self.table.setItem(row, 3, QTableWidgetItem(philhealth_number))
-            self.table.setItem(row, 4, QTableWidgetItem(hdmf_number))
-            self.table.setItem(row, 5, QTableWidgetItem(employer_name))
+            self.table.setItem(row, 2, QTableWidgetItem(employer_name))
 
     def _select_account(self, row):
         if row < 0 or row >= len(self.accounts):
@@ -10372,33 +10711,21 @@ class SuperAdminWindow(QWidget, AuthShellMixin):
         sub = QLabel("Super admin can view and delete registered user accounts.")
         sub.setStyleSheet("color: #94a3b8;")
 
-        self.table = QTableWidget(0, 6)
-        self.table.setHorizontalHeaderLabels([
+        self.table = SharedTable([
             "Username",
             "Password",
             "SSS Number",
             "PhilHealth Number",
             "HDMF Number",
             "Employer Name",
-        ])
+        ], self)
         table_header = self.table.horizontalHeader()
         table_header.setDefaultAlignment(Qt.AlignLeft | Qt.AlignVCenter)
         table_header.setSectionResizeMode(QHeaderView.Stretch)
         table_header.setStretchLastSection(True)
         self.table.setWordWrap(False)
         self.table.setTextElideMode(Qt.ElideNone)
-        self.table.verticalHeader().setVisible(False)
-        self.table.setEditTriggers(QTableWidget.NoEditTriggers)
         self.table.setMinimumHeight(380)
-        self.table.setAlternatingRowColors(True)
-        self.table.setStyleSheet("""
-            QTableWidget {
-                background: rgba(2, 6, 23, 0.50);
-            }
-            QTableWidget::item {
-                padding: 8px 6px;
-            }
-        """)
 
         buttons = QHBoxLayout()
         refresh_btn = QPushButton("Refresh")
@@ -10436,16 +10763,10 @@ class SuperAdminWindow(QWidget, AuthShellMixin):
         self.table.setRowCount(len(accounts))
         for row, account in enumerate(accounts):
             username = account.username if hasattr(account, "username") else account.get("username", "")
-            sss_number = account.sss_number if hasattr(account, "sss_number") else account.get("sss_number", "")
-            philhealth_number = account.philhealth_number if hasattr(account, "philhealth_number") else account.get("philhealth_number", "")
-            hdmf_number = account.hdmf_number if hasattr(account, "hdmf_number") else account.get("hdmf_number", "")
             employer_name = account.employer_name if hasattr(account, "employer_name") else account.get("employer_name", "")
             self.table.setItem(row, 0, QTableWidgetItem(username))
             self.table.setItem(row, 1, QTableWidgetItem("Protected"))
-            self.table.setItem(row, 2, QTableWidgetItem(sss_number))
-            self.table.setItem(row, 3, QTableWidgetItem(philhealth_number))
-            self.table.setItem(row, 4, QTableWidgetItem(hdmf_number))
-            self.table.setItem(row, 5, QTableWidgetItem(employer_name))
+            self.table.setItem(row, 2, QTableWidgetItem(employer_name))
 
     def _select_account(self, row):
         if row < 0 or row >= len(self.accounts):
@@ -10756,7 +11077,7 @@ class EarningsPanel(QWidget):
 
         main_layout = QVBoxLayout(self)
         main_layout.setContentsMargins(0, 0, 0, 0)
-        main_layout.setSpacing(14)
+        main_layout.setSpacing(AppStyles.PANEL_SPACING)
 
         title = QLabel("Earnings Automation")
         title.setFont(QFont("Segoe UI", 17, QFont.Bold))
@@ -10773,14 +11094,14 @@ class EarningsPanel(QWidget):
                 border-radius: 10px;
                 color: #dbeafe;
                 font: 12px 'Segoe UI';
-                padding: 12px;
+                padding: 10px;
                 outline: none;
             }
             QListWidget::item {
                 border: none;
-                border-radius: 6px;
+                border-radius: 8px;
                 padding: 8px 10px;
-                margin: 1px 0;
+                margin: 2px 0;
             }
             QListWidget::item:selected {
                 background: rgba(16, 185, 129, 0.22);
@@ -11176,6 +11497,7 @@ class EmployeeRecordsHeader(QWidget):
         layout.setSpacing(16)
 
         self.stats_panel = TrueGlassPanel(border_radius=16)
+        self.stats_panel.setStyleSheet(self.stats_panel.styleSheet() + "QFrame { border: 1px solid rgba(148, 163, 184, 0.16); }")
         stats_layout = QHBoxLayout(self.stats_panel)
         stats_layout.setContentsMargins(18, 18, 18, 18)
         stats_layout.setSpacing(12)
@@ -11188,17 +11510,15 @@ class EmployeeRecordsHeader(QWidget):
             "Last Imported Payroll",
         ]:
             card = QFrame()
-            card.setStyleSheet(
-                "background: rgba(15, 23, 42, 0.55); border: 1px solid rgba(255,255,255,0.08); border-radius: 14px;"
-            )
+            card.setStyleSheet(AppStyles.TABLE_STAT_CARD)
             card_layout = QVBoxLayout(card)
             card_layout.setContentsMargins(12, 12, 12, 12)
             card_layout.setSpacing(6)
 
             title = QLabel(label)
-            title.setStyleSheet("color: #cbd5e1; font-size: 12px;")
+            title.setStyleSheet(AppStyles.TABLE_METADATA_TEXT)
             value = QLabel("0")
-            value.setStyleSheet("color: #34d399; font-size: 22px; font-weight: 700;")
+            value.setStyleSheet("color: #34d399; font: 800 22px 'Segoe UI';")
 
             card_layout.addWidget(title)
             card_layout.addWidget(value)
@@ -11208,15 +11528,14 @@ class EmployeeRecordsHeader(QWidget):
         layout.addWidget(self.stats_panel)
 
         filters_panel = TrueGlassPanel(border_radius=16)
+        filters_panel.setStyleSheet(filters_panel.styleSheet() + "QFrame { border: 1px solid rgba(148, 163, 184, 0.16); }")
         filters_layout = QHBoxLayout(filters_panel)
         filters_layout.setContentsMargins(16, 16, 16, 16)
         filters_layout.setSpacing(10)
 
         self.search_input = QLineEdit()
         self.search_input.setPlaceholderText("Search employee")
-        self.search_input.setStyleSheet(
-            "QLineEdit { background: rgba(15,23,42,0.75); color: white; border: 1px solid rgba(255,255,255,0.14); border-radius: 8px; padding: 8px 10px; }"
-        )
+        self.search_input.setStyleSheet(AppStyles.TABLE_SEARCH_INPUT)
         filters_layout.addWidget(self.search_input, stretch=1)
 
         self.employer_combo = QComboBox()
@@ -11290,8 +11609,9 @@ from PySide6.QtWidgets import (
     QHBoxLayout,
     QLabel,
     QPushButton,
-    QSizePolicy,
 )
+
+from constants.styles import AppStyles
 
 
 class EmployeeRecordsPaginator(QFrame):
@@ -11307,31 +11627,11 @@ class EmployeeRecordsPaginator(QFrame):
 
         self.prev_button = QPushButton("← Previous")
         self.next_button = QPushButton("Next →")
-        button_style = """
-            QPushButton {
-                background: rgba(30, 41, 59, 0.82);
-                color: #f8fafc;
-                border: 1px solid rgba(148, 163, 184, 0.28);
-                border-radius: 8px;
-                padding: 8px 16px;
-                font: 700 11px 'Segoe UI';
-            }
-            QPushButton:hover:!disabled {
-                background: rgba(51, 65, 85, 0.92);
-                border-color: rgba(148, 163, 184, 0.42);
-                color: #ffffff;
-            }
-            QPushButton:disabled {
-                color: rgba(226, 232, 240, 0.38);
-                background: rgba(15, 23, 42, 0.5);
-                border-color: rgba(148, 163, 184, 0.12);
-            }
-        """
-        self.prev_button.setStyleSheet(button_style)
-        self.next_button.setStyleSheet(button_style)
+        self.prev_button.setStyleSheet(AppStyles.TABLE_PAGINATION_BUTTON)
+        self.next_button.setStyleSheet(AppStyles.TABLE_PAGINATION_BUTTON)
 
         self.page_label = QLabel("Page 1")
-        self.page_label.setStyleSheet("color: #cbd5e1;")
+        self.page_label.setStyleSheet(AppStyles.TABLE_METADATA_TEXT)
 
         layout.addStretch()
         layout.addWidget(self.prev_button)
@@ -11359,7 +11659,6 @@ from PySide6.QtWidgets import (
     QLabel,
     QPushButton,
     QScrollArea,
-    QTableWidget,
     QTableWidgetItem,
     QVBoxLayout,
     QWidget,
@@ -11372,6 +11671,7 @@ from widgets.employee_records_paginator import EmployeeRecordsPaginator
 from widgets.employee_records_table import EmployeeRecordsTable
 from widgets.glass_panel import TrueGlassPanel
 from widgets.glass_dialog import GlassDialog
+from widgets.shared_table import SharedTable
 from core.session_manager import get_active_account
 from shared.ui import set_exit_icon
 
@@ -11398,6 +11698,7 @@ class EmployeeRecordsPanel(QWidget):
 
         self.table = EmployeeRecordsTable(self)
         self.table.cellDoubleClicked.connect(self._on_cell_double_clicked)
+        self.table.setMinimumHeight(320)
         layout.addWidget(self.table, stretch=1)
 
         self.paginator = EmployeeRecordsPaginator(self)
@@ -11406,7 +11707,7 @@ class EmployeeRecordsPanel(QWidget):
         self.loading_label = QLabel("Loading employees...")
         self.loading_label.setAlignment(Qt.AlignCenter)
         self.loading_label.setStyleSheet(
-            "color: #f8fafc; font-size: 13px; font-weight: 600; background: rgba(15, 23, 42, 0.68); border-radius: 8px; padding: 8px 12px;"
+            "color: #f8fafc; font: 600 13px 'Segoe UI'; background: rgba(15, 23, 42, 0.72); border: 1px solid rgba(148, 163, 184, 0.16); border-radius: 10px; padding: 8px 12px;"
         )
         self.loading_label.hide()
         layout.addWidget(self.loading_label)
@@ -11593,29 +11894,8 @@ class EmployeeDetailsDialog(QDialog):
                 background: transparent;
                 border: none;
             }
-            QScrollBar:vertical {
-                background: rgba(15, 23, 42, 0.28);
-                width: 10px;
-                border-radius: 5px;
-                margin: 2px 0;
-            }
-            QScrollBar::handle:vertical {
-                background: qlineargradient(x1:0, y1:0, x2:1, y2:0, stop:0 #14b8a6, stop:1 #3b82f6);
-                border-radius: 5px;
-                min-height: 24px;
-            }
-            QScrollBar::handle:vertical:hover {
-                background: qlineargradient(x1:0, y1:0, x2:1, y2:0, stop:0 #2dd4bf, stop:1 #60a5fa);
-            }
-            QScrollBar::add-line:vertical,
-            QScrollBar::sub-line:vertical,
-            QScrollBar::add-page:vertical,
-            QScrollBar::sub-page:vertical {
-                background: transparent;
-                border: none;
-            }
-        """)
-        
+        """ + AppStyles.SCROLLBAR)
+
         content = QWidget()
         content_layout = QVBoxLayout(content)
         content_layout.setSpacing(12)
@@ -11777,19 +12057,17 @@ class EmployeeDetailsDialog(QDialog):
                 history_layout.addWidget(history_title)
 
                 # Columns: Month, FDATE, TDATE, SSS, PHILHEALTH, PAGIBIG, PAGIBIG LOANS, SSS LOANS
-                history_table = QTableWidget(0, 8)
-                history_table.setColumnCount(8)
-                history_table.setHorizontalHeaderLabels([
-                    "Month", "FDATE", "TDATE", "SSS", "PHILHEALTH", "PAGIBIG", "PAGIBIG LOANS", "SSS LOANS"
+                history_table = SharedTable([
+                    "Month",
+                    "FDATE",
+                    "TDATE",
+                    "SSS",
+                    "PHILHEALTH",
+                    "PAGIBIG",
+                    "PAGIBIG LOANS",
+                    "SSS LOANS",
                 ])
-                history_table.setEditTriggers(QTableWidget.NoEditTriggers)
-                history_table.setAlternatingRowColors(True)
                 history_table.setMinimumHeight(220)
-                history_table.verticalHeader().setVisible(False)
-                history_table.setSelectionBehavior(QTableWidget.SelectRows)
-                history_table.setSelectionMode(QTableWidget.SingleSelection)
-                history_table.setStyleSheet(AppStyles.HISTORY_SURFACE)
-
                 history_table.setRowCount(len(sorted_history))
                 for row_idx, item in enumerate(sorted_history):
                     values = [
@@ -11846,48 +12124,24 @@ widgets\employee_records_table.py:
 <code>
 from PySide6.QtCore import Qt
 from PySide6.QtGui import QColor
-from PySide6.QtWidgets import (
-    QHeaderView,
-    QTableWidget,
-    QTableWidgetItem,
-    QSizePolicy,
-)
+from PySide6.QtWidgets import QHeaderView, QTableWidgetItem
+
+from constants.styles import AppStyles
+from widgets.shared_table import SharedTable
 
 
-class EmployeeRecordsTable(QTableWidget):
+class EmployeeRecordsTable(SharedTable):
     def __init__(self, parent=None):
-        super().__init__(0, 3, parent)
-        self._build_ui()
+        super().__init__(['No.', 'Client', 'Employee Name'], parent)
         self._current_employee_rows = []
 
-    def _build_ui(self):
-        self.setAlternatingRowColors(True)
-        self.setSelectionBehavior(QTableWidget.SelectRows)
-        self.setSelectionMode(QTableWidget.SingleSelection)
-        self.setShowGrid(False)
-        self.setEditTriggers(QTableWidget.NoEditTriggers)
-        self.verticalHeader().setVisible(False)
-        self.setStyleSheet(
-            "QTableWidget { background: #071b1b; color: #dbeafe; border: 1px solid rgba(255,255,255,0.06); border-radius: 12px; margin-right: 2px; }"
-            " QHeaderView::section { background: #2b3744; color: #f8fafc; padding: 8px; border: none; font-weight: 700; }"
-            " QTableWidget::item { padding: 6px 8px; border-bottom: 1px solid rgba(255,255,255,0.04); }"
-            " QTableWidget::item:selected { background: #0f766e; color: #ffffff; }"
-            " QTableWidget::item:alternate { background: #041516; }"
-            " QTableWidget QScrollBar:vertical { background: rgba(15,23,42,0.48); width: 12px; border-radius: 6px; margin: 2px; }"
-            " QTableWidget QScrollBar::handle:vertical { background: qlineargradient(x1:0, y1:0, x2:1, y2:0, stop:0 #14b8a6, stop:1 #3b82f6); border-radius: 6px; min-height: 20px; }"
-            " QTableWidget QScrollBar::handle:vertical:hover { background: qlineargradient(x1:0, y1:0, x2:1, y2:0, stop:0 #2dd4bf, stop:1 #60a5fa); }",
-        )
-        self.setHorizontalHeaderLabels(["No.", "Client", "Employee Name"])
-        self.horizontalHeader().setStretchLastSection(False)
+    def _build_ui(self, columns):
+        super()._build_ui(columns)
         self.horizontalHeader().setSectionResizeMode(0, QHeaderView.ResizeToContents)
         self.horizontalHeader().setSectionResizeMode(1, QHeaderView.Stretch)
         self.horizontalHeader().setSectionResizeMode(2, QHeaderView.Stretch)
-        self.setWordWrap(True)
         self.setColumnWidth(0, 48)
-        self.setSortingEnabled(False)
-        self.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
-        self.setMinimumHeight(200)
-        self.verticalHeader().setDefaultSectionSize(36)
+        self.setMinimumHeight(320)
 
     def populate(self, employees, search_text="", page=1, page_size=100):
         self.setRowCount(0)
@@ -11895,11 +12149,7 @@ class EmployeeRecordsTable(QTableWidget):
         search_text = search_text.strip().lower()
 
         if not employees:
-            self.setRowCount(1)
-            empty_item = QTableWidgetItem("No records found")
-            empty_item.setTextAlignment(Qt.AlignCenter)
-            self.setItem(0, 0, empty_item)
-            self.setSpan(0, 0, 1, self.columnCount())
+            self.set_empty_state("No records found")
             return
 
         self.setRowCount(len(employees))
@@ -11927,7 +12177,7 @@ class EmployeeRecordsTable(QTableWidget):
                 if col_idx in (1, 2):
                     item.setToolTip(str(value))
                 self.setItem(row_index, col_idx, item)
-            self.setRowHeight(row_index, 38)
+            self.setRowHeight(row_index, AppStyles.TABLE_ROW_HEIGHT)
 
     def get_current_employee(self, row):
         if 0 <= row < len(self._current_employee_rows):
@@ -11957,6 +12207,7 @@ from PySide6.QtWidgets import (
 
 from constants.styles import AppStyles
 from widgets.glass_dialog import GlassDialog
+from widgets.shared_table import SharedTable
 
 
 class EmployerFormDialog(QDialog):
@@ -12004,13 +12255,19 @@ class EmployerFormDialog(QDialog):
         form.setSpacing(10)
 
         self.name_input = QLineEdit()
+        self.name_input.setStyleSheet(AppStyles.FIELD_INPUT)
         self.address_input = QLineEdit()
+        self.address_input.setStyleSheet(AppStyles.FIELD_INPUT)
         self.tin_input = QLineEdit()
+        self.tin_input.setStyleSheet(AppStyles.FIELD_INPUT)
         self.sss_input = QLineEdit()
+        self.sss_input.setStyleSheet(AppStyles.FIELD_INPUT)
         self.sss_input.setInputMask("00-0000000-0;_")
         self.philhealth_input = QLineEdit()
+        self.philhealth_input.setStyleSheet(AppStyles.FIELD_INPUT)
         self.philhealth_input.setInputMask("00-000000000-0;_")
         self.hdmf_input = QLineEdit()
+        self.hdmf_input.setStyleSheet(AppStyles.FIELD_INPUT)
         self.hdmf_input.setInputMask("0000-0000-0000;_")
         self.status_combo = QComboBox()
         self.status_combo.addItems(["active", "inactive"])
@@ -12129,8 +12386,7 @@ class EmployerAdminPanel(QWidget):
         layout.addWidget(header)
         layout.addWidget(sub)
 
-        self.table = QTableWidget(0, 7)
-        self.table.setHorizontalHeaderLabels([
+        self.table = SharedTable([
             "Name",
             "Address",
             "TIN",
@@ -12138,30 +12394,14 @@ class EmployerAdminPanel(QWidget):
             "PhilHealth",
             "HDMF",
             "Status",
-        ])
-        self.table.setAlternatingRowColors(True)
-        self.table.setSelectionBehavior(QTableWidget.SelectRows)
-        self.table.setSelectionMode(QTableWidget.SingleSelection)
-        self.table.setShowGrid(False)
-        self.table.setEditTriggers(QTableWidget.NoEditTriggers)
-        self.table.verticalHeader().setVisible(False)
+        ], self)
         self.table.setWordWrap(True)
-        self.table.setStyleSheet(
-            "QTableWidget { background: #071b1b; color: #dbeafe; border: 1px solid rgba(255,255,255,0.06); border-radius: 12px; margin-right: 2px; }"
-            " QHeaderView::section { background: #2b3744; color: #f8fafc; padding: 8px; border: none; font-weight: 700; }"
-            " QTableWidget::item { padding: 6px 8px; border-bottom: 1px solid rgba(255,255,255,0.04); }"
-            " QTableWidget::item:selected { background: #0f766e; color: #ffffff; }"
-            " QTableWidget::item:alternate { background: #041516; }"
-            " QTableWidget QScrollBar:vertical { background: rgba(15,23,42,0.48); width: 12px; border-radius: 6px; margin: 2px; }"
-            " QTableWidget QScrollBar::handle:vertical { background: qlineargradient(x1:0, y1:0, x2:1, y2:0, stop:0 #14b8a6, stop:1 #3b82f6); border-radius: 6px; min-height: 20px; }"
-            " QTableWidget QScrollBar::handle:vertical:hover { background: qlineargradient(x1:0, y1:0, x2:1, y2:0, stop:0 #2dd4bf, stop:1 #60a5fa); }"
-        )
         table_header = self.table.horizontalHeader()
         table_header.setDefaultAlignment(Qt.AlignLeft | Qt.AlignVCenter)
         table_header.setStretchLastSection(True)
         table_header.setSectionResizeMode(QHeaderView.Stretch)
         self.table.setMinimumHeight(360)
-        self.table.verticalHeader().setDefaultSectionSize(38)
+        self.table.set_row_height(38)
         layout.addWidget(self.table, stretch=1)
 
         buttons = QHBoxLayout()
@@ -12329,6 +12569,7 @@ class GlassDialog(QDialog):
                 border: none;
                 font: 13px 'Segoe UI';
                 padding: 0 24px 18px 24px;
+                color: #e5e7eb;
             }
         """)
 
@@ -12402,9 +12643,8 @@ from PySide6.QtGui import QColor
 from PySide6.QtWidgets import QGraphicsDropShadowEffect
 
 class TrueGlassPanel(QFrame):
-    def __init__(self, border_radius=18, parent=None):
+    def __init__(self, border_radius=14, parent=None):
         super().__init__(parent)
-        # Ensure proper rendering with rounded borders
         self.setLineWidth(0)
         self.setFrameStyle(QFrame.NoFrame)
         self.setStyleSheet(f"""
@@ -12413,15 +12653,15 @@ class TrueGlassPanel(QFrame):
                 border: 1px solid rgba(255, 255, 255, 0.12);
                 border-radius: {border_radius}px;
             }}
-            QLabel {{ 
-                background: transparent; 
+            QLabel {{
+                background: transparent;
                 border: none;
                 outline: none;
             }}
         """)
         glow = QGraphicsDropShadowEffect(self)
-        glow.setBlurRadius(15)
-        glow.setColor(QColor(16, 185, 129, 25)) 
+        glow.setBlurRadius(12)
+        glow.setColor(QColor(16, 185, 129, 20))
         glow.setOffset(0, 0)
         self.setGraphicsEffect(glow)
 </code>
@@ -12518,7 +12758,8 @@ class HDMFLoanPanel(QWidget):
         main_layout.addWidget(title)
 
         form_holder = QWidget()
-        form_holder.setStyleSheet("""
+        form_holder.setStyleSheet(
+            """
             QWidget {
                 background: rgba(20, 43, 37, 0.64);
                 border: 1px solid rgba(148, 163, 184, 0.22);
@@ -12530,19 +12771,9 @@ class HDMFLoanPanel(QWidget):
                 background: transparent;
                 font: 600 12px 'Segoe UI';
             }
-            QLineEdit {
-                background: rgba(2, 6, 23, 0.56);
-                border: 1px solid rgba(148, 163, 184, 0.24);
-                border-radius: 7px;
-                color: #e5e7eb;
-                min-height: 34px;
-                padding: 0 10px;
-                font: 12px 'Segoe UI';
-            }
-            QLineEdit:focus {
-                border-color: rgba(20, 184, 166, 0.72);
-            }
-        """)
+        """
+            + AppStyles.FIELD_INPUT
+        )
         form_layout = QFormLayout(form_holder)
         form_layout.setContentsMargins(22, 22, 22, 22)
         form_layout.setSpacing(12)
@@ -13039,6 +13270,11 @@ class NoteRowWidget(QFrame):
 
 </code>
 
+widgets\parent.py:
+<code>
+
+</code>
+
 widgets\philhealth_panel.py:
 <code>
 import os
@@ -13069,6 +13305,7 @@ from PySide6.QtWidgets import (
 from constants.styles import AppStyles
 from controllers.philhealth_controller import PhilHealthController
 from widgets.glass_dialog import GlassDialog
+from widgets.shared_table import SharedTable
 from repositories.history_repository import HistoryRepository
 from repositories.statistics_repository import StatisticsRepository
 from services.philhealth_service import PhilHealthService
@@ -13092,7 +13329,7 @@ class SingleTablePopup(QDialog):
 
         title_row = QHBoxLayout()
         title_label = QLabel(title)
-        title_label.setStyleSheet("color: #f8fafc; font: 800 16px 'Segoe UI';")
+        title_label.setStyleSheet(AppStyles.SECTION_TITLE)
         close_btn = QPushButton()
         close_btn.setFixedSize(28, 28)
         set_exit_icon(close_btn, "#93c5fd", 11)
@@ -13105,7 +13342,6 @@ class SingleTablePopup(QDialog):
 
         if tabs:
             tab_widget = QTabWidget()
-            tab_widget.setStyleSheet(AppStyles.HISTORY_SURFACE)
             for label, rows in tabs:
                 tab_widget.addTab(self._create_table(rows), label)
             layout.addWidget(tab_widget)
@@ -13113,17 +13349,15 @@ class SingleTablePopup(QDialog):
             layout.addWidget(self._create_table(data))
 
     def _create_table(self, data):
-        table = DraggableTableWidget()
-        table.setColumnCount(len(self.headers) + 1)
-        table.setHorizontalHeaderLabels(["No."] + self.headers)
-        table.verticalHeader().setVisible(False)
+        table = DraggableTableWidget(["No."] + self.headers)
         table.setSelectionBehavior(QAbstractItemView.SelectRows)
         table.setSelectionMode(QAbstractItemView.SingleSelection)
         table.setDragDropMode(QAbstractItemView.NoDragDrop)
         table.setEditTriggers(QAbstractItemView.NoEditTriggers)
         self._apply_table_widths(table)
         table.setAlternatingRowColors(True)
-        table.setStyleSheet(AppStyles.HISTORY_SURFACE)
+        table.setStyleSheet(AppStyles.TABLE_CANONICAL)
+        table.set_row_height(AppStyles.TABLE_ROW_HEIGHT)
         self._populate_table(table, data)
         return table
 
@@ -13162,7 +13396,10 @@ class SingleTablePopup(QDialog):
                 table.setItem(row_index - 1, column_index, item)
 
 
-class DraggableTableWidget(QTableWidget):
+class DraggableTableWidget(SharedTable):
+    def __init__(self, columns=None, parent=None):
+        super().__init__(columns or [], parent)
+
     def dropEvent(self, event):
         super().dropEvent(event)
         for row_index in range(self.rowCount()):
@@ -13207,7 +13444,7 @@ class HistoryCardWidget(QFrame):
         header = QHBoxLayout()
         header.setSpacing(6)
         title = QLabel(self.record.get("month_year", "Unknown"))
-        title.setStyleSheet("color: #f8fafc; font: 800 14px 'Segoe UI';")
+        title.setStyleSheet(AppStyles.SECTION_TITLE)
         header.addWidget(title)
         header.addStretch()
         delete_btn = QPushButton()
@@ -13242,13 +13479,13 @@ class HistoryCardWidget(QFrame):
 
         def make_row(label, val, color):
             row = QHBoxLayout()
-            row_lbl = QLabel(label)
-            row_lbl.setStyleSheet("color: #94a3b8; font: 11px 'Segoe UI';")
-            row_val = QLabel(str(val))
-            row_val.setStyleSheet(f"color: {color}; font: 700 12px 'Segoe UI';")
-            row.addWidget(row_lbl)
+            label_widget = QLabel(label)
+            label_widget.setStyleSheet("color: #94a3b8; font-size: 11px; border: none; background: transparent;")
+            value_widget = QLabel(str(val))
+            value_widget.setStyleSheet(f"color: {color}; font-weight: bold; font-size: 12px; border: none; background: transparent;")
+            row.addWidget(label_widget)
             row.addStretch()
-            row.addWidget(row_val)
+            row.addWidget(value_widget)
             return row
 
         metrics_layout.addLayout(make_row("Total Employees:", self.record.get("total_count", 0), "#3b82f6"))
@@ -13279,11 +13516,7 @@ class HistoryDetailCard(QFrame):
                 background: transparent;
                 border: none;
             }
-            QTableWidget::item {
-                color: #e5e7eb;
-                padding: 5px 8px;
-            }
-        """ + AppStyles.HISTORY_SURFACE)
+        """)
 
         layout = QVBoxLayout(self)
         layout.setContentsMargins(14, 14, 14, 14)
@@ -13304,7 +13537,6 @@ class HistoryDetailCard(QFrame):
         layout.addLayout(header)
 
         self.tabs = QTabWidget()
-        self.tabs.setStyleSheet(AppStyles.HISTORY_SURFACE)
         self.tabs.setDocumentMode(True)
         self.tabs.addTab(self._create_table(self.record.get("data_total", [])), "Active")
         self.tabs.addTab(self._create_table(self.record.get("data_missing", [])), "Missing")
@@ -13321,24 +13553,22 @@ class HistoryDetailCard(QFrame):
         header.setSectionResizeMode(3, QHeaderView.Stretch)
 
     def _create_table(self, data):
-        table = QTableWidget()
-        table.setColumnCount(5)
-        table.setHorizontalHeaderLabels([
+        table = SharedTable([
             "No.",
             "Client",
             "PhilHealth No",
             "Employee Name",
             "Birthdate",
         ])
-        table.verticalHeader().setVisible(False)
         table.setSelectionBehavior(QAbstractItemView.SelectRows)
         table.setSelectionMode(QAbstractItemView.SingleSelection)
         table.setDragDropMode(QAbstractItemView.NoDragDrop)
-        table.setEditTriggers(QAbstractItemView.NoEditTriggers)
+        table.setEditTriggers(QTableWidget.NoEditTriggers)
         table.setAlternatingRowColors(True)
         table.setMinimumHeight(320)
         table.setMinimumWidth(760)
         self._apply_table_widths(table)
+        table.setStyleSheet(AppStyles.TABLE_CANONICAL)
         self._populate_table(table, data)
         return table
 
@@ -13616,53 +13846,7 @@ class PhilHealthPanel(QWidget):
                 border-color: rgba(244, 63, 94, 0.88);
                 color: #ffffff;
             }
-            QTableWidget {
-                background: rgba(2, 6, 23, 0.48);
-                alternate-background-color: rgba(15, 23, 42, 0.55);
-                border: 1px solid rgba(148, 163, 184, 0.20);
-                border-radius: 10px;
-                color: #e5e7eb;
-                gridline-color: rgba(148, 163, 184, 0.16);
-                selection-background-color: rgba(20, 184, 166, 0.34);
-                selection-color: #ffffff;
-                font: 11px 'Segoe UI';
-            }
-            QTableWidget::item {
-                color: #e5e7eb;
-                padding: 5px 8px;
-            }
-            QHeaderView::section {
-                background: rgba(2, 6, 23, 0.86);
-                border: none;
-                border-right: 1px solid rgba(148, 163, 184, 0.18);
-                color: #f8fafc;
-                font: 800 11px 'Segoe UI';
-                padding: 8px;
-            }
-            QScrollBar:vertical {
-                background: rgba(2, 6, 23, 0.18);
-                border: none;
-                border-radius: 6px;
-                width: 12px;
-                margin: 3px;
-            }
-            QScrollBar::handle:vertical {
-                background: rgba(148, 163, 184, 0.46);
-                border-radius: 6px;
-                min-height: 24px;
-            }
-            QScrollBar::handle:vertical:hover {
-                background: rgba(20, 184, 166, 0.72);
-            }
-            QScrollBar::add-line:vertical,
-            QScrollBar::sub-line:vertical,
-            QScrollBar::add-page:vertical,
-            QScrollBar::sub-page:vertical {
-                background: transparent;
-                border: none;
-                height: 0;
-            }
-        """
+        """ + AppStyles.TABLE_CANONICAL
 
     def _setup_ui(self):
         self.setStyleSheet(self._style())
@@ -14008,22 +14192,7 @@ class PhilHealthPanel(QWidget):
                 color: #e5e7eb;
                 border-color: rgba(20, 184, 166, 0.34);
             }
-            QTableWidget {
-                background: rgba(2, 6, 23, 0.46);
-                border: 1px solid rgba(148, 163, 184, 0.18);
-                border-radius: 10px;
-                color: #e5e7eb;
-                gridline-color: rgba(148, 163, 184, 0.16);
-                selection-background-color: rgba(20, 184, 166, 0.34);
-            }
-            QHeaderView::section {
-                background: rgba(2, 6, 23, 0.74);
-                border: none;
-                border-right: 1px solid rgba(148, 163, 184, 0.18);
-                color: #cbd5e1;
-                font: 700 11px 'Segoe UI';
-                padding: 7px 8px;
-            }
+            """ + AppStyles.TABLE_CANONICAL + """
             MetricCard, HistoryCard {
                 background: rgba(20, 43, 37, 0.64);
                 border: 1px solid rgba(148, 163, 184, 0.22);
@@ -14033,48 +14202,48 @@ class PhilHealthPanel(QWidget):
                 background: transparent;
                 border: none;
             }
-            QScrollBar:vertical {
+            QScrollArea QScrollBar:vertical {
                 background: rgba(2, 6, 23, 0.18);
                 border: none;
-                border-radius: 6px;
+                border-radius: 14px;
                 width: 12px;
                 margin: 3px;
             }
-            QScrollBar::handle:vertical {
+            QScrollArea QScrollBar::handle:vertical {
                 background: rgba(148, 163, 184, 0.46);
-                border-radius: 6px;
+                border-radius: 14px;
                 min-height: 24px;
             }
-            QScrollBar::handle:vertical:hover {
+            QScrollArea QScrollBar::handle:vertical:hover {
                 background: rgba(20, 184, 166, 0.72);
             }
-            QScrollBar::add-line:vertical,
-            QScrollBar::sub-line:vertical,
-            QScrollBar::add-page:vertical,
-            QScrollBar::sub-page:vertical {
+            QScrollArea QScrollBar::add-line:vertical,
+            QScrollArea QScrollBar::sub-line:vertical,
+            QScrollArea QScrollBar::add-page:vertical,
+            QScrollArea QScrollBar::sub-page:vertical {
                 background: transparent;
                 border: none;
                 height: 0;
             }
-            QScrollBar:horizontal {
+            QScrollArea QScrollBar:horizontal {
                 background: rgba(2, 6, 23, 0.18);
                 border: none;
-                border-radius: 6px;
+                border-radius: 14px;
                 height: 12px;
                 margin: 3px;
             }
-            QScrollBar::handle:horizontal {
+            QScrollArea QScrollBar::handle:horizontal {
                 background: rgba(148, 163, 184, 0.46);
-                border-radius: 6px;
+                border-radius: 14px;
                 min-width: 24px;
             }
-            QScrollBar::handle:horizontal:hover {
+            QScrollArea QScrollBar::handle:horizontal:hover {
                 background: rgba(20, 184, 166, 0.72);
             }
-            QScrollBar::add-line:horizontal,
-            QScrollBar::sub-line:horizontal,
-            QScrollBar::add-page:horizontal,
-            QScrollBar::sub-page:horizontal {
+            QScrollArea QScrollBar::add-line:horizontal,
+            QScrollArea QScrollBar::sub-line:horizontal,
+            QScrollArea QScrollBar::add-page:horizontal,
+            QScrollArea QScrollBar::sub-page:horizontal {
                 background: transparent;
                 border: none;
                 width: 0;
@@ -14146,7 +14315,7 @@ class RightPanelWidget(QWidget):
         log_card_layout.setSpacing(12)
 
         log_header = QLabel("Activity Log")
-        log_header.setStyleSheet(AppStyles.CARD_HEADER)
+        log_header.setStyleSheet(AppStyles.SECTION_TITLE)
 
         now = datetime.now()
         self.activity_container = QWidget()
@@ -14183,7 +14352,7 @@ class RightPanelWidget(QWidget):
         notes_header_row.setSpacing(8)
 
         notes_header = QLabel("Notes")
-        notes_header.setStyleSheet(AppStyles.CARD_HEADER)
+        notes_header.setStyleSheet(AppStyles.SECTION_TITLE)
         notes_header_row.addWidget(notes_header)
         notes_header_row.addStretch()
 
@@ -14759,35 +14928,74 @@ class RightPanelWidget(QWidget):
         """ + self._scrollbar_style()
 
     def _scrollbar_style(self):
-        return """
-            QScrollBar:vertical {
-                background: rgba(2, 6, 23, 0.18);
-                border: none;
-                border-radius: 6px;
-                width: 12px;
-                margin: 3px;
-            }
-            QScrollBar::handle:vertical {
-                background: rgba(148, 163, 184, 0.46);
-                border-radius: 6px;
-                min-height: 24px;
-            }
-            QScrollBar::handle:vertical:hover {
-                background: rgba(20, 184, 166, 0.72);
-            }
-            QScrollBar::add-line:vertical,
-            QScrollBar::sub-line:vertical,
-            QScrollBar::add-page:vertical,
-            QScrollBar::sub-page:vertical {
-                background: transparent;
-                border: none;
-                height: 0;
-            }
-            QScrollBar:horizontal {
-                background: transparent;
-                height: 0;
-            }
-        """
+        return AppStyles.SCROLLBAR
+
+</code>
+
+widgets\shared_table.py:
+<code>
+from PySide6.QtCore import Qt
+from PySide6.QtWidgets import QHeaderView, QSizePolicy, QTableWidget, QTableWidgetItem
+
+from constants.styles import AppStyles
+
+
+class SharedTable(QTableWidget):
+    def __init__(self, columns=None, parent=None):
+        super().__init__(0, len(columns or []), parent)
+        self._build_ui(columns or [])
+
+    def _build_ui(self, columns):
+        self.setAlternatingRowColors(True)
+        self.setSelectionBehavior(QTableWidget.SelectRows)
+        self.setSelectionMode(QTableWidget.SingleSelection)
+        self.setShowGrid(False)
+        self.setEditTriggers(QTableWidget.NoEditTriggers)
+        self.setSortingEnabled(False)
+        self.verticalHeader().setVisible(False)
+        self.setVerticalScrollBarPolicy(Qt.ScrollBarAsNeeded)
+        self.setHorizontalScrollBarPolicy(Qt.ScrollBarAsNeeded)
+        self.setWordWrap(True)
+        self.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
+        self.setMinimumHeight(260)
+        self.setStyleSheet(AppStyles.TABLE_CANONICAL)
+        self.set_row_height(AppStyles.TABLE_ROW_HEIGHT)
+        if columns:
+            self.setHorizontalHeaderLabels(columns)
+        header = self.horizontalHeader()
+        header.setDefaultAlignment(Qt.AlignLeft | Qt.AlignVCenter)
+        header.setStretchLastSection(False)
+        header.setHighlightSections(False)
+
+    def set_columns(self, columns):
+        self.setColumnCount(len(columns))
+        self.setHorizontalHeaderLabels(columns)
+
+    def set_stretch_columns(self, *indices):
+        self.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
+        for index in indices:
+            self.horizontalHeader().setSectionResizeMode(index, QHeaderView.Stretch)
+
+    def set_resize_to_contents(self, *indices):
+        for index in indices:
+            self.horizontalHeader().setSectionResizeMode(index, QHeaderView.ResizeToContents)
+
+    def set_row_height(self, height):
+        self.verticalHeader().setDefaultSectionSize(height)
+
+    def set_empty_state(self, message="No records found"):
+        self.setRowCount(1)
+        self.clearContents()
+        empty_item = QTableWidgetItem(message)
+        empty_item.setFlags(empty_item.flags() & ~Qt.ItemIsEditable)
+        empty_item.setTextAlignment(Qt.AlignCenter | Qt.AlignVCenter)
+        self.setItem(0, 0, empty_item)
+        self.setSpan(0, 0, 1, max(1, self.columnCount()))
+        self.setRowHeight(0, max(72, AppStyles.TABLE_ROW_HEIGHT + 24))
+
+    def clear_rows(self):
+        self.setRowCount(0)
+        self.clearContents()
 
 </code>
 
@@ -14800,6 +15008,7 @@ from PySide6.QtGui import QImage, QPainter, QPixmap
 from PySide6.QtSvg import QSvgRenderer
 from PySide6.QtWidgets import QHBoxLayout, QLabel, QListWidget, QPushButton, QVBoxLayout, QWidget
 
+from constants.styles import AppStyles
 from shared.resources import asset_path
 
 
@@ -14840,10 +15049,7 @@ class SidebarWidget(QWidget):
             logo_label.setPixmap(QPixmap.fromImage(image))
 
         title_label = QLabel("GovSync")
-        title_label.setStyleSheet(
-            "color: white; font-size: 20px; font-weight: bold; "
-            "background: transparent; border: none;"
-        )
+        title_label.setStyleSheet(AppStyles.SCREEN_TITLE)
 
         header.addWidget(logo_label)
         header.addWidget(title_label)
@@ -14865,31 +15071,9 @@ class SidebarWidget(QWidget):
         )
         nav.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
         nav.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
-        nav.setStyleSheet("""
-            QListWidget {
-                background: transparent;
-                border: none;
-                outline: none;
-            }
-            QListWidget::item {
-                color: #94a3b8;
-                padding: 12px 16px;
-                font-size: 13px;
-                font-weight: 600;
-                border-radius: 12px;
-                margin-bottom: 4px;
-            }
-            QListWidget::item:hover {
-                background-color: rgba(255, 255, 255, 0.04);
-                color: #f1f5f9;
-            }
-            QListWidget::item:selected {
-                background-color: rgba(16, 185, 129, 0.15);
-                color: #34d399;
-                border: 1px solid rgba(16, 185, 129, 0.4);
-            }
-        """)
+        nav.setStyleSheet(AppStyles.NAV_LIST)
         nav.setCurrentRow(0)
+        nav.setAlternatingRowColors(False)
         return nav
 
     def _create_logout_button(self):
@@ -14897,13 +15081,9 @@ class SidebarWidget(QWidget):
         button.setCursor(Qt.PointingHandCursor)
         button.setMinimumHeight(42)
         button.clicked.connect(self.logout_requested.emit)
-        button.setStyleSheet("""
+        button.setStyleSheet(AppStyles.SECONDARY_BUTTON + """
             QPushButton {
-                background: rgba(30, 41, 59, 0.72);
-                border: 1px solid rgba(148, 163, 184, 0.24);
-                border-radius: 10px;
-                color: #e5e7eb;
-                font: 700 12px 'Segoe UI';
+                min-height: 42px;
             }
             QPushButton:hover {
                 background: rgba(244, 63, 94, 0.20);
@@ -14944,6 +15124,7 @@ from PySide6.QtWidgets import (
 )
 
 from constants.styles import AppStyles
+from widgets.shared_table import SharedTable
 from services.auth_manager import account_json_path, get_active_account
 from controllers.sss_controller import SSSController
 from services.sss_service import (
@@ -15036,7 +15217,7 @@ class SSSPanel(QWidget):
 
         main_layout = QVBoxLayout(self)
         main_layout.setContentsMargins(0, 0, 0, 0)
-        main_layout.setSpacing(14)
+        main_layout.setSpacing(AppStyles.PANEL_SPACING)
 
         title = QLabel("SSS TXT Automation")
         title.setFont(QFont("Segoe UI", 17, QFont.Bold))
@@ -15082,21 +15263,22 @@ class SSSPanel(QWidget):
         generate_tab = QWidget()
         generate_tab.setStyleSheet("background: transparent; border: none;")
         generate_layout = QVBoxLayout(generate_tab)
-        generate_layout.setContentsMargins(16, 16, 16, 16)
-        generate_layout.setSpacing(14)
+        generate_layout.setContentsMargins(AppStyles.SECTION_PADDING, AppStyles.SECTION_PADDING, AppStyles.SECTION_PADDING, AppStyles.SECTION_PADDING)
+        generate_layout.setSpacing(AppStyles.PANEL_SPACING)
 
         viewer_tab = QWidget()
         viewer_tab.setStyleSheet("background: transparent; border: none;")
         viewer_layout = QVBoxLayout(viewer_tab)
-        viewer_layout.setContentsMargins(16, 16, 16, 16)
-        viewer_layout.setSpacing(12)
+        viewer_layout.setContentsMargins(AppStyles.SECTION_PADDING, AppStyles.SECTION_PADDING, AppStyles.SECTION_PADDING, AppStyles.SECTION_PADDING)
+        viewer_layout.setSpacing(AppStyles.INNER_PADDING)
 
         self.tabs.addTab(generate_tab, "Generate TXT")
         self.tabs.addTab(viewer_tab, "TXT Viewer")
         main_layout.addWidget(self.tabs, stretch=1)
 
         form_holder = QWidget()
-        form_holder.setStyleSheet("""
+        form_holder.setStyleSheet(
+            """
             QWidget {
                 background: rgba(20, 43, 37, 0.64);
                 border: 1px solid rgba(148, 163, 184, 0.22);
@@ -15107,18 +15289,6 @@ class SSSPanel(QWidget):
                 border: none;
                 background: transparent;
                 font: 600 12px 'Segoe UI';
-            }
-            QLineEdit, QComboBox {
-                background: rgba(2, 6, 23, 0.56);
-                border: 1px solid rgba(148, 163, 184, 0.24);
-                border-radius: 7px;
-                color: #e5e7eb;
-                min-height: 34px;
-                padding: 0 10px;
-                font: 12px 'Segoe UI';
-            }
-            QLineEdit:focus, QComboBox:focus {
-                border-color: rgba(20, 184, 166, 0.72);
             }
             QComboBox::drop-down {
                 border: none;
@@ -15138,25 +15308,10 @@ class SSSPanel(QWidget):
                 min-height: 28px;
                 padding: 6px 10px;
             }
-            QScrollBar:vertical {
-                background: #071512;
-                border: none;
-                border-radius: 6px;
-                width: 12px;
-                margin: 3px;
-            }
-            QScrollBar::handle:vertical {
-                background: rgba(148, 163, 184, 0.70);
-                border-radius: 6px;
-                min-height: 24px;
-            }
-            QScrollBar::add-line:vertical,
-            QScrollBar::sub-line:vertical {
-                height: 0;
-                border: none;
-                background: transparent;
-            }
-        """)
+            """
+            + AppStyles.FIELD_INPUT
+            + AppStyles.SCROLLBAR
+        )
         form_layout = QFormLayout(form_holder)
         form_layout.setContentsMargins(22, 22, 22, 22)
         form_layout.setSpacing(14)
@@ -15221,9 +15376,7 @@ class SSSPanel(QWidget):
         queue_header = QHBoxLayout()
         queue_header.setSpacing(8)
         queue_label = QLabel("Bulk Source Queue")
-        queue_label.setStyleSheet(
-            "color: #cbd5e1; font: 700 12px 'Segoe UI'; border: none; background: transparent;"
-        )
+        queue_label.setStyleSheet(AppStyles.SECTION_TITLE)
         queue_header.addWidget(queue_label)
         queue_header.addStretch()
         self.btn_add_sources = self._secondary_button("Add Files")
@@ -15273,9 +15426,7 @@ class SSSPanel(QWidget):
         viewer_header.setSpacing(8)
 
         viewer_title = QLabel("Partial List TXT Viewer")
-        viewer_title.setStyleSheet(
-            "color: #cbd5e1; font: 700 12px 'Segoe UI'; border: none; background: transparent;"
-        )
+        viewer_title.setStyleSheet(AppStyles.SECTION_TITLE)
         viewer_header.addWidget(viewer_title, stretch=1)
 
         self.btn_import_txt = self._secondary_button("Import TXT")
@@ -15287,40 +15438,13 @@ class SSSPanel(QWidget):
         viewer_header.addWidget(self.btn_save_txt)
         viewer_layout.addLayout(viewer_header)
 
-        self.txt_table = QTableWidget(0, len(TXT_COLUMNS))
-        self.txt_table.setHorizontalHeaderLabels(TXT_COLUMNS)
+        self.txt_table = SharedTable(TXT_COLUMNS, self)
         self.txt_table.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeToContents)
         self.txt_table.horizontalHeader().setStretchLastSection(True)
-        self.txt_table.verticalHeader().setVisible(False)
         self.txt_table.setAlternatingRowColors(False)
+        self.txt_table.set_row_height(36)
         self.txt_table.setEditTriggers(QAbstractItemView.AllEditTriggers)
-        self.txt_table.setStyleSheet("""
-            QTableWidget {
-                background: rgba(20, 43, 37, 0.64);
-                border: 1px solid rgba(148, 163, 184, 0.22);
-                border-radius: 10px;
-                color: #dbeafe;
-                gridline-color: rgba(148, 163, 184, 0.16);
-                font: 11px 'Segoe UI';
-                outline: none;
-            }
-            QHeaderView::section {
-                background: rgba(2, 6, 23, 0.74);
-                border: none;
-                border-right: 1px solid rgba(148, 163, 184, 0.18);
-                color: #cbd5e1;
-                font: 700 11px 'Segoe UI';
-                padding: 7px 8px;
-            }
-            QTableWidget::item {
-                border: none;
-                padding: 5px 7px;
-            }
-            QTableWidget::item:selected {
-                background: rgba(20, 184, 166, 0.28);
-                color: #ffffff;
-            }
-        """)
+        self.txt_table.setStyleSheet(AppStyles.TABLE_CANONICAL)
         viewer_layout.addWidget(self.txt_table, stretch=1)
 
         self.progress_bar = QProgressBar()
@@ -15737,6 +15861,7 @@ widgets\workspace.py:
 <code>
 from PySide6.QtWidgets import QHBoxLayout, QLabel, QVBoxLayout, QWidget
 
+from constants.styles import AppStyles
 from widgets.glass_panel import TrueGlassPanel
 
 
@@ -15757,13 +15882,9 @@ class WorkspaceWidget(QWidget):
         self.banner_layout.setSpacing(6)
 
         self.welcome_title = QLabel()
-        self.welcome_title.setStyleSheet(
-            "color: #34d399; font-size: 24px; font-weight: 800; border: none; background: transparent;"
-        )
+        self.welcome_title.setStyleSheet("color: #34d399; font: 800 24px 'Segoe UI'; border: none; background: transparent;")
         self.welcome_subtitle = QLabel("Your compliance workspace is ready.")
-        self.welcome_subtitle.setStyleSheet(
-            "color: #cbd5e1; font-size: 12px; border: none; background: transparent;"
-        )
+        self.welcome_subtitle.setStyleSheet(AppStyles.SECTION_SUBTITLE)
         self.banner_layout.addStretch()
         self.banner_layout.addWidget(self.welcome_title)
         self.banner_layout.addWidget(self.welcome_subtitle)
@@ -15774,28 +15895,34 @@ class WorkspaceWidget(QWidget):
 
         self.philhealth_box = TrueGlassPanel(border_radius=15)
         philhealth_layout = QVBoxLayout(self.philhealth_box)
-        philhealth_layout.addWidget(QLabel("Philhealth (Past Month Total)"))
+        philhealth_label = QLabel("Philhealth (Past Month Total)")
+        philhealth_label.setStyleSheet(AppStyles.SECTION_SUBTITLE)
+        philhealth_layout.addWidget(philhealth_label)
         self.lbl_ph_count = QLabel("0")
         self.lbl_ph_count.setStyleSheet(
-            "color: #34d399; font-size: 28px; font-weight: 800; border: none; background: transparent;"
+            "color: #34d399; font: 800 28px 'Segoe UI'; border: none; background: transparent;"
         )
         philhealth_layout.addWidget(self.lbl_ph_count)
 
         self.hdmf_box = TrueGlassPanel(border_radius=15)
         hdmf_layout = QVBoxLayout(self.hdmf_box)
-        hdmf_layout.addWidget(QLabel("HDMF (Past Month Total)"))
+        hdmf_label = QLabel("HDMF (Past Month Total)")
+        hdmf_label.setStyleSheet(AppStyles.SECTION_SUBTITLE)
+        hdmf_layout.addWidget(hdmf_label)
         self.lbl_hd_count = QLabel("0")
         self.lbl_hd_count.setStyleSheet(
-            "color: #34d399; font-size: 28px; font-weight: 800; border: none; background: transparent;"
+            "color: #34d399; font: 800 28px 'Segoe UI'; border: none; background: transparent;"
         )
         hdmf_layout.addWidget(self.lbl_hd_count)
 
         self.sss_box = TrueGlassPanel(border_radius=15)
         sss_layout = QVBoxLayout(self.sss_box)
-        sss_layout.addWidget(QLabel("SSS (Past Month Total)"))
+        sss_label = QLabel("SSS (Past Month Total)")
+        sss_label.setStyleSheet(AppStyles.SECTION_SUBTITLE)
+        sss_layout.addWidget(sss_label)
         self.lbl_sss_count = QLabel("0")
         self.lbl_sss_count.setStyleSheet(
-            "color: #34d399; font-size: 28px; font-weight: 800; border: none; background: transparent;"
+            "color: #34d399; font: 800 28px 'Segoe UI'; border: none; background: transparent;"
         )
         sss_layout.addWidget(self.lbl_sss_count)
 

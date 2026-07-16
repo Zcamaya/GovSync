@@ -1,59 +1,23 @@
 from PySide6.QtCore import Qt
 from PySide6.QtGui import QColor
-from PySide6.QtWidgets import (
-    QHeaderView,
-    QTableWidget,
-    QTableWidgetItem,
-    QSizePolicy,
-)
+from PySide6.QtWidgets import QHeaderView, QTableWidgetItem
 
 from constants.styles import AppStyles
+from widgets.shared_table import SharedTable
 
 
-class EmployeeRecordsTable(QTableWidget):
+class EmployeeRecordsTable(SharedTable):
     def __init__(self, parent=None):
-        super().__init__(0, 3, parent)
-        self._build_ui()
+        super().__init__(['No.', 'Client', 'Employee Name'], parent)
         self._current_employee_rows = []
 
-    def _build_ui(self):
-        self.setAlternatingRowColors(True)
-        self.setSelectionBehavior(QTableWidget.SelectRows)
-        self.setSelectionMode(QTableWidget.SingleSelection)
-        self.setShowGrid(False)
-        self.setEditTriggers(QTableWidget.NoEditTriggers)
-        self.verticalHeader().setVisible(False)
-        self.setStyleSheet(
-            AppStyles.TABLE_BASE
-            + AppStyles.TABLE_SCROLLBAR
-            + """
-            QHeaderView::section {
-                background: rgba(15, 23, 42, 0.92);
-                color: #f8fafc;
-                padding: 8px;
-                border: none;
-                font-weight: 700;
-            }
-            QTableWidget::item:selected {
-                background: rgba(20, 184, 166, 0.24);
-                color: #ffffff;
-            }
-            QTableWidget::item:alternate {
-                background: rgba(2, 6, 23, 0.34);
-            }
-            """
-        )
-        self.setHorizontalHeaderLabels(["No.", "Client", "Employee Name"])
-        self.horizontalHeader().setStretchLastSection(False)
+    def _build_ui(self, columns):
+        super()._build_ui(columns)
         self.horizontalHeader().setSectionResizeMode(0, QHeaderView.ResizeToContents)
         self.horizontalHeader().setSectionResizeMode(1, QHeaderView.Stretch)
         self.horizontalHeader().setSectionResizeMode(2, QHeaderView.Stretch)
-        self.setWordWrap(True)
         self.setColumnWidth(0, 48)
-        self.setSortingEnabled(False)
-        self.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
-        self.setMinimumHeight(200)
-        self.verticalHeader().setDefaultSectionSize(36)
+        self.setMinimumHeight(320)
 
     def populate(self, employees, search_text="", page=1, page_size=100):
         self.setRowCount(0)
@@ -61,11 +25,7 @@ class EmployeeRecordsTable(QTableWidget):
         search_text = search_text.strip().lower()
 
         if not employees:
-            self.setRowCount(1)
-            empty_item = QTableWidgetItem("No records found")
-            empty_item.setTextAlignment(Qt.AlignCenter)
-            self.setItem(0, 0, empty_item)
-            self.setSpan(0, 0, 1, self.columnCount())
+            self.set_empty_state("No records found")
             return
 
         self.setRowCount(len(employees))
@@ -93,7 +53,7 @@ class EmployeeRecordsTable(QTableWidget):
                 if col_idx in (1, 2):
                     item.setToolTip(str(value))
                 self.setItem(row_index, col_idx, item)
-            self.setRowHeight(row_index, 38)
+            self.setRowHeight(row_index, AppStyles.TABLE_ROW_HEIGHT)
 
     def get_current_employee(self, row):
         if 0 <= row < len(self._current_employee_rows):

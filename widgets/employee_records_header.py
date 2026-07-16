@@ -25,6 +25,9 @@ class EmployeeRecordsHeader(QWidget):
         layout.setSpacing(16)
 
         self.stats_panel = TrueGlassPanel(border_radius=16)
+        self.stats_panel.setStyleSheet(
+            self.stats_panel.styleSheet() + f"QFrame {{ border: 1px solid {AppStyles.PANEL_BORDER_SUBTLE}; }}"
+        )
         stats_layout = QHBoxLayout(self.stats_panel)
         stats_layout.setContentsMargins(18, 18, 18, 18)
         stats_layout.setSpacing(12)
@@ -37,17 +40,15 @@ class EmployeeRecordsHeader(QWidget):
             "Last Imported Payroll",
         ]:
             card = QFrame()
-            card.setStyleSheet(
-                "background: rgba(15, 23, 42, 0.55); border: 1px solid rgba(255,255,255,0.08); border-radius: 14px;"
-            )
+            card.setStyleSheet(AppStyles.TABLE_STAT_CARD)
             card_layout = QVBoxLayout(card)
             card_layout.setContentsMargins(12, 12, 12, 12)
             card_layout.setSpacing(6)
 
             title = QLabel(label)
-            title.setStyleSheet("color: #cbd5e1; font-size: 12px;")
+            title.setStyleSheet(AppStyles.TABLE_METADATA_TEXT)
             value = QLabel("0")
-            value.setStyleSheet("color: #34d399; font-size: 22px; font-weight: 700;")
+            value.setStyleSheet(AppStyles.METRIC_VALUE.replace("28px", "22px"))
 
             card_layout.addWidget(title)
             card_layout.addWidget(value)
@@ -57,27 +58,32 @@ class EmployeeRecordsHeader(QWidget):
         layout.addWidget(self.stats_panel)
 
         filters_panel = TrueGlassPanel(border_radius=16)
+        filters_panel.setStyleSheet(
+            filters_panel.styleSheet() + f"QFrame {{ border: 1px solid {AppStyles.PANEL_BORDER_SUBTLE}; }}"
+        )
         filters_layout = QHBoxLayout(filters_panel)
         filters_layout.setContentsMargins(16, 16, 16, 16)
         filters_layout.setSpacing(10)
 
         self.search_input = QLineEdit()
         self.search_input.setPlaceholderText("Search employee")
-        self.search_input.setStyleSheet(
-            "QLineEdit { background: rgba(15,23,42,0.75); color: white; border: 1px solid rgba(255,255,255,0.14); border-radius: 8px; padding: 8px 10px; }"
-        )
+        self.search_input.setMinimumHeight(38)
+        self.search_input.setStyleSheet(AppStyles.TABLE_SEARCH_INPUT)
         filters_layout.addWidget(self.search_input, stretch=1)
 
         self.employer_combo = QComboBox()
         self.employer_combo.addItem("Employer")
+        self.employer_combo.setMinimumHeight(38)
         filters_layout.addWidget(self.employer_combo)
 
         self.client_combo = QComboBox()
         self.client_combo.addItem("Client")
+        self.client_combo.setMinimumHeight(38)
         filters_layout.addWidget(self.client_combo)
 
         self.applicable_month_combo = QComboBox()
         self.applicable_month_combo.addItem("Applicable Month")
+        self.applicable_month_combo.setMinimumHeight(38)
         filters_layout.addWidget(self.applicable_month_combo)
 
         combo_style = AppStyles.GLOBAL_DROPDOWN

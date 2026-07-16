@@ -38,6 +38,7 @@ class GlassDialog(QDialog):
                 border: none;
                 font: 13px 'Segoe UI';
                 padding: 0 24px 18px 24px;
+                color: #e5e7eb;
             }
         """)
 

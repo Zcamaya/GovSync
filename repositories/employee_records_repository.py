@@ -282,7 +282,12 @@ class EmployeeRecordsRepository:
     def get_employee_payroll_history(self, employer_id: str | None, employee_id: str = "", sss_number: str = "") -> list[dict[str, Any]]:
         connection = self._connect()
         try:
-            if employer_id:
+
+            # If employer_id is numeric or doesn't look like a company name, ignore it and use no filter
+            # (The employer_id from the UI might be numeric but the database stores employer names)
+            use_employer_filter = employer_id and isinstance(employer_id, str) and employer_id.strip() and not str(employer_id).isdigit()
+            
+            if use_employer_filter:
                 rows = connection.execute(
                     """
                     SELECT
@@ -348,6 +353,7 @@ class EmployeeRecordsRepository:
                         "from_date": row["from_date"],
                         "to_date": row["to_date"],
                         "client": row["client_name"],
+                        "company": row["company"],
                         "basic_rate": row["basicrate"],
                         "sss": row["sss"],
                         "sss_number": row["sssno"],
