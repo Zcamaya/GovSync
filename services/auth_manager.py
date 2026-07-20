@@ -158,6 +158,10 @@ def _save_active_account(account: dict[str, str] | None) -> None:
     set_active_account(account)
 
 
+def _hash_password(password: str) -> str:
+    return _get_auth_service()._hash_password(password)
+
+
 def list_accounts() -> list[Account]:
     return _get_account_repository().list_all()
 
@@ -283,6 +287,10 @@ def update_account(username: str, **fields: Any) -> None:
         if key in ("username", "password", "password_hash", "sss_number", "philhealth_number", "hdmf_number", "employer_name"):
             if key in {"sss_number", "philhealth_number", "hdmf_number"}:
                 merged[key] = digits_only(value)
+            elif key in {"password", "password_hash"}:
+                hashed_password = _hash_password(str(value).strip())
+                merged["password"] = hashed_password
+                merged["password_hash"] = hashed_password
             else:
                 merged[key] = str(value).strip()
 

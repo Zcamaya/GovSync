@@ -17,6 +17,7 @@ from widgets.glass_panel import TrueGlassPanel
 class EmployeeRecordsHeader(QWidget):
     def __init__(self, parent=None):
         super().__init__(parent)
+        self._compact_mode = False
         self._build_ui()
 
     def _build_ui(self):
@@ -102,6 +103,43 @@ class EmployeeRecordsHeader(QWidget):
             cb.setSizeAdjustPolicy(QComboBox.AdjustToContents)
 
         layout.addWidget(filters_panel)
+        self.filters_panel = filters_panel
+
+    def set_compact_mode(self, enabled: bool):
+        if self._compact_mode == enabled:
+            return
+
+        self._compact_mode = enabled
+        if enabled:
+            self.layout().setSpacing(10)
+            self.stats_panel.layout().setContentsMargins(12, 12, 12, 12)
+            for card in self.stats_cards:
+                title, value = card
+                title.setStyleSheet(AppStyles.TABLE_METADATA_TEXT.replace("11px", "10px"))
+                value.setStyleSheet(AppStyles.METRIC_VALUE.replace("28px", "20px"))
+
+            filters_layout = self.filters_panel.layout()
+            filters_layout.setContentsMargins(12, 12, 12, 12)
+            filters_layout.setSpacing(8)
+            self.search_input.setMinimumHeight(32)
+            self.employer_combo.setMinimumHeight(32)
+            self.client_combo.setMinimumHeight(32)
+            self.applicable_month_combo.setMinimumHeight(32)
+        else:
+            self.layout().setSpacing(16)
+            self.stats_panel.layout().setContentsMargins(18, 18, 18, 18)
+            for card in self.stats_cards:
+                title, value = card
+                title.setStyleSheet(AppStyles.TABLE_METADATA_TEXT)
+                value.setStyleSheet(AppStyles.METRIC_VALUE.replace("28px", "22px"))
+
+            filters_layout = self.filters_panel.layout()
+            filters_layout.setContentsMargins(16, 16, 16, 16)
+            filters_layout.setSpacing(10)
+            self.search_input.setMinimumHeight(38)
+            self.employer_combo.setMinimumHeight(38)
+            self.client_combo.setMinimumHeight(38)
+            self.applicable_month_combo.setMinimumHeight(38)
 
     def set_stats(self, stats: dict):
         labels = ["total_employees", "total_clients", "total_imports", "last_imported"]

@@ -1,7 +1,7 @@
 import re
 from datetime import datetime
 
-from PySide6.QtCore import Qt, QTimer
+from PySide6.QtCore import Qt, QTimer, QThread, Signal
 from PySide6.QtGui import QColor
 from PySide6.QtWidgets import (
     QComboBox,
@@ -23,9 +23,49 @@ from widgets.employee_records_paginator import EmployeeRecordsPaginator
 from widgets.employee_records_table import EmployeeRecordsTable
 from widgets.glass_panel import TrueGlassPanel
 from widgets.glass_dialog import GlassDialog
-from widgets.shared_table import SharedTable
+from widgets.shared_table import RoundedTableCard, SharedTable
 from core.session_manager import get_active_account
 from shared.ui import set_exit_icon
+
+
+class EmployeeRecordsLoadWorker(QThread):
+    finished = Signal(int, object, int)
+    failed = Signal(int, str)
+
+    def __init__(self, request_id, controller, employer_id, search_text, client_filter, applicable_month_filter, lastname_filter, employer_filter, sort_by, sort_order, page, page_size, parent=None):
+        super().__init__(parent)
+        self.request_id = request_id
+        self.controller = controller
+        self.employer_id = employer_id
+        self.search_text = search_text
+        self.client_filter = client_filter
+        self.applicable_month_filter = applicable_month_filter
+        self.lastname_filter = lastname_filter
+        self.employer_filter = employer_filter
+        self.sort_by = sort_by
+        self.sort_order = sort_order
+        self.page = page
+        self.page_size = page_size
+
+    def run(self):
+        try:
+            employees, total_count = self.controller.list_employees(
+                employer_id=self.employer_id,
+                search_text=self.search_text,
+                client_filter=self.client_filter,
+                applicable_month_filter=self.applicable_month_filter,
+                lastname_filter=self.lastname_filter,
+                employer_filter=self.employer_filter,
+                sort_by=self.sort_by,
+                sort_order=self.sort_order,
+                page=self.page,
+                page_size=self.page_size,
+            )
+            stats = self.controller.get_statistics(employer_id=self.employer_id)
+            options = self.controller.get_filter_options(employer_id=self.employer_id) or {}
+            self.finished.emit(self.request_id, {"employees": employees, "stats": stats, "options": options}, total_count)
+        except Exception as exc:
+            self.failed.emit(self.request_id, str(exc))
 
 
 def _parse_period_value(value):
@@ -70,6 +110,13 @@ class EmployeeRecordsPanel(QWidget):
         self.page_size = 100
         self.employer_id = None
         self._pending_refresh = False
+        self._refresh_request_id = 0
+        self._refresh_in_progress = False
+        self._refresh_queued = False
+        self._refresh_timer = QTimer(self)
+        self._refresh_timer.setSingleShot(True)
+        self._refresh_timer.timeout.connect(self.refresh_data)
+        self._load_worker = None
         self._build_ui()
         self._connect_signals()
         self.refresh_data()
@@ -84,7 +131,7 @@ class EmployeeRecordsPanel(QWidget):
 
         self.table = EmployeeRecordsTable(self)
         self.table.cellDoubleClicked.connect(self._on_cell_double_clicked)
-        self.table.setMinimumHeight(320)
+        self.table.setMinimumHeight(180)
         layout.addWidget(self.table, stretch=1)
 
         self.paginator = EmployeeRecordsPaginator(self)
@@ -112,15 +159,19 @@ class EmployeeRecordsPanel(QWidget):
 
     def _schedule_refresh(self):
         self._pending_refresh = True
-        QTimer.singleShot(250, self.refresh_data)
+        self.current_page = 1
+        self._refresh_timer.start(250)
 
     def refresh_data(self):
         if self._pending_refresh:
             self._pending_refresh = False
+        if self._refresh_in_progress:
+            self._refresh_queued = True
+            return
         self._show_loading(True)
-        self._load_data_async()
-
-    def _load_data_async(self):
+        self._refresh_in_progress = True
+        self._refresh_request_id += 1
+        request_id = self._refresh_request_id
         account = get_active_account() or {}
         employer_id = None  # Show all employees from all accounts
         employer_filter = self.header.employer_combo.currentText() if self.header.employer_combo.currentText() != "Employer" else ""
@@ -131,31 +182,66 @@ class EmployeeRecordsPanel(QWidget):
         sort_by = "lastname"
         sort_order = "asc"
 
-        employees, total_count = self.controller.list_employees(
-            employer_id=employer_id,
-            search_text=search_text,
-            client_filter=client_filter,
-            applicable_month_filter=applicable_month_filter,
-            employer_filter=employer_filter,
-            lastname_filter="",
-            sort_by=sort_by,
-            sort_order=sort_order,
-            page=self.current_page,
-            page_size=self.page_size,
+        worker = EmployeeRecordsLoadWorker(
+            request_id,
+            self.controller,
+            employer_id,
+            search_text,
+            client_filter,
+            applicable_month_filter,
+            "",
+            employer_filter,
+            sort_by,
+            sort_order,
+            self.current_page,
+            self.page_size,
+            self,
         )
-        self._populate_filters(employer_id)
+        worker.finished.connect(self._on_load_finished)
+        worker.failed.connect(self._on_load_failed)
+        worker.finished.connect(worker.deleteLater)
+        worker.failed.connect(worker.deleteLater)
+        self._load_worker = worker
+        worker.start()
 
+    def _on_load_finished(self, request_id, payload, total_count):
+        if request_id != self._refresh_request_id:
+            return
+        self._refresh_in_progress = False
+        self._load_worker = None
+        employees = payload.get("employees", [])
+        stats = payload.get("stats", {})
+        options = payload.get("options", {}) or {}
+        self._populate_filters(None, options)
         self._populate_table(employees)
-        self._populate_stats(employer_id)
+        self._populate_stats(None, stats)
         self._update_pagination(total_count)
         self._show_loading(False)
+        if self._refresh_queued:
+            self._refresh_queued = False
+            self.refresh_data()
 
-    def _populate_stats(self, employer_id):
-        stats = self.controller.get_statistics(employer_id=employer_id)
+    def _on_load_failed(self, request_id, message):
+        if request_id != self._refresh_request_id:
+            return
+        self._refresh_in_progress = False
+        self._load_worker = None
+        self._show_loading(False)
+        self.loading_label.setText(f"Failed to load employees: {message}")
+        self.loading_label.show()
+        self.table.setVisible(False)
+        if self._refresh_queued:
+            self._refresh_queued = False
+            self.refresh_data()
+
+    def _populate_stats(self, employer_id, stats=None):
+        if stats is None:
+            stats = self.controller.get_statistics(employer_id=employer_id)
         self.header.set_stats(stats)
 
-    def _populate_filters(self, employer_id):
-        options = self.controller.get_filter_options(employer_id=employer_id) or {}
+    def _populate_filters(self, employer_id, options=None):
+        if options is None:
+            options = self.controller.get_filter_options(employer_id=employer_id) or {}
         self.header.set_filter_options(options)
 
     def _populate_table(self, employees):
@@ -170,7 +256,7 @@ class EmployeeRecordsPanel(QWidget):
     def _show_details(self, employee):
         if not employee:
             return
-        employer_id = self.employer_id or (get_active_account() or {}).get("employer_id") or (get_active_account() or {}).get("employer_name") or None
+        employer_id = employee.get("employer_id") or self.employer_id or (get_active_account() or {}).get("employer_id") or (get_active_account() or {}).get("employer_name") or None
         employee_id = employee.get("employee_id", "")
         sss_number = employee.get("sss_number", "")
         history = self.controller.get_employee_payroll_history(employer_id=employer_id, employee_id=employee_id, sss_number=sss_number)
@@ -199,8 +285,31 @@ class EmployeeRecordsPanel(QWidget):
         self.refresh_data()
 
     def _show_loading(self, visible):
+        if visible:
+            self.loading_label.setText("Loading employees...")
         self.loading_label.setVisible(visible)
         self.table.setVisible(not visible)
+
+    def resizeEvent(self, event):
+        super().resizeEvent(event)
+        try:
+            compact_mode = self.height() < 860 or self.width() < 1350
+            paginator_height = 40 if compact_mode else 50
+
+            self.header.set_compact_mode(compact_mode)
+            self.paginator.set_compact_mode(compact_mode)
+            self.paginator.setFixedHeight(paginator_height)
+
+            table_min_height = 100 if compact_mode else 180
+            self.table.setMinimumHeight(table_min_height)
+            self.table.set_row_height(26 if compact_mode else AppStyles.TABLE_ROW_HEIGHT)
+
+            if compact_mode:
+                self.loading_label.setVisible(False)
+            elif self._refresh_in_progress:
+                self.loading_label.setVisible(True)
+        except Exception:
+            pass
 
 
 class EmployeeDetailsDialog(QDialog):
@@ -486,7 +595,7 @@ class EmployeeDetailsDialog(QDialog):
                 
                 history_layout.addLayout(title_filter_layout)
 
-                history_table = SharedTable([
+                history_table = RoundedTableCard([
                     "Applicable month",
                     "fdate",
                     "tdate",

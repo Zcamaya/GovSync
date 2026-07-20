@@ -1,4 +1,3 @@
-import json
 import os
 
 from PySide6.QtCore import QThread, Signal, Qt
@@ -17,8 +16,10 @@ from PySide6.QtWidgets import (
 )
 
 from constants.styles import AppStyles
-from services.auth_manager import account_json_path, get_active_account
+from services.auth_manager import get_active_account
 from controllers.hdmf_controller import HDMFController
+from shared.helpers.account_state import account_state_path, resolve_account_username
+from shared.helpers.json_state import load_json_dict, save_json_dict
 from widgets.glass_dialog import GlassDialog
 
 
@@ -53,7 +54,7 @@ class HDMFLoanPanel(QWidget):
     def __init__(self, parent=None, controller=None):
         super().__init__(parent)
         self.controller = controller or HDMFController()
-        self.current_username = (get_active_account() or {}).get("username") or "default"
+        self.current_username = resolve_account_username(get_active_account() or {})
         self._persist_enabled = False
         self.earnings_file_path = ""
         self.monitoring_file_path = ""
@@ -63,11 +64,7 @@ class HDMFLoanPanel(QWidget):
         self._persist_enabled = True
 
     def set_account(self, account):
-        if isinstance(account, dict):
-            username = account.get("username", "")
-        else:
-            username = str(account or "")
-        self.current_username = username or "default"
+        self.current_username = resolve_account_username(account)
         self._reset_ui_state()
         self._load_state()
 
@@ -255,7 +252,7 @@ class HDMFLoanPanel(QWidget):
         ).exec()
 
     def _state_path(self):
-        return account_json_path(self.current_username, "hdmf_loan_panel_state.json")
+        return account_state_path(self.current_username, "hdmf_loan_panel_state.json")
 
     def _load_state(self):
         # Clear form fields first to avoid stale data from previous account
@@ -263,17 +260,7 @@ class HDMFLoanPanel(QWidget):
         self.monitoring_file.clear()
         self.earnings_file_path = ""
         self.monitoring_file_path = ""
-        
-        path = self._state_path()
-        if not os.path.exists(path):
-            return
-        try:
-            with open(path, "r", encoding="utf-8") as input_file:
-                data = json.load(input_file)
-        except (OSError, json.JSONDecodeError):
-            return
-        if not isinstance(data, dict):
-            return
+        data = load_json_dict(self._state_path(), default={})
 
         self.earnings_file_path = str(data.get("earnings_file_path", "")).strip()
         self.monitoring_file_path = str(data.get("monitoring_file_path", "")).strip()
@@ -286,15 +273,11 @@ class HDMFLoanPanel(QWidget):
     def _save_state(self):
         if not getattr(self, "_persist_enabled", False):
             return
-        path = self._state_path()
-        os.makedirs(os.path.dirname(path), exist_ok=True)
-        with open(path, "w", encoding="utf-8") as output_file:
-            json.dump(
-                {
-                    "earnings_file_path": self.earnings_file_path,
-                    "monitoring_file_path": self.monitoring_file_path,
-                    "status": self.status_label.text(),
-                },
-                output_file,
-                indent=2,
-            )
+        save_json_dict(
+            self._state_path(),
+            {
+                "earnings_file_path": self.earnings_file_path,
+                "monitoring_file_path": self.monitoring_file_path,
+                "status": self.status_label.text(),
+            },
+        )

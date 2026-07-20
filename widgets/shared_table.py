@@ -1,11 +1,14 @@
 from PySide6.QtCore import QEvent, Qt, QPropertyAnimation, QEasingCurve, QTimer
 from PySide6.QtWidgets import (
+    QFrame,
     QGraphicsOpacityEffect,
     QHeaderView,
     QSizePolicy,
     QScrollBar,
     QTableWidget,
     QTableWidgetItem,
+    QVBoxLayout,
+    QWidget,
 )
 
 from constants.styles import AppStyles
@@ -174,6 +177,87 @@ class SharedTable(QTableWidget):
         self._overlay_vscrollbar.setSingleStep(self.verticalScrollBar().singleStep())
         self._overlay_vscrollbar.setVisible(maximum > 0)
         self._update_scrollbar_positions()
+
+    def _sync_horizontal_range(self, minimum, maximum):
+        self._overlay_hscrollbar.setRange(minimum, maximum)
+        self._overlay_hscrollbar.setPageStep(self.horizontalScrollBar().pageStep())
+        self._overlay_hscrollbar.setSingleStep(self.horizontalScrollBar().singleStep())
+        self._overlay_hscrollbar.setVisible(maximum > 0)
+        self._update_scrollbar_positions()
+
+    def _show_scrollbars(self):
+        if self.verticalScrollBar().maximum() > 0:
+            self._overlay_vscrollbar.fade_in()
+        if self.horizontalScrollBar().maximum() > 0:
+            self._overlay_hscrollbar.fade_in()
+
+    def _hide_scrollbars(self):
+        self._overlay_vscrollbar.fade_out()
+        self._overlay_hscrollbar.fade_out()
+
+    def _start_hide_timer(self):
+        self._hide_scrollbars_timer.start(900)
+
+    def set_columns(self, columns):
+        self.setColumnCount(len(columns))
+        self.setHorizontalHeaderLabels(columns)
+
+    def set_stretch_columns(self, *indices):
+        self.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
+        for index in indices:
+            self.horizontalHeader().setSectionResizeMode(index, QHeaderView.Stretch)
+
+    def set_resize_to_contents(self, *indices):
+        for index in indices:
+            self.horizontalHeader().setSectionResizeMode(index, QHeaderView.ResizeToContents)
+
+    def set_row_height(self, height):
+        self.verticalHeader().setDefaultSectionSize(height)
+
+    def set_empty_state(self, message="No records found"):
+        self.setRowCount(1)
+        self.clearContents()
+        empty_item = QTableWidgetItem(message)
+        empty_item.setFlags(empty_item.flags() & ~Qt.ItemIsEditable)
+        empty_item.setTextAlignment(Qt.AlignCenter | Qt.AlignVCenter)
+        self.setItem(0, 0, empty_item)
+        self.setSpan(0, 0, 1, max(1, self.columnCount()))
+        self.setRowHeight(0, max(72, AppStyles.TABLE_ROW_HEIGHT + 24))
+
+    def clear_rows(self):
+        self.setRowCount(0)
+        self.clearContents()
+
+
+class RoundedTableCard(QWidget):
+    def __init__(self, columns=None, parent=None):
+        super().__init__(parent)
+        self.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
+        self.setObjectName("TableCardWrapper")
+
+        self._layout = QVBoxLayout(self)
+        self._layout.setContentsMargins(0, 0, 0, 0)
+        self._layout.setSpacing(0)
+
+        self.card = QFrame(self)
+        self.card.setObjectName("TableCard")
+        self.card.setStyleSheet(AppStyles.TABLE_CARD)
+
+        self.card_layout = QVBoxLayout(self.card)
+        self.card_layout.setContentsMargins(12, 12, 12, 12)
+        self.card_layout.setSpacing(0)
+
+        self.table = SharedTable(columns or [], self.card)
+        self.table.setStyleSheet(AppStyles.TABLE_CANONICAL)
+        self.card_layout.addWidget(self.table)
+        self._layout.addWidget(self.card)
+
+    def setStyleSheet(self, style):
+        # Treat style calls as applying to the inner table.
+        self.table.setStyleSheet(style)
+
+    def __getattr__(self, name):
+        return getattr(self.table, name)
 
     def _sync_horizontal_range(self, minimum, maximum):
         self._overlay_hscrollbar.setRange(minimum, maximum)

@@ -1,6 +1,4 @@
 import calendar as cal_lib
-import json
-import os
 import uuid
 from datetime import datetime
 
@@ -25,7 +23,8 @@ from widgets.custom_reference_calendar import CustomReferenceCalendar
 from widgets.glass_panel import TrueGlassPanel
 from widgets.note_editor import NoteEditorDialog
 from widgets.note_row import NoteRowWidget
-from services.auth_manager import account_json_path
+from shared.helpers.account_state import account_state_path, resolve_account_username
+from shared.helpers.json_state import load_json_dict, save_json_dict
 from shared.ui import set_exit_icon
 
 
@@ -48,7 +47,7 @@ class RightPanelWidget(QWidget):
 
         right_panel_layout = QVBoxLayout(self)
         right_panel_layout.setContentsMargins(0, 0, 0, 0)
-        right_panel_layout.setSpacing(14)
+        right_panel_layout.setSpacing(8)
 
         self.calendar_view = CustomReferenceCalendar()
         self.calendar_view.setFixedWidth(300)
@@ -56,7 +55,7 @@ class RightPanelWidget(QWidget):
         log_card = TrueGlassPanel(border_radius=20)
         log_card_layout = QVBoxLayout(log_card)
         log_card_layout.setContentsMargins(16, 16, 16, 16)
-        log_card_layout.setSpacing(12)
+        log_card_layout.setSpacing(8)
 
         log_header = QLabel("Activity Log")
         log_header.setStyleSheet(AppStyles.SECTION_TITLE)
@@ -81,12 +80,11 @@ class RightPanelWidget(QWidget):
         activity_scroll.setWidget(self.activity_container)
         activity_scroll.setStyleSheet(self._scrollable_style())
         activity_scroll.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
-        activity_scroll.setMinimumHeight(150)
-        activity_scroll.setMinimumHeight(140)
+        activity_scroll.setMinimumHeight(190)
 
         notes_card = TrueGlassPanel(border_radius=20)
         notes_card.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Preferred)
-        notes_card.setMaximumHeight(220)
+        notes_card.setMaximumHeight(260)
         notes_layout = QVBoxLayout(notes_card)
         notes_layout.setContentsMargins(16, 16, 16, 16)
         notes_layout.setSpacing(8)
@@ -119,7 +117,7 @@ class RightPanelWidget(QWidget):
         notes_scroll.setWidget(self.notes_container)
         notes_scroll.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Preferred)
         notes_scroll.setStyleSheet(self._scrollable_style())
-        notes_scroll.setMinimumHeight(self.NOTES_VIEWPORT_HEIGHT)
+        notes_scroll.setMinimumHeight(160)
 
         self.add_note_btn = QPushButton("+ Add Item")
         self.add_note_btn.setCursor(Qt.PointingHandCursor)
@@ -138,34 +136,38 @@ class RightPanelWidget(QWidget):
         # Keep calendar fixed and prevent overlap by enforcing layout minimums
         log_card.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
         # ensure the log area has a usable minimum so it won't be squashed under the calendar
-        log_card.setMinimumHeight(160)
+        log_card.setMinimumHeight(230)
         # keep notes compact and prevent it stretching to take available space
-        notes_card.setMaximumHeight(220)
+        notes_card.setMaximumHeight(260)
 
         # keep references for runtime resizing logic
         self.log_card = log_card
         self.notes_card = notes_card
         self.activity_scroll = activity_scroll
+        self.notes_scroll = notes_scroll
+        self._activity_scroll_min_height = 190
+        self._notes_scroll_min_height = 160
+        self._notes_card_max_height = 260
+        self._calendar_height_max = self.calendar_view.height()
+        self._calendar_height_min = 270
+        self._notes_container_min_height = self.NOTES_VIEWPORT_HEIGHT
 
         # Make the layout respect children's minimum sizes
         right_panel_layout.setSizeConstraint(QLayout.SetMinimumSize)
 
         # Set a conservative minimum height for the whole panel so the calendar + gap
         # + activity area fit without overlapping when window is compacted
-        total_min = self.calendar_view.height() + 12 + log_card.minimumHeight() + min(notes_card.maximumHeight(), self.NOTES_VIEWPORT_HEIGHT)
+        total_min = self._calendar_height_min + 8 + self._activity_scroll_min_height + 18
         self.setMinimumHeight(total_min)
 
         right_panel_layout.addWidget(self.calendar_view, stretch=0)
-        right_panel_layout.addSpacing(12)
+        right_panel_layout.addSpacing(8)
         right_panel_layout.addWidget(log_card, stretch=1)
         right_panel_layout.addWidget(notes_card, stretch=0)
         self._load_notes_items()
 
     def set_account(self, username):
-        if isinstance(username, dict):
-            self.username = username.get("username", "default") or "default"
-        else:
-            self.username = username or "default"
+        self.username = resolve_account_username(username)
         self.state = self._load_state()
         self._rebuild_activity_rows()
         self._load_notes_items()
@@ -185,23 +187,22 @@ class RightPanelWidget(QWidget):
     def resizeEvent(self, event):
         super().resizeEvent(event)
         try:
-            gap = 12
-            cal_h = self.calendar_view.height()
-            avail = max(0, self.height() - cal_h - gap)
+            gap = 8
+            calendar_height = self._calendar_height_max
+            self.calendar_view.setFixedHeight(calendar_height)
+            avail = max(0, self.height() - calendar_height - gap)
 
-            activity_min = max(100, self.log_card.minimumHeight())
-            notes_max = self.notes_card.maximumHeight()
+            activity_min = max(self._activity_scroll_min_height, int(avail * 0.56))
+            notes_target = max(132, min(self._notes_card_max_height, int(avail * 0.30)))
+            notes_scroll_min = self._notes_scroll_min_height
+            notes_container_min = self._notes_container_min_height
+            activity_scroll_min = self._activity_scroll_min_height
 
-            # allocate notes height but preserve activity_min
-            notes_height = min(notes_max, max(0, avail - activity_min))
-
-            # if no room for notes, collapse notes and allow activity to take available space
-            if notes_height <= 0:
-                self.notes_card.setMaximumHeight(0)
-                self.log_card.setMinimumHeight(max(0, avail))
-            else:
-                self.notes_card.setMaximumHeight(notes_height)
-                self.log_card.setMinimumHeight(min(activity_min, max(0, avail - notes_height)))
+            self.activity_scroll.setMinimumHeight(activity_scroll_min)
+            self.notes_scroll.setMinimumHeight(notes_scroll_min)
+            self.notes_container.setMinimumHeight(notes_container_min)
+            self.notes_card.setMaximumHeight(max(72, notes_target + 56))
+            self.log_card.setMinimumHeight(activity_min)
         except Exception:
             pass
 
@@ -639,20 +640,12 @@ class RightPanelWidget(QWidget):
             self._position_status_notices()
 
     def _load_state(self):
-        path = account_json_path(self.username, "right_panel.json")
-        if not os.path.exists(path):
-            return {"notes": [], "checks": {}}
-        try:
-            with open(path, "r", encoding="utf-8") as input_file:
-                data = json.load(input_file)
-        except (OSError, json.JSONDecodeError):
-            return {"notes": [], "checks": {}}
-        return data if isinstance(data, dict) else {"notes": [], "checks": {}}
+        path = account_state_path(self.username, "right_panel.json")
+        return load_json_dict(path, default={"notes": [], "checks": {}})
 
     def _save_state(self):
-        path = account_json_path(self.username, "right_panel.json")
-        with open(path, "w", encoding="utf-8") as output_file:
-            json.dump(self.state, output_file, indent=2)
+        path = account_state_path(self.username, "right_panel.json")
+        save_json_dict(path, self.state)
 
     def _save_check(self, month_key, name, checked):
         checks = self.state.setdefault("checks", {})

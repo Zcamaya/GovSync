@@ -548,6 +548,10 @@ Each folder exists to keep concerns separated and to enforce a layered architect
 ✔ Employer-name capture, persistence, and account visibility
 ✔ Account-scoped UI reset and stale-field clearing for SSS, HDMF, and PhilHealth panels
 ✔ PhilHealth history and deletion scoped to the active account
+✔ Phase 1 regression tests added for auth update behavior, payroll import ownership, and SSS banner visibility
+✔ Phase 2 bug fixes for auth password updates, payroll duplicate ownership, SSS banner visibility, and PhilHealth session leakage
+✔ Phase 3 started with a shared JSON state helper for repeated per-account widget persistence
+✔ Phase 3 continued with shared helpers in earnings, SSS, right panel, and auth employer combo wiring
 
 ☐ Complete module coverage for history UI
 ☐ End-to-end PhilHealth workflow verification
@@ -560,11 +564,11 @@ Each folder exists to keep concerns separated and to enforce a layered architect
 
 ## 6. Current Task
 
-- Current feature being developed: Keep the project documentation aligned with the recent account-state isolation and employer-name improvements.
-- Current bug: No active bug is explicitly tracked; recent work focuses on preventing stale account state and cross-account data leakage in the UI.
-- Current objective: Maintain `AI_CONTEXT.md`, `README.md`, `CHANGELOG.md`, and project rules so future work can follow the current architecture and behavior.
-- Files involved: `AI_CONTEXT.md`, `README.md`, `CHANGELOG.md`, `PROJECT_RULES.md`, `services/auth_manager.py`, `storage/sqlite.py`, `widgets/sss_panel.py`, `widgets/hdmf_loan_panel.py`, `widgets/philhealth_panel.py`, `repositories/account_repository.py`.
-- Next action: Update the documentation after each meaningful code change and preserve the existing UI while fixing state or persistence issues.
+- Current feature being developed: Phase 3 duplication cleanup with low-risk helper extraction, while keeping runtime behavior stable.
+- Current bug: The highest-risk regressions have been addressed, but broader duplication and boundary cleanup still remains.
+- Current objective: Reduce repeated state-loading/saving code and repeated UI wiring without changing file formats or UI flow.
+- Files involved: `shared/helpers/json_state.py`, `widgets/hdmf_loan_panel.py`, `widgets/right_panel.py`, `widgets/earnings_panel.py`, `widgets/sss_panel.py`, `widgets/auth_windows.py`.
+- Next action: Continue cautiously with duplication cleanup only where the behavior surface is simple.
 
 ---
 
@@ -738,6 +742,109 @@ Completed:
 Next:
 - Keep markdown files current as further fixes land.
 - Preserve the existing UI while improving state handling and persistence.
+
+### Session 3
+Completed:
+- Added phase 1 regression tests covering auth account updates, payroll import ownership, and SSS banner visibility.
+- Marked known logic bugs as xfailed tests so refactor work can proceed with explicit guardrails.
+Next:
+- Fix the xfailed regressions during the next logic-focused phase.
+- Keep the docs synchronized with any behavior changes.
+
+### Session 4
+Completed:
+- Fixed account update password handling so password changes are rehashed before persistence.
+- Unified payroll duplicate lookup ownership with the same identifier stored in the import plan.
+- Restored the SSS account banner visibility when a linked SSS number exists.
+- Removed the PhilHealth panel's redundant session write and set selected history tracking when opening records.
+Next:
+- Confirm the updated regression tests and continue with broader refactor cleanup.
+- Keep the docs synchronized with any behavior changes.
+
+### Session 5
+Completed:
+- Added a shared JSON state helper for repeated widget persistence.
+- Swapped HDMF loan panel and right panel state load/save logic to the shared helper without changing file layout.
+Next:
+- Expand duplication cleanup only when the code path is similarly low-risk.
+- Avoid changing user-visible behavior while consolidating helpers.
+
+### Session 6
+Completed:
+- Reused the shared JSON helper in the earnings panel and SSS panel.
+- Extracted shared employer combo wiring in the auth UI to reduce duplicate setup code.
+- Consolidated repeated auth account registration branching into one helper.
+- Removed an unused import from the right panel cleanup.
+Next:
+- Keep refactoring cautious and behavior-preserving.
+- Only move into riskier structural cleanup after the current helpers settle.
+
+### Session 7
+Completed:
+- Added a shared account username resolver for panels that only need normalized account state switching.
+- Reused the resolver in the earnings panel, HDMF loan panel, right panel, and PhilHealth panel.
+Next:
+- Keep phase 4 limited to similarly low-risk helper extraction.
+- Avoid broader structural edits unless we have a clearly isolated duplicate pattern.
+
+### Session 8
+Completed:
+- Reused the shared account username resolver for panel startup defaults in earnings, HDMF loan, and SSS.
+Next:
+- Continue with only isolated, behavior-preserving duplicate removal.
+- Stop before touching shared flows that also carry panel-specific state.
+
+### Session 9
+Completed:
+- Added a shared account-state path helper to keep per-account panel JSON path construction consistent.
+- Reused that helper in earnings, HDMF loan, right panel, and SSS state persistence.
+Next:
+- Keep future refactors similarly small and reversible.
+- Avoid broad orchestration changes unless they are separately justified.
+
+### Session 10
+Completed:
+- Made the employee records panel load data off the UI thread with a queued refresh path.
+- Reset employee list pagination when filters change so narrowing results does not land on empty pages.
+- Fixed employee detail history lookup to prefer the selected row's employer context.
+- Restricted the auth shell drag behavior to the header area only.
+Next:
+- Keep the remaining UI fixes similarly conservative.
+- Check other fixed-size layouts for clipping only after the current changes settle.
+
+### Session 11
+Completed:
+- Fixed the authenticated session write so the active account updates immediately after login.
+- Restored the PhilHealth popup minimum width after testing the safer session-state fix.
+Next:
+- Continue looking for isolated UI state bugs before touching broad layout structure.
+- Avoid shrinking table dialogs below the space needed for their visible columns.
+
+### Session 12
+Completed:
+- Rebuilt the employee records paginator with clean text and compact-mode support.
+- Added responsive footer sizing in the employee records panel so the table and paginator compress together.
+- Made the right panel calendar, activity log, and notes section shrink dynamically when the window height is tight.
+Next:
+- Keep testing the smallest window size against clipped content before widening the scope again.
+- Only touch other fixed-size widgets if they show the same kind of overflow pressure.
+
+### Session 13
+Completed:
+- Relaxed the right panel notes inner container minimum height in compact mode so the bottom notes area can actually collapse instead of clipping offscreen.
+- Kept the notes stack expandable again when the panel has room, so the normal layout still looks the same.
+Next:
+- Watch for any other nested scroll areas that retain hidden minimum heights during resize.
+- Avoid reintroducing fixed minimums inside panels that already have runtime resize logic.
+
+### Session 14
+Completed:
+- Added compact-mode resizing to the employee records header so the stats and filters use less vertical space when the window is short.
+- Tightened the employee records footer and table row heights in compact mode so the pagination bar can stay visible.
+- Removed the right panel's layout minimum-size constraint and made its calendar, activity log, and notes shrink from the actual window height.
+Next:
+- Verify the smallest window size again and keep trimming only the remaining hard-coded floors.
+- Avoid reintroducing layout constraints that force hidden spacer space below the visible content.
 
 ---
 

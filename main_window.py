@@ -18,7 +18,7 @@ from core.page_factory import PageFactory
 from core.window_state_manager import WindowStateManager
 from widgets.glass_dialog import GlassDialog
 from shared.ui import set_exit_icon, set_maximize_icon, set_minimize_icon
-from config import APP_NAME, DEFAULT_WINDOW_HEIGHT, DEFAULT_WINDOW_WIDTH, MIN_WINDOW_HEIGHT, MIN_WINDOW_HEIGHT, MIN_WINDOW_WIDTH
+from config import APP_NAME, DEFAULT_WINDOW_HEIGHT, DEFAULT_WINDOW_WIDTH, MIN_WINDOW_HEIGHT, MIN_WINDOW_WIDTH
 from shared.resources import asset_path
 
 

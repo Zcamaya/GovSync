@@ -26,11 +26,12 @@ from PySide6.QtWidgets import (
 from constants.styles import AppStyles
 from controllers.philhealth_controller import PhilHealthController
 from widgets.glass_dialog import GlassDialog
-from widgets.shared_table import SharedTable
+from widgets.shared_table import RoundedTableCard, SharedTable
 from repositories.history_repository import HistoryRepository
 from repositories.statistics_repository import StatisticsRepository
 from services.philhealth_service import PhilHealthService
-from services.auth_manager import database_path, get_account, get_active_account, set_active_account
+from services.auth_manager import database_path, get_active_account
+from shared.helpers.account_state import resolve_account_username
 from shared.ui import set_exit_icon
 
 
@@ -275,7 +276,7 @@ class HistoryDetailCard(QFrame):
         header.setSectionResizeMode(3, QHeaderView.Stretch)
 
     def _create_table(self, data):
-        table = SharedTable([
+        table = RoundedTableCard([
             "No.",
             "Client",
             "PhilHealth No",
@@ -288,7 +289,7 @@ class HistoryDetailCard(QFrame):
         table.setEditTriggers(QTableWidget.NoEditTriggers)
         table.setAlternatingRowColors(True)
         table.setMinimumHeight(320)
-        table.setMinimumWidth(760)
+        table.setMinimumWidth(640)
         self._apply_table_widths(table)
         table.setStyleSheet(AppStyles.TABLE_CANONICAL)
         self._populate_table(table, data)
@@ -393,21 +394,15 @@ class PhilHealthPanel(QWidget):
             if label in {"Missing Names", "Newly Hired"}:
                 self.engine.tab_container.removeTab(index)
 
-    def _resolve_username(self, account_or_username):
-        if isinstance(account_or_username, dict):
-            return str(account_or_username.get("username", "")).strip() or "default"
-        return str(account_or_username or "").strip() or "default"
-
     def set_account(self, account_or_username):
-        self.current_username = self._resolve_username(account_or_username)
-        account = get_account(self.current_username) or {"username": self.current_username}
-        set_active_account(account)
+        self.current_username = resolve_account_username(account_or_username)
         self._reset_process_view()
         self.engine.load_history()
         self._restore_latest_process_state()
 
     def _show_history_detail_popup(self, record):
         headers = ["Client", "PhilHealth No", "Employee Name", "Birthdate"]
+        self.selected_history_record_id = record.get("id")
         popup = SingleTablePopup(
             f"Historical Records: {record.get('month_year', '')}",
             headers,

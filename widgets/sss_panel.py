@@ -1,4 +1,3 @@
-import json
 import os
 
 from PySide6.QtCore import QThread, Signal, Qt
@@ -25,9 +24,11 @@ from PySide6.QtWidgets import (
 )
 
 from constants.styles import AppStyles
-from widgets.shared_table import SharedTable
-from services.auth_manager import account_json_path, get_active_account
+from widgets.shared_table import RoundedTableCard, SharedTable
+from services.auth_manager import get_active_account
 from controllers.sss_controller import SSSController
+from shared.helpers.account_state import account_state_path, resolve_account_username
+from shared.helpers.json_state import load_json_dict, save_json_dict
 from services.sss_service import (
     SSSService,
     TXT_COLUMNS,
@@ -100,11 +101,17 @@ class SSSPanel(QWidget):
         super().__init__(parent)
         self.controller = controller or SSSController()
         self.dashboard_service = dashboard_service
-        self.current_username = (get_active_account() or {}).get("username") or "default"
+        self.current_username = resolve_account_username(get_active_account() or {})
         self._persist_enabled = False
         self.source_file_path = ""
         self.correction_file_path = ""
         self.txt_file_path = ""
+        # Holds the full set of loaded TXT rows (unfiltered)
+        self.current_txt_rows = []
+        # Holds the currently displayed (filtered) rows
+        self.filtered_rows = []
+        # Internal flag to suppress itemChanged handling during programmatic updates
+        self._suppress_table_signals = False
         self.selected_source_files = []
         self.bulk_worker = None
         self.worker = None
@@ -311,9 +318,20 @@ class SSSPanel(QWidget):
 
         viewer_header.addWidget(self.btn_import_txt)
         viewer_header.addWidget(self.btn_save_txt)
+        # Search bar for filtering loaded TXT rows
+        self.search_input = QLineEdit()
+        self.search_input.setPlaceholderText("Search TXT rows...")
+        self.search_input.setMinimumHeight(34)
+        self.search_input.textChanged.connect(self._apply_search_filter)
+        viewer_header.addWidget(self.search_input)
+
+        # Delete currently selected row(s)
+        self.btn_delete_row = self._secondary_button("Delete Row")
+        self.btn_delete_row.clicked.connect(self.delete_selected_row)
+        viewer_header.addWidget(self.btn_delete_row)
         viewer_layout.addLayout(viewer_header)
 
-        self.txt_table = SharedTable(TXT_COLUMNS, self)
+        self.txt_table = RoundedTableCard(TXT_COLUMNS, self)
         self.txt_table.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeToContents)
         self.txt_table.horizontalHeader().setStretchLastSection(True)
         self.txt_table.setAlternatingRowColors(False)
@@ -321,6 +339,8 @@ class SSSPanel(QWidget):
         self.txt_table.setEditTriggers(QAbstractItemView.AllEditTriggers)
         self.txt_table.setStyleSheet(AppStyles.TABLE_CANONICAL)
         viewer_layout.addWidget(self.txt_table, stretch=1)
+        # Keep table edits in sync with `current_txt_rows`
+        self.txt_table.itemChanged.connect(self._on_table_item_changed)
 
         self.progress_bar = QProgressBar()
         self.progress_bar.setTextVisible(False)
@@ -385,12 +405,14 @@ class SSSPanel(QWidget):
         sss_number = str(self.account_info.get("sss_number", "")).strip()
         if sss_number:
             self.employer_id.setText(format_employer_id(sss_number))
-        self.account_banner.setVisible(False)
-        if sss_number:
-            return
+            self.account_banner.setText(f"Linked SSS Number: {format_employer_id(sss_number)}")
+            self.account_banner.setVisible(True)
+        else:
+            self.account_banner.setText("Linked SSS Number: Not connected")
+            self.account_banner.setVisible(False)
 
     def _state_path(self):
-        return account_json_path(self.current_username, "sss_panel_state.json")
+        return account_state_path(self.current_username, "sss_panel_state.json")
 
     def _load_state(self):
         # Clear form fields first to avoid stale data from previous account
@@ -400,17 +422,7 @@ class SSSPanel(QWidget):
         self.correction_file.clear()
         self.correction_file_path = ""
         self.txt_file_path = ""
-        
-        path = self._state_path()
-        if not os.path.exists(path):
-            return
-        try:
-            with open(path, "r", encoding="utf-8") as input_file:
-                data = json.load(input_file)
-        except (OSError, json.JSONDecodeError):
-            return
-        if not isinstance(data, dict):
-            return
+        data = load_json_dict(self._state_path(), default={})
 
         self.selected_source_files = [str(item) for item in data.get("selected_source_files", []) if str(item).strip()]
         self.source_queue.clear()
@@ -446,9 +458,9 @@ class SSSPanel(QWidget):
     def _save_state(self):
         if not getattr(self, "_persist_enabled", False):
             return
-        path = self._state_path()
-        os.makedirs(os.path.dirname(path), exist_ok=True)
-        data = {
+        save_json_dict(
+            self._state_path(),
+            {
             "selected_source_files": self.selected_source_files,
             "output_folder": self.output_folder.text().strip(),
             "correction_file_path": self.correction_file_path,
@@ -458,9 +470,8 @@ class SSSPanel(QWidget):
             "year": self.year_combo.currentText(),
             "txt_file_path": self.txt_file_path,
             "status": self.status_label.text(),
-        }
-        with open(path, "w", encoding="utf-8") as output_file:
-            json.dump(data, output_file, indent=2)
+            },
+        )
 
     def _path_row(self, form_layout, label, placeholder, browse_callback):
         row = QWidget()
@@ -574,8 +585,11 @@ class SSSPanel(QWidget):
             GlassDialog(self, "TXT Import Error", str(exc)).exec()
             return
 
+        # Store full rows and render
+        self.current_txt_rows = rows
+        self.filtered_rows = list(rows)
         self.txt_file_path = path
-        self._populate_txt_table(rows)
+        self._render_txt_table(self.filtered_rows)
         self.status_label.setText(f"Loaded {len(rows)} TXT row(s).")
         self._save_state()
 
@@ -595,7 +609,8 @@ class SSSPanel(QWidget):
             if not path:
                 return
 
-        rows = self._table_rows()
+        # Save from the underlying data model (not just visible rows)
+        rows = list(self.current_txt_rows)
         try:
             output_path, written_rows = self.controller.save_txt(rows, path)
         except Exception as exc:
@@ -608,13 +623,97 @@ class SSSPanel(QWidget):
         GlassDialog(self, "TXT Saved", f"Saved {written_rows} row(s).\n\n{output_path}").exec()
 
     def _populate_txt_table(self, rows):
-        self.txt_table.setRowCount(len(rows))
+        # Deprecated: use _render_txt_table for direct rendering.
+        self.current_txt_rows = rows
+        self.filtered_rows = list(rows)
+        self._render_txt_table(rows)
 
-        for row_index, row in enumerate(rows):
-            for column_index, column_name in enumerate(TXT_COLUMNS):
-                item = QTableWidgetItem(str(row.get(column_name, "")))
+    def _render_txt_table(self, rows):
+        # Render rows into the table while avoiding firing itemChanged
+        self._suppress_table_signals = True
+        try:
+            self.txt_table.setRowCount(len(rows))
 
-                self.txt_table.setItem(row_index, column_index, item)
+            for row_index, row in enumerate(rows):
+                for column_index, column_name in enumerate(TXT_COLUMNS):
+                    item = QTableWidgetItem(str(row.get(column_name, "")))
+                    self.txt_table.setItem(row_index, column_index, item)
+        finally:
+            self._suppress_table_signals = False
+
+        # Clear selection after rendering
+        self.txt_table.clearSelection()
+
+    def _on_table_item_changed(self, item: QTableWidgetItem):
+        if getattr(self, "_suppress_table_signals", False):
+            return
+
+        row_idx = item.row()
+        col_idx = item.column()
+        if not (0 <= row_idx < len(self.filtered_rows)):
+            return
+
+        column_name = TXT_COLUMNS[col_idx]
+        new_value = item.text().strip() if item.text().strip() else "NULL"
+
+        # Update the visible (filtered) row object — this mutates the same dict in current_txt_rows
+        try:
+            self.filtered_rows[row_idx][column_name] = new_value
+        except Exception:
+            return
+
+        # No further action needed because filtered_rows references current_txt_rows entries
+        # Update UI status
+        self.status_label.setText("Edited row saved to memory.")
+        self._save_state()
+
+    def _apply_search_filter(self):
+        query = self.search_input.text().strip().lower()
+        if not query:
+            self.filtered_rows = list(self.current_txt_rows)
+        else:
+            matched = []
+            for row in self.current_txt_rows:
+                for val in row.values():
+                    if query in (str(val) or "").lower():
+                        matched.append(row)
+                        break
+            self.filtered_rows = matched
+        self._render_txt_table(self.filtered_rows)
+
+    def delete_selected_row(self):
+        selected_ranges = self.txt_table.selectedRanges()
+        if not selected_ranges:
+            GlassDialog(self, "Notice", "Select a row to delete.").exec()
+            return
+
+        # Collect selected row indexes (visible indexes)
+        rows_to_delete = set()
+        for sel in selected_ranges:
+            for r in range(sel.topRow(), sel.bottomRow() + 1):
+                rows_to_delete.add(r)
+
+        # Map visible indexes to underlying rows in filtered_rows
+        to_remove = []
+        for idx in sorted(rows_to_delete, reverse=True):
+            if 0 <= idx < len(self.filtered_rows):
+                to_remove.append(self.filtered_rows[idx])
+
+        # Remove from full rows list
+        for row in to_remove:
+            try:
+                self.current_txt_rows.remove(row)
+            except ValueError:
+                # fallback: remove by matching values
+                for existing in list(self.current_txt_rows):
+                    if all(str(existing.get(k, "")) == str(row.get(k, "")) for k in TXT_COLUMNS):
+                        self.current_txt_rows.remove(existing)
+                        break
+
+        # Reapply current filter to refresh view
+        self._apply_search_filter()
+        self.status_label.setText(f"Deleted {len(to_remove)} row(s).")
+        self._save_state()
 
     def _table_rows(self):
         rows = []

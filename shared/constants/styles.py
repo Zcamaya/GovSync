@@ -695,6 +695,17 @@ class AppStyles:
         }
     """
 
+    TABLE_CARD = """
+        QFrame#TableCard {
+            background: rgba(8, 14, 26, 0.96);
+            border: 1px solid rgba(71, 85, 105, 0.45);
+            border-radius: 18px;
+        }
+        QFrame#TableCard:hover {
+            border-color: rgba(59, 130, 246, 0.36);
+        }
+    """
+
     TABLE_CANONICAL = TABLE_BASE + TABLE_SCROLLBAR + """
         QTableWidget {
             border: 1px solid rgba(71, 85, 105, 0.42);

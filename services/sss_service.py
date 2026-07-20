@@ -18,7 +18,8 @@ class SSSService:
         return load_sss_txt(file_path)
 
     def save_txt(self, rows, file_path):
-        return save_sss_txt(rows, file_path)
+        # `save_sss_txt` expects (file_path, rows) — ensure correct argument order
+        return save_sss_txt(file_path, rows)
 
 
 # Re-export SSS helper constants for widget use and cross-component encapsulation.

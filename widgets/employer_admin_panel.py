@@ -17,7 +17,7 @@ from PySide6.QtWidgets import (
 
 from constants.styles import AppStyles
 from widgets.glass_dialog import GlassDialog
-from widgets.shared_table import SharedTable
+from widgets.shared_table import RoundedTableCard, SharedTable
 
 
 class EmployerFormDialog(QDialog):
@@ -196,7 +196,7 @@ class EmployerAdminPanel(QWidget):
         layout.addWidget(header)
         layout.addWidget(sub)
 
-        self.table = SharedTable([
+        self.table = RoundedTableCard([
             "Name",
             "Address",
             "TIN",

@@ -35,7 +35,47 @@ from services.auth_manager import (
 from shared.resources import asset_path
 from shared.ui import set_exit_icon
 from constants.styles import AppStyles
-from widgets.shared_table import SharedTable
+from widgets.shared_table import RoundedTableCard, SharedTable
+
+
+def _populate_employer_combo(combo, employer_controller):
+    combo.clear()
+    combo.addItem("", None)
+    if employer_controller is None:
+        return
+    try:
+        employers = employer_controller.list_active_employers() or []
+    except Exception:
+        employers = []
+    for employer in employers:
+        combo.addItem(employer.name, employer.id)
+
+
+def _selected_employer_data(combo):
+    return combo.currentText().strip(), combo.currentData()
+
+
+def _register_account_flow(controller, username, password, employer_name, employer_id):
+    if controller:
+        controller.register(
+            username,
+            password,
+            "",
+            "",
+            "",
+            employer_name,
+            employer_id,
+        )
+    else:
+        register_account(
+            username,
+            password,
+            "",
+            "",
+            "",
+            employer_name,
+            employer_id,
+        )
 
 
 def logo_pixmap(size):
@@ -211,6 +251,7 @@ class AuthShellMixin:
         self.setWindowFlags(Qt.FramelessWindowHint | Qt.Window)
         self.setAttribute(Qt.WA_TranslucentBackground)
         self.drag_pos = QPoint()
+        self._dragging_window = False
         self.setStyleSheet(SHELL_STYLE)
 
         shell = QFrame()
@@ -263,14 +304,29 @@ class AuthShellMixin:
         return shell_layout
 
     def mousePressEvent(self, event):
-        if event.button() == Qt.LeftButton:
+        if event.button() == Qt.LeftButton and event.position().y() <= 56:
             self.drag_pos = event.globalPosition().toPoint()
+            self._dragging_window = True
+            event.accept()
+            return
+        super().mousePressEvent(event)
 
     def mouseMoveEvent(self, event):
-        if event.buttons() == Qt.LeftButton:
+        if self._dragging_window and event.buttons() == Qt.LeftButton:
             next_pos = self.pos() + event.globalPosition().toPoint() - self.drag_pos
             self.move(next_pos)
             self.drag_pos = event.globalPosition().toPoint()
+            event.accept()
+            return
+        super().mouseMoveEvent(event)
+
+    def mouseReleaseEvent(self, event):
+        if event.button() == Qt.LeftButton:
+            self._dragging_window = False
+            self.drag_pos = QPoint()
+            event.accept()
+            return
+        super().mouseReleaseEvent(event)
 
 
 class LoginDialog(QDialog, AuthShellMixin):
@@ -485,27 +541,15 @@ class LoginDialog(QDialog, AuthShellMixin):
         self.accept()
 
     def _populate_employer_combo(self):
-        self.register_employer_combo.clear()
-        self.register_employer_combo.addItem("", None)
-        if self.employer_controller is None:
-            return
-        try:
-            employers = self.employer_controller.list_active_employers() or []
-        except Exception:
-            employers = []
-        for employer in employers:
-            self.register_employer_combo.addItem(employer.name, employer.id)
+        _populate_employer_combo(self.register_employer_combo, self.employer_controller)
 
     def _create_account(self):
         try:
-            employer_name = self.register_employer_combo.currentText().strip()
-            employer_id = self.register_employer_combo.currentData()
-            register_account(
+            employer_name, employer_id = _selected_employer_data(self.register_employer_combo)
+            _register_account_flow(
+                self.controller,
                 self.register_username.text(),
                 self.register_password.text(),
-                "",
-                "",
-                "",
                 employer_name,
                 employer_id,
             )
@@ -805,41 +849,18 @@ class LoginPage(QWidget):
         self.authenticated.emit(role, username)
 
     def _populate_employer_combo(self):
-        self.register_employer_combo.clear()
-        self.register_employer_combo.addItem("", None)
-        if self.employer_controller is None:
-            return
-        try:
-            employers = self.employer_controller.list_active_employers() or []
-        except Exception:
-            employers = []
-        for employer in employers:
-            self.register_employer_combo.addItem(employer.name, employer.id)
+        _populate_employer_combo(self.register_employer_combo, self.employer_controller)
 
     def _create_account(self):
         try:
-            employer_name = self.register_employer_combo.currentText().strip()
-            employer_id = self.register_employer_combo.currentData()
-            if self.controller:
-                self.controller.register(
-                    self.register_username.text(),
-                    self.register_password.text(),
-                    "",
-                    "",
-                    "",
-                    employer_name,
-                    employer_id,
-                )
-            else:
-                register_account(
-                    self.register_username.text(),
-                    self.register_password.text(),
-                    "",
-                    "",
-                    "",
-                    employer_name,
-                    employer_id,
-                )
+            employer_name, employer_id = _selected_employer_data(self.register_employer_combo)
+            _register_account_flow(
+                self.controller,
+                self.register_username.text(),
+                self.register_password.text(),
+                employer_name,
+                employer_id,
+            )
         except ValueError as exc:
             self.register_message.setStyleSheet(
                 "color: #fb7185; font: 700 11px 'Segoe UI';"
@@ -979,7 +1000,7 @@ class SuperAdminPage(QWidget):
         """)
         layout.addWidget(self.account_list, stretch=1)
 
-        self.table = SharedTable(["Username", "Password", "Employer Name"], self)
+        self.table = RoundedTableCard(["Username", "Password", "Employer Name"], self)
         table_header = self.table.horizontalHeader()
         table_header.setDefaultAlignment(Qt.AlignLeft | Qt.AlignVCenter)
         table_header.setSectionResizeMode(QHeaderView.Stretch)
@@ -1134,16 +1155,7 @@ class RegisterDialog(QDialog, AuthShellMixin):
         shell_layout.addStretch()
 
     def _populate_employer_combo(self):
-        self.employer_combo.clear()
-        self.employer_combo.addItem("", None)
-        if self.employer_controller is None:
-            return
-        try:
-            employers = self.employer_controller.list_active_employers() or []
-        except Exception:
-            employers = []
-        for employer in employers:
-            self.employer_combo.addItem(employer.name, employer.id)
+        _populate_employer_combo(self.employer_combo, self.employer_controller)
 
     def showEvent(self, event):
         # refresh employers each time the dialog is shown
@@ -1155,28 +1167,14 @@ class RegisterDialog(QDialog, AuthShellMixin):
 
     def _create(self):
         try:
-            employer_name = self.employer_combo.currentText().strip()
-            employer_id = self.employer_combo.currentData()
-            if self.controller:
-                self.controller.register(
-                    self.username.text(),
-                    self.password.text(),
-                    "",
-                    "",
-                    "",
-                    employer_name,
-                    employer_id,
-                )
-            else:
-                register_account(
-                    self.username.text(),
-                    self.password.text(),
-                    "",
-                    "",
-                    "",
-                    employer_name,
-                    employer_id,
-                )
+            employer_name, employer_id = _selected_employer_data(self.employer_combo)
+            _register_account_flow(
+                self.controller,
+                self.username.text(),
+                self.password.text(),
+                employer_name,
+                employer_id,
+            )
         except ValueError as exc:
             QMessageBox.warning(self, "Invalid Account", str(exc))
             return
@@ -1241,7 +1239,7 @@ class SuperAdminWindow(QWidget, AuthShellMixin):
         sub = QLabel("Super admin can view and delete registered user accounts.")
         sub.setStyleSheet("color: #94a3b8;")
 
-        self.table = SharedTable([
+        self.table = RoundedTableCard([
             "Username",
             "Password",
             "SSS Number",

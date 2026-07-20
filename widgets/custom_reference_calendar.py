@@ -115,6 +115,7 @@ class CustomReferenceCalendar(QFrame):
                 label = QLabel(str(day))
                 label.setAlignment(Qt.AlignCenter)
                 label.setFixedSize(28, 28)
+                label.setFont(QFont("Segoe UI", 8, QFont.Bold))
 
                 is_today = (
                     day == self.now.day

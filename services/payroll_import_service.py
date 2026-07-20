@@ -9,7 +9,6 @@ from openpyxl import load_workbook
 from models.payroll_import import PayrollImport, PayrollImportPlan
 from repositories.payroll_repository import PayrollRepository
 from services.auth_manager import get_active_account
-from services.dashboard_service import get_account_username
 
 
 REQUIRED_EARNINGS_COLUMNS = [
@@ -125,8 +124,6 @@ class PayrollImportService:
     ) -> PayrollImportPlan:
         account = get_active_account() or {}
         employer_id = str(account.get("employer_id") or account.get("employer_name") or account.get("username") or "default")
-        employer_name = str(account.get("employer_name") or "")
-        account_username = get_account_username()
         frame, _ = self.inspect_workbook(file_path)
         import_id = str(uuid.uuid4())
         file_hash = self.repository.file_hash(file_path)
@@ -138,7 +135,7 @@ class PayrollImportService:
 
         existing_import = self.repository.get_import_by_hash(file_hash)
         existing_payroll = self.repository.get_payroll_import(
-            employer_id=account_username,
+            employer_id=employer_id,
             applicable_month=applicable_month,
             from_date=from_date,
             to_date=to_date,
@@ -146,7 +143,7 @@ class PayrollImportService:
         )
         if existing_payroll is None:
             existing_payroll = self.repository.get_payroll_import_for_month(
-                employer_id=account_username,
+                employer_id=employer_id,
                 applicable_month=applicable_month,
                 client_id=client_id,
             )

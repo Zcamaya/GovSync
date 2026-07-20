@@ -1,4 +1,3 @@
-import json
 import os
 import threading
 
@@ -22,9 +21,11 @@ from PySide6.QtWidgets import (
 )
 
 from constants.styles import AppStyles
-from services.auth_manager import account_json_path, get_active_account
+from services.auth_manager import get_active_account
 from services.sss_engine import get_default_month_and_year, get_months_list, get_years_list
 from controllers.payroll_controller import PayrollController
+from shared.helpers.account_state import account_state_path, resolve_account_username
+from shared.helpers.json_state import load_json_dict, save_json_dict
 from widgets.glass_dialog import GlassDialog
 
 
@@ -114,17 +115,13 @@ class EarningsPanel(QWidget):
         self.selected_files = []
         self.controller = controller or PayrollController()
         self.dashboard_service = dashboard_service
-        self.current_username = (get_active_account() or {}).get("username") or "default"
+        self.current_username = resolve_account_username(get_active_account() or {})
         self.worker = None
         self._setup_ui()
         self._load_state()
 
     def set_account(self, account):
-        if isinstance(account, dict):
-            username = account.get("username", "")
-        else:
-            username = str(account or "")
-        self.current_username = username or "default"
+        self.current_username = resolve_account_username(account)
         self._load_state()
 
     def _setup_ui(self):
@@ -484,19 +481,10 @@ class EarningsPanel(QWidget):
         GlassDialog(self, "Processing Summary", message).exec()
 
     def _state_path(self):
-        return account_json_path(self.current_username, "earnings_panel_state.json")
+        return account_state_path(self.current_username, "earnings_panel_state.json")
 
     def _load_state(self):
-        path = self._state_path()
-        if not os.path.exists(path):
-            return
-        try:
-            with open(path, "r", encoding="utf-8") as input_file:
-                data = json.load(input_file)
-        except (OSError, json.JSONDecodeError):
-            return
-        if not isinstance(data, dict):
-            return
+        data = load_json_dict(self._state_path(), default={})
         files = data.get("selected_files", [])
         if isinstance(files, list):
             self.selected_files = [str(item) for item in files if str(item).strip()]
@@ -506,14 +494,13 @@ class EarningsPanel(QWidget):
         self.status_label.setText(data.get("status", f"{len(self.selected_files)} file(s) ready"))
 
     def _save_state(self):
-        path = self._state_path()
-        data = {
-            "selected_files": self.selected_files,
-            "status": self.status_label.text(),
-        }
-        os.makedirs(os.path.dirname(path), exist_ok=True)
-        with open(path, "w", encoding="utf-8") as output_file:
-            json.dump(data, output_file, indent=2)
+        save_json_dict(
+            self._state_path(),
+            {
+                "selected_files": self.selected_files,
+                "status": self.status_label.text(),
+            },
+        )
 
     def _set_processing_enabled(self, enabled):
         self.btn_add_file.setEnabled(enabled)

@@ -20,7 +20,7 @@ from services.auth_manager import database_path, get_active_account
 from services.dashboard_service import get_account_username
 from shared.ui import set_exit_icon
 from constants.styles import AppStyles
-from widgets.shared_table import SharedTable
+from widgets.shared_table import RoundedTableCard, SharedTable
 
 
 # ---------------------------------------------------------

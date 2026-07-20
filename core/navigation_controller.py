@@ -53,6 +53,7 @@ class NavigationController:
             return
 
         account = get_account(username) or {"username": username}
+        set_active_account(account)
         self.right_column.set_account(account)
         self.philhealth_panel.set_account(account)
         self.workspace_widget.set_account_name(account.get("username", username))
