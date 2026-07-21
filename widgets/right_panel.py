@@ -106,7 +106,7 @@ class RightPanelWidget(QWidget):
         activity_scroll.setFrameShape(QFrame.NoFrame)
         activity_scroll.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
         activity_scroll.setVerticalScrollBarPolicy(Qt.ScrollBarAsNeeded)
-        activity_scroll.setViewportMargins(0, 0, 4, 0)
+        activity_scroll.setViewportMargins(0, 0, 8, 0)
         activity_scroll.setWidget(self.activity_container)
         activity_scroll.setStyleSheet(self._scrollable_style())
         activity_scroll.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
@@ -148,7 +148,7 @@ class RightPanelWidget(QWidget):
         notes_scroll.setFrameShape(QFrame.NoFrame)
         notes_scroll.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
         notes_scroll.setVerticalScrollBarPolicy(Qt.ScrollBarAsNeeded)
-        notes_scroll.setViewportMargins(0, 0, 4, 0)
+        notes_scroll.setViewportMargins(0, 0, 8, 0)
         notes_scroll.setWidget(self.notes_container)
         notes_scroll.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Preferred)
         notes_scroll.setStyleSheet(self._scrollable_style())
@@ -694,16 +694,63 @@ class RightPanelWidget(QWidget):
         return """
             QScrollArea {
                 background: transparent;
-                border: none;
+                border: 1px solid rgba(148, 163, 184, 0.14);
+                border-radius: 14px;
             }
             QScrollArea::viewport {
-                background: transparent;
+                background: rgba(10, 18, 32, 0.12);
                 border-radius: 14px;
             }
             QScrollArea > QWidget > QWidget {
                 background: transparent;
             }
-        """ + self._scrollbar_style()
+            QScrollArea QScrollBar:vertical {
+                background: transparent;
+                border: none;
+                width: 8px;
+                margin: 4px 2px 4px 0px;
+            }
+            QScrollArea QScrollBar::handle:vertical {
+                background: rgba(107, 175, 141, 0.34);
+                border-radius: 6px;
+                min-height: 24px;
+            }
+            QScrollArea QScrollBar::handle:vertical:hover,
+            QScrollArea QScrollBar::handle:vertical:pressed {
+                background: rgba(107, 175, 141, 0.54);
+            }
+            QScrollArea QScrollBar::add-line:vertical,
+            QScrollArea QScrollBar::sub-line:vertical,
+            QScrollArea QScrollBar::add-page:vertical,
+            QScrollArea QScrollBar::sub-page:vertical {
+                background: transparent;
+                border: none;
+                height: 0;
+            }
+            QScrollArea QScrollBar:horizontal {
+                background: transparent;
+                border: none;
+                height: 8px;
+                margin: 0px 4px 2px 4px;
+            }
+            QScrollArea QScrollBar::handle:horizontal {
+                background: rgba(107, 175, 141, 0.34);
+                border-radius: 6px;
+                min-width: 24px;
+            }
+            QScrollArea QScrollBar::handle:horizontal:hover,
+            QScrollArea QScrollBar::handle:horizontal:pressed {
+                background: rgba(107, 175, 141, 0.54);
+            }
+            QScrollArea QScrollBar::add-line:horizontal,
+            QScrollArea QScrollBar::sub-line:horizontal,
+            QScrollArea QScrollBar::add-page:horizontal,
+            QScrollArea QScrollBar::sub-page:horizontal {
+                background: transparent;
+                border: none;
+                width: 0;
+            }
+        """
 
     def _scrollbar_style(self):
-        return AppStyles.SCROLLBAR
+        return ""

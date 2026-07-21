@@ -278,20 +278,20 @@ class SSSPanel(QWidget):
             QListWidget {
                 background: rgba(2, 6, 23, 0.46);
                 border: 1px solid rgba(148, 163, 184, 0.22);
-                border-radius: 10px;
+                border-radius: 12px;
                 color: #dbeafe;
                 font: 12px 'Segoe UI';
-                padding: 10px;
+                padding: 10px 8px;
                 outline: none;
             }
             QListWidget::viewport {
-                border-radius: 10px;
+                border-radius: 12px;
                 background: transparent;
             }
             QListWidget::item {
-                padding: 8px 10px;
-                margin: 2px 0;
-                border-radius: 6px;
+                padding: 8px 12px;
+                margin: 2px 4px;
+                border-radius: 10px;
             }
             QListWidget::item:selected {
                 background: rgba(20, 184, 166, 0.22);
@@ -482,17 +482,17 @@ class SSSPanel(QWidget):
         row.setStyleSheet("border: none; background: transparent;")
         row.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed)
         row_layout = QHBoxLayout(row)
-        row_layout.setContentsMargins(0, 0, 6, 0)
-        row_layout.setSpacing(12)
+        row_layout.setContentsMargins(0, 0, 0, 0)
+        row_layout.setSpacing(8)
 
         line_edit = QLineEdit()
         line_edit.setPlaceholderText(placeholder)
         line_edit.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed)
-        line_edit.setMinimumHeight(36)
+        line_edit.setMinimumHeight(34)
 
         button = QPushButton("Browse")
         button.setCursor(Qt.PointingHandCursor)
-        button.setFixedSize(98, 36)
+        button.setFixedSize(86, 34)
         button.setStyleSheet(AppStyles.SECONDARY_BUTTON)
         button.clicked.connect(browse_callback)
 

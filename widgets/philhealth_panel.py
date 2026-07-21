@@ -1,8 +1,8 @@
 import os
 from datetime import datetime
 
-from PySide6.QtCore import QPoint, QTimer, Qt, Signal
-from PySide6.QtGui import QColor, QFont
+from PySide6.QtCore import QPoint, QTimer, Qt, Signal, QRectF
+from PySide6.QtGui import QColor, QFont, QPainterPath, QRegion
 from PySide6.QtWidgets import (
     QApplication,
     QAbstractItemView,
@@ -42,6 +42,7 @@ class SingleTablePopup(QDialog):
         self.setWindowFlags(Qt.Dialog | Qt.FramelessWindowHint)
         self.setModal(True)
         self.setAttribute(Qt.WA_DeleteOnClose)
+        self.setAttribute(Qt.WA_StyledBackground, True)
         self.setMinimumSize(860, 560)
         self.drag_pos = QPoint()
         self.headers = list(headers)
@@ -70,6 +71,22 @@ class SingleTablePopup(QDialog):
             layout.addWidget(tab_widget)
         else:
             layout.addWidget(self._create_table(data))
+
+    def resizeEvent(self, event):
+        super().resizeEvent(event)
+        self._apply_round_mask(self, 20)
+
+    def showEvent(self, event):
+        super().showEvent(event)
+        self._apply_round_mask(self, 20)
+
+    def _apply_round_mask(self, widget, radius: int):
+        rect = widget.rect()
+        if rect.width() <= 0 or rect.height() <= 0:
+            return
+        path = QPainterPath()
+        path.addRoundedRect(QRectF(rect), radius, radius)
+        widget.setMask(QRegion(path.toFillPolygon().toPolygon()))
 
     def _create_table(self, data):
         table = DraggableTableWidget(["No."] + self.headers)

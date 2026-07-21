@@ -143,21 +143,21 @@ class EarningsPanel(QWidget):
             QListWidget {
                 background: rgba(20, 43, 37, 0.64);
                 border: 1px solid rgba(148, 163, 184, 0.22);
-                border-radius: 10px;
+                border-radius: 12px;
                 color: #dbeafe;
                 font: 12px 'Segoe UI';
-                padding: 10px;
+                padding: 10px 8px;
                 outline: none;
             }
             QListWidget::viewport {
-                border-radius: 10px;
+                border-radius: 12px;
                 background: transparent;
             }
             QListWidget::item {
                 border: none;
-                border-radius: 8px;
-                padding: 8px 10px;
-                margin: 2px 0;
+                border-radius: 10px;
+                padding: 8px 12px;
+                margin: 2px 4px;
             }
             QListWidget::item:selected {
                 background: rgba(16, 185, 129, 0.22);

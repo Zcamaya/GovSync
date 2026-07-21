@@ -1,4 +1,4 @@
-from PySide6.QtCore import QEvent, Qt, QPropertyAnimation, QEasingCurve, QTimer
+from PySide6.QtCore import QEvent, Qt, QPropertyAnimation, QEasingCurve, QTimer, QRectF
 from PySide6.QtWidgets import (
     QFrame,
     QGraphicsOpacityEffect,
@@ -10,6 +10,7 @@ from PySide6.QtWidgets import (
     QVBoxLayout,
     QWidget,
 )
+from PySide6.QtGui import QPainterPath, QRegion
 
 from constants.styles import AppStyles
 
@@ -77,6 +78,8 @@ class SharedTable(QTableWidget):
         self._build_ui(columns or [])
 
     def _build_ui(self, columns):
+        self.setAttribute(Qt.WA_StyledBackground, True)
+        self.setFrameShape(QFrame.NoFrame)
         self.setAlternatingRowColors(True)
         self.setSelectionBehavior(QTableWidget.SelectRows)
         self.setSelectionMode(QTableWidget.SingleSelection)
@@ -118,6 +121,7 @@ class SharedTable(QTableWidget):
         self._overlay_hscrollbar.valueChanged.connect(self.horizontalScrollBar().setValue)
         self.installEventFilter(self)
         self.viewport().installEventFilter(self)
+        self.viewport().setAttribute(Qt.WA_StyledBackground, True)
         self._sync_vertical_range(0, self.verticalScrollBar().maximum())
         self._sync_horizontal_range(0, self.horizontalScrollBar().maximum())
 
@@ -132,6 +136,8 @@ class SharedTable(QTableWidget):
 
     def resizeEvent(self, event):
         super().resizeEvent(event)
+        self._apply_round_mask(self, 14)
+        self._apply_round_mask(self.viewport(), 14)
         # Debounce overlay scrollbar position updates
         try:
             if not hasattr(self, "_resize_debounce_timer"):
@@ -143,6 +149,14 @@ class SharedTable(QTableWidget):
             self._resize_debounce_timer.start(40)
         except Exception:
             self._update_scrollbar_positions()
+
+    def _apply_round_mask(self, widget, radius: int):
+        rect = widget.rect()
+        if rect.width() <= 0 or rect.height() <= 0:
+            return
+        path = QPainterPath()
+        path.addRoundedRect(QRectF(rect), radius, radius)
+        widget.setMask(QRegion(path.toFillPolygon().toPolygon()))
 
     def wheelEvent(self, event):
         self._show_scrollbars()
@@ -244,6 +258,7 @@ class RoundedTableCard(QWidget):
         super().__init__(parent)
         self.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
         self.setObjectName("TableCardWrapper")
+        self.setAttribute(Qt.WA_StyledBackground, True)
 
         self._layout = QVBoxLayout(self)
         self._layout.setContentsMargins(0, 0, 0, 0)
@@ -251,6 +266,7 @@ class RoundedTableCard(QWidget):
 
         self.card = QFrame(self)
         self.card.setObjectName("TableCard")
+        self.card.setAttribute(Qt.WA_StyledBackground, True)
         self.card.setStyleSheet(AppStyles.TABLE_CARD)
 
         self.card_layout = QVBoxLayout(self.card)
@@ -263,7 +279,9 @@ class RoundedTableCard(QWidget):
         self.card_layout.setSpacing(0)
 
         self.table = SharedTable(columns or [], self.card)
+        self.table.setAttribute(Qt.WA_StyledBackground, True)
         self.table.setStyleSheet(AppStyles.TABLE_CANONICAL)
+        self.table.viewport().setAttribute(Qt.WA_StyledBackground, True)
         self.card_layout.addWidget(self.table)
         self._layout.addWidget(self.card)
 
@@ -273,6 +291,21 @@ class RoundedTableCard(QWidget):
 
     def __getattr__(self, name):
         return getattr(self.table, name)
+
+    def resizeEvent(self, event):
+        super().resizeEvent(event)
+        self._apply_round_mask(self, 18)
+        self._apply_round_mask(self.card, 18)
+        self._apply_round_mask(self.table, 14)
+        self._apply_round_mask(self.table.viewport(), 14)
+
+    def _apply_round_mask(self, widget, radius: int):
+        rect = widget.rect()
+        if rect.width() <= 0 or rect.height() <= 0:
+            return
+        path = QPainterPath()
+        path.addRoundedRect(QRectF(rect), radius, radius)
+        widget.setMask(QRegion(path.toFillPolygon().toPolygon()))
 
     def _sync_horizontal_range(self, minimum, maximum):
         self._overlay_hscrollbar.setRange(minimum, maximum)
