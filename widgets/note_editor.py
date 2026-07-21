@@ -79,8 +79,8 @@ class NoteEditorDialog(QDialog):
         outer.addWidget(card)
 
         layout = QVBoxLayout(card)
-        layout.setContentsMargins(18, 16, 18, 16)
-        layout.setSpacing(12)
+        layout.setContentsMargins(AppStyles.SECTION_PADDING, AppStyles.INNER_PADDING, AppStyles.SECTION_PADDING, AppStyles.INNER_PADDING)
+        layout.setSpacing(AppStyles.INNER_PADDING)
 
         title_row = QHBoxLayout()
         title_row.setSpacing(10)

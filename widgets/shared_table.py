@@ -132,7 +132,17 @@ class SharedTable(QTableWidget):
 
     def resizeEvent(self, event):
         super().resizeEvent(event)
-        self._update_scrollbar_positions()
+        # Debounce overlay scrollbar position updates
+        try:
+            if not hasattr(self, "_resize_debounce_timer"):
+                from PySide6.QtCore import QTimer
+
+                self._resize_debounce_timer = QTimer(self)
+                self._resize_debounce_timer.setSingleShot(True)
+                self._resize_debounce_timer.timeout.connect(self._update_scrollbar_positions)
+            self._resize_debounce_timer.start(40)
+        except Exception:
+            self._update_scrollbar_positions()
 
     def wheelEvent(self, event):
         self._show_scrollbars()
@@ -244,7 +254,12 @@ class RoundedTableCard(QWidget):
         self.card.setStyleSheet(AppStyles.TABLE_CARD)
 
         self.card_layout = QVBoxLayout(self.card)
-        self.card_layout.setContentsMargins(12, 12, 12, 12)
+        self.card_layout.setContentsMargins(
+            AppStyles.TABLE_CARD_PADDING,
+            AppStyles.TABLE_CARD_PADDING,
+            AppStyles.TABLE_CARD_PADDING,
+            AppStyles.TABLE_CARD_PADDING,
+        )
         self.card_layout.setSpacing(0)
 
         self.table = SharedTable(columns or [], self.card)

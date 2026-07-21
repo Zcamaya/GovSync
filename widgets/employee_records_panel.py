@@ -26,6 +26,9 @@ from widgets.glass_dialog import GlassDialog
 from widgets.shared_table import RoundedTableCard, SharedTable
 from core.session_manager import get_active_account
 from shared.ui import set_exit_icon
+from core.logger import configure_logger
+
+logger = configure_logger()
 
 
 class EmployeeRecordsLoadWorker(QThread):
@@ -120,11 +123,15 @@ class EmployeeRecordsPanel(QWidget):
         self._build_ui()
         self._connect_signals()
         self.refresh_data()
+        # debounce timer for resize-driven UI updates
+        self._resize_timer = QTimer(self)
+        self._resize_timer.setSingleShot(True)
+        self._resize_timer.timeout.connect(self._apply_resize)
 
     def _build_ui(self):
         layout = QVBoxLayout(self)
-        layout.setContentsMargins(0, 0, 0, 0)
-        layout.setSpacing(16)
+        layout.setContentsMargins(AppStyles.SECTION_PADDING, AppStyles.SECTION_PADDING, AppStyles.SECTION_PADDING, AppStyles.SECTION_PADDING)
+        layout.setSpacing(AppStyles.PANEL_SPACING)
 
         self.header = EmployeeRecordsHeader(self)
         layout.addWidget(self.header)
@@ -292,6 +299,13 @@ class EmployeeRecordsPanel(QWidget):
 
     def resizeEvent(self, event):
         super().resizeEvent(event)
+        # Debounce resize work to avoid jank during continuous resize
+        try:
+            self._resize_timer.start(75)
+        except Exception as exc:
+            logger.exception("Error scheduling EmployeeRecordsPanel resize debounce: %s", exc)
+
+    def _apply_resize(self):
         try:
             compact_mode = self.height() < 860 or self.width() < 1350
             paginator_height = 40 if compact_mode else 50
@@ -308,8 +322,8 @@ class EmployeeRecordsPanel(QWidget):
                 self.loading_label.setVisible(False)
             elif self._refresh_in_progress:
                 self.loading_label.setVisible(True)
-        except Exception:
-            pass
+        except Exception as exc:
+            logger.exception("Error during EmployeeRecordsPanel._apply_resize: %s", exc)
 
 
 class EmployeeDetailsDialog(QDialog):
@@ -320,7 +334,21 @@ class EmployeeDetailsDialog(QDialog):
         self.setWindowFlags(Qt.Dialog | Qt.FramelessWindowHint)
         self.setAttribute(Qt.WA_TranslucentBackground)
         self.setModal(True)
-        self.resize(900, 750)
+        # Use responsive sizing: set minimum and cap to parent size
+        self.setMinimumSize(560, 420)
+        parent_win = self.window() or parent
+        if parent_win is not None:
+            try:
+                pw = int(parent_win.width())
+                ph = int(parent_win.height())
+                if pw > 0 and ph > 0:
+                    maxw = max(800, int(pw * 0.9))
+                    maxh = max(600, int(ph * 0.9))
+                else:
+                    maxw, maxh = 800, 600
+            except Exception:
+                maxw, maxh = 800, 600
+            self.setMaximumSize(maxw, maxh)
         
         self.setStyleSheet(AppStyles.DIALOG_BASE)
         

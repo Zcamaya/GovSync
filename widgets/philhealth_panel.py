@@ -46,8 +46,8 @@ class SingleTablePopup(QDialog):
         self.drag_pos = QPoint()
         self.headers = list(headers)
         layout = QVBoxLayout(self)
-        layout.setContentsMargins(16, 16, 16, 16)
-        layout.setSpacing(12)
+        layout.setContentsMargins(AppStyles.SECTION_PADDING, AppStyles.SECTION_PADDING, AppStyles.SECTION_PADDING, AppStyles.SECTION_PADDING)
+        layout.setSpacing(AppStyles.PANEL_SPACING)
 
         title_row = QHBoxLayout()
         title_label = QLabel(title)
@@ -242,7 +242,7 @@ class HistoryDetailCard(QFrame):
         """)
 
         layout = QVBoxLayout(self)
-        layout.setContentsMargins(14, 14, 14, 14)
+        layout.setContentsMargins(AppStyles.INNER_PADDING + 2, AppStyles.INNER_PADDING + 2, AppStyles.INNER_PADDING + 2, AppStyles.INNER_PADDING + 2)
         layout.setSpacing(10)
 
         header = QHBoxLayout()
@@ -289,7 +289,7 @@ class HistoryDetailCard(QFrame):
         table.setEditTriggers(QTableWidget.NoEditTriggers)
         table.setAlternatingRowColors(True)
         table.setMinimumHeight(320)
-        table.setMinimumWidth(640)
+        table.setMinimumWidth(560)
         self._apply_table_widths(table)
         table.setStyleSheet(AppStyles.TABLE_CANONICAL)
         self._populate_table(table, data)
@@ -570,7 +570,7 @@ class PhilHealthPanel(QWidget):
 
         layout = QVBoxLayout(self)
         layout.setContentsMargins(0, 0, 0, 0)
-        layout.setSpacing(14)
+        layout.setSpacing(AppStyles.PANEL_SPACING)
 
         title = QLabel("PhilHealth Automation")
         title.setFont(QFont("Segoe UI", 17, QFont.Bold))
@@ -586,8 +586,8 @@ class PhilHealthPanel(QWidget):
         tab = QWidget()
         tab.setStyleSheet("background: transparent; border: none;")
         layout = QVBoxLayout(tab)
-        layout.setContentsMargins(16, 16, 16, 16)
-        layout.setSpacing(14)
+        layout.setContentsMargins(AppStyles.SECTION_PADDING, AppStyles.SECTION_PADDING, AppStyles.SECTION_PADDING, AppStyles.SECTION_PADDING)
+        layout.setSpacing(AppStyles.PANEL_SPACING)
 
         form_card = QFrame()
         form_card.setObjectName("GovCard")
@@ -794,8 +794,8 @@ class PhilHealthPanel(QWidget):
         tab = QWidget()
         tab.setStyleSheet("background: transparent; border: none;")
         layout = QVBoxLayout(tab)
-        layout.setContentsMargins(16, 16, 16, 16)
-        layout.setSpacing(12)
+        layout.setContentsMargins(AppStyles.SECTION_PADDING, AppStyles.SECTION_PADDING, AppStyles.SECTION_PADDING, AppStyles.SECTION_PADDING)
+        layout.setSpacing(AppStyles.INNER_PADDING)
 
         header = QHBoxLayout()
         title = QLabel("PhilHealth Records Viewer")

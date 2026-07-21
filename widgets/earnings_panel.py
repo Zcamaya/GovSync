@@ -199,7 +199,7 @@ class EarningsPanel(QWidget):
         main_layout.addWidget(self.status_label)
 
         button_layout = QHBoxLayout()
-        button_layout.setSpacing(14)
+        button_layout.setSpacing(AppStyles.PANEL_SPACING)
 
         self.btn_add_file = self._secondary_button("Add File")
         self.btn_add_file.clicked.connect(self.add_files)
@@ -231,7 +231,7 @@ class EarningsPanel(QWidget):
         self.year_combo.setCurrentText(default_year)
 
         month_row = QHBoxLayout()
-        month_row.setSpacing(10)
+        month_row.setSpacing(AppStyles.INNER_PADDING - 2)
         month_row.addWidget(month_label)
         month_row.addWidget(self.month_combo)
         month_row.addWidget(year_label)
@@ -250,16 +250,31 @@ class EarningsPanel(QWidget):
         dialog = QDialog(self)
         dialog.setWindowFlags(Qt.FramelessWindowHint | Qt.Dialog)
         dialog.setAttribute(Qt.WA_TranslucentBackground)
-        dialog.setFixedSize(520, 420)
+        # Make dialog responsive: rely on layouts and constrain to parent
+        dialog.setMinimumSize(420, 320)
+        if self.window():
+            try:
+                pw = int(self.window().width())
+                ph = int(self.window().height())
+                if pw > 0 and ph > 0:
+                    maxw = max(800, int(pw * 0.9))
+                    maxh = max(600, int(ph * 0.9))
+                else:
+                    maxw, maxh = 800, 600
+            except Exception:
+                maxw, maxh = 800, 600
+            dialog.setMaximumSize(maxw, maxh)
         dialog.setStyleSheet(AppStyles.DIALOG_BASE + "QCheckBox { color: #e2e8f0; }")
 
-        outer = QFrame(dialog)
+        outer = QFrame()
         outer.setObjectName("DialogCard")
-        outer.setGeometry(0, 0, 520, 420)
 
         layout = QVBoxLayout(outer)
-        layout.setContentsMargins(18, 18, 18, 18)
-        layout.setSpacing(16)
+        dialog.setLayout(QVBoxLayout())
+        dialog.layout().setContentsMargins(0, 0, 0, 0)
+        dialog.layout().addWidget(outer)
+        layout.setContentsMargins(AppStyles.SECTION_PADDING + 2, AppStyles.SECTION_PADDING + 2, AppStyles.SECTION_PADDING + 2, AppStyles.SECTION_PADDING + 2)
+        layout.setSpacing(AppStyles.PANEL_SPACING)
 
         title = QLabel("Import Confirmation")
         title.setStyleSheet("color: #f8fafc; font-size: 18px; font-weight: 700;")
@@ -290,7 +305,7 @@ class EarningsPanel(QWidget):
         self.sheet_checkboxes = []
         sheet_labels = ["PHIC", "HDMF", "SSS", "HDMF LOANS", "SSS LOANS"]
         sheet_layout = QVBoxLayout()
-        sheet_layout.setContentsMargins(16, 0, 0, 0)
+        sheet_layout.setContentsMargins(AppStyles.SECTION_PADDING, 0, 0, 0)
         for label in sheet_labels:
             checkbox = QCheckBox(label)
             checkbox.setChecked(True)

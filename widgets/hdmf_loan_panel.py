@@ -102,8 +102,8 @@ class HDMFLoanPanel(QWidget):
             + AppStyles.FIELD_INPUT
         )
         form_layout = QFormLayout(form_holder)
-        form_layout.setContentsMargins(22, 22, 22, 22)
-        form_layout.setSpacing(12)
+        form_layout.setContentsMargins(AppStyles.SECTION_PADDING + 6, AppStyles.SECTION_PADDING + 6, AppStyles.SECTION_PADDING + 6, AppStyles.SECTION_PADDING + 6)
+        form_layout.setSpacing(AppStyles.INNER_PADDING)
 
         self.earnings_file = self._path_row(
             form_layout,
@@ -169,7 +169,7 @@ class HDMFLoanPanel(QWidget):
         row.setStyleSheet("border: none; background: transparent;")
         row_layout = QHBoxLayout(row)
         row_layout.setContentsMargins(0, 0, 0, 0)
-        row_layout.setSpacing(10)
+        row_layout.setSpacing(AppStyles.INNER_PADDING - 2)
 
         line_edit = QLineEdit()
         line_edit.setPlaceholderText(placeholder)

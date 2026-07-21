@@ -1,4 +1,17 @@
 class AppStyles:
+    WINDOW_MARGIN = 12
+    PAGE_MARGIN = 16
+    PANEL_SPACING = 14
+    PANEL_SPACING_COMPACT = 10
+    SECTION_PADDING = 16
+    INNER_PADDING = 12
+    TABLE_CARD_PADDING = 12
+    DIALOG_PADDING = 16
+    SIDEBAR_WIDTH = 240
+    RIGHT_PANEL_MIN_WIDTH = 320
+    NOTIFICATION_MARGIN = 16
+    NOTIFICATION_GAP = 8
+
     PANEL_TITLE = "color: #f8fafc; border: none; background: transparent; font: 800 16px 'Segoe UI';"
     SECTION_HEADER = "color: #f8fafc; border: none; background: transparent; font: 800 18px 'Segoe UI';"
     CARD_HEADER = "color: #f8fafc; border: none; background: transparent; font: 800 16px 'Segoe UI';"
@@ -105,10 +118,6 @@ class AppStyles:
     CARD_RADIUS = 14
     CONTROL_RADIUS = 10
     SMALL_RADIUS = 8
-
-    PANEL_SPACING = 14
-    SECTION_PADDING = 16
-    INNER_PADDING = 12
 
     GLASS_PANEL = f"""
         QFrame {{

@@ -3,7 +3,7 @@ import os
 from PySide6.QtCore import Qt, Signal
 from PySide6.QtGui import QImage, QPainter, QPixmap
 from PySide6.QtSvg import QSvgRenderer
-from PySide6.QtWidgets import QHBoxLayout, QLabel, QListWidget, QPushButton, QVBoxLayout, QWidget
+from PySide6.QtWidgets import QHBoxLayout, QLabel, QListWidget, QPushButton, QSizePolicy, QVBoxLayout, QWidget
 
 from constants.styles import AppStyles
 from shared.resources import asset_path
@@ -14,11 +14,19 @@ class SidebarWidget(QWidget):
 
     def __init__(self, parent=None):
         super().__init__(parent)
-        self.setFixedWidth(240)
+        self.setObjectName("SidebarWidget")
+        self.setAttribute(Qt.WA_StyledBackground, True)
+        self.setFixedWidth(AppStyles.SIDEBAR_WIDTH)
+        self.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Expanding)
+        self.setStyleSheet("""
+            QWidget#SidebarWidget {
+                border-radius: 18px;
+            }
+        """)
 
         layout = QVBoxLayout(self)
-        layout.setContentsMargins(10, 15, 10, 15)
-        layout.setSpacing(10)
+        layout.setContentsMargins(AppStyles.SECTION_PADDING, AppStyles.SECTION_PADDING, AppStyles.SECTION_PADDING, AppStyles.SECTION_PADDING)
+        layout.setSpacing(AppStyles.PANEL_SPACING)
         layout.addLayout(self._create_header())
 
         self.list_widget = self._create_nav_list()
@@ -27,7 +35,7 @@ class SidebarWidget(QWidget):
 
     def _create_header(self):
         header = QHBoxLayout()
-        header.setContentsMargins(0, 0, 0, 10)
+        header.setContentsMargins(0, 0, 0, AppStyles.INNER_PADDING - 2)
 
         logo_path = asset_path("logo.svg")
 

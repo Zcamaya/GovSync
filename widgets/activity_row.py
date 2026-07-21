@@ -10,6 +10,8 @@ from PySide6.QtWidgets import (
     QVBoxLayout,
 )
 
+from constants.styles import AppStyles
+
 
 class ActivityRowWidget(QFrame):
     clicked = Signal(str, object, int)
@@ -26,11 +28,11 @@ class ActivityRowWidget(QFrame):
         self._init_ui()
 
     def _init_ui(self):
-        self.setFixedHeight(52)
+        self.setFixedHeight(48)
 
         layout = QHBoxLayout(self)
-        layout.setContentsMargins(10, 8, 10, 8)
-        layout.setSpacing(8)
+        layout.setContentsMargins(AppStyles.INNER_PADDING - 2, 5, AppStyles.INNER_PADDING - 2, 5)
+        layout.setSpacing(AppStyles.INNER_PADDING - 3)
 
         self.checkbox = QCheckBox()
         self.checkbox.setChecked(self.checked)
@@ -40,20 +42,20 @@ class ActivityRowWidget(QFrame):
         self.checkbox.setFixedSize(18, 18)
 
         self.title_label = QLabel(self.name)
-        self.title_label.setFont(QFont("Segoe UI", 9, QFont.Bold))
+        self.title_label.setFont(QFont("Segoe UI", 8, QFont.Bold))
         self.title_label.setStyleSheet("color: #f8fafc;")
 
         self.detail_label = QLabel(self._detail_text())
-        self.detail_label.setFont(QFont("Segoe UI", 8))
+        self.detail_label.setFont(QFont("Segoe UI", 7))
         self.detail_label.setStyleSheet("color: #94a3b8;")
 
         text_layout = QVBoxLayout()
         text_layout.setContentsMargins(0, 0, 0, 0)
-        text_layout.setSpacing(1)
+        text_layout.setSpacing(0)
         text_layout.addWidget(self.title_label)
         text_layout.addWidget(self.detail_label)
 
-        layout.addWidget(self.checkbox, alignment=Qt.AlignTop)
+        layout.addWidget(self.checkbox, alignment=Qt.AlignVCenter)
         layout.addLayout(text_layout, stretch=1)
 
         self._update_style()

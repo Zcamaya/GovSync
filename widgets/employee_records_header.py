@@ -23,15 +23,15 @@ class EmployeeRecordsHeader(QWidget):
     def _build_ui(self):
         layout = QVBoxLayout(self)
         layout.setContentsMargins(0, 0, 0, 0)
-        layout.setSpacing(16)
+        layout.setSpacing(AppStyles.PANEL_SPACING)
 
         self.stats_panel = TrueGlassPanel(border_radius=16)
         self.stats_panel.setStyleSheet(
             self.stats_panel.styleSheet() + f"QFrame {{ border: 1px solid {AppStyles.PANEL_BORDER_SUBTLE}; }}"
         )
         stats_layout = QHBoxLayout(self.stats_panel)
-        stats_layout.setContentsMargins(18, 18, 18, 18)
-        stats_layout.setSpacing(12)
+        stats_layout.setContentsMargins(AppStyles.SECTION_PADDING, AppStyles.SECTION_PADDING, AppStyles.SECTION_PADDING, AppStyles.SECTION_PADDING)
+        stats_layout.setSpacing(AppStyles.INNER_PADDING)
 
         self.stats_cards = []
         for label in [
@@ -63,8 +63,8 @@ class EmployeeRecordsHeader(QWidget):
             filters_panel.styleSheet() + f"QFrame {{ border: 1px solid {AppStyles.PANEL_BORDER_SUBTLE}; }}"
         )
         filters_layout = QHBoxLayout(filters_panel)
-        filters_layout.setContentsMargins(16, 16, 16, 16)
-        filters_layout.setSpacing(10)
+        filters_layout.setContentsMargins(AppStyles.SECTION_PADDING, AppStyles.SECTION_PADDING, AppStyles.SECTION_PADDING, AppStyles.SECTION_PADDING)
+        filters_layout.setSpacing(AppStyles.INNER_PADDING)
 
         self.search_input = QLineEdit()
         self.search_input.setPlaceholderText("Search employee")
@@ -111,7 +111,7 @@ class EmployeeRecordsHeader(QWidget):
 
         self._compact_mode = enabled
         if enabled:
-            self.layout().setSpacing(10)
+            self.layout().setSpacing(AppStyles.PANEL_SPACING_COMPACT)
             self.stats_panel.layout().setContentsMargins(12, 12, 12, 12)
             for card in self.stats_cards:
                 title, value = card
@@ -120,13 +120,13 @@ class EmployeeRecordsHeader(QWidget):
 
             filters_layout = self.filters_panel.layout()
             filters_layout.setContentsMargins(12, 12, 12, 12)
-            filters_layout.setSpacing(8)
+            filters_layout.setSpacing(AppStyles.INNER_PADDING - 4)
             self.search_input.setMinimumHeight(32)
             self.employer_combo.setMinimumHeight(32)
             self.client_combo.setMinimumHeight(32)
             self.applicable_month_combo.setMinimumHeight(32)
         else:
-            self.layout().setSpacing(16)
+            self.layout().setSpacing(AppStyles.PANEL_SPACING)
             self.stats_panel.layout().setContentsMargins(18, 18, 18, 18)
             for card in self.stats_cards:
                 title, value = card
@@ -134,8 +134,8 @@ class EmployeeRecordsHeader(QWidget):
                 value.setStyleSheet(AppStyles.METRIC_VALUE.replace("28px", "22px"))
 
             filters_layout = self.filters_panel.layout()
-            filters_layout.setContentsMargins(16, 16, 16, 16)
-            filters_layout.setSpacing(10)
+            filters_layout.setContentsMargins(AppStyles.SECTION_PADDING, AppStyles.SECTION_PADDING, AppStyles.SECTION_PADDING, AppStyles.SECTION_PADDING)
+            filters_layout.setSpacing(AppStyles.INNER_PADDING - 2)
             self.search_input.setMinimumHeight(38)
             self.employer_combo.setMinimumHeight(38)
             self.client_combo.setMinimumHeight(38)

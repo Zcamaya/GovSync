@@ -17,7 +17,21 @@ class GlassDialog(QDialog):
         super().__init__(parent)
         self.setWindowFlags(Qt.FramelessWindowHint | Qt.Dialog)
         self.setAttribute(Qt.WA_TranslucentBackground)
-        self.setFixedSize(560, 380)
+        # Use responsive sizing: set a reasonable minimum and allow parent to limit maximum
+        self.setMinimumSize(420, 260)
+        parent_win = self.window() or parent
+        if parent_win is not None:
+            try:
+                pw = int(parent_win.width())
+                ph = int(parent_win.height())
+                if pw > 0 and ph > 0:
+                    maxw = max(640, int(pw * 0.9))
+                    maxh = max(480, int(ph * 0.9))
+                else:
+                    maxw, maxh = 640, 480
+            except Exception:
+                maxw, maxh = 640, 480
+            self.setMaximumSize(maxw, maxh)
         self.drag_pos = QPoint()
         self._is_dragging = False
 
@@ -62,8 +76,8 @@ class GlassDialog(QDialog):
         button_bar = QFrame()
         button_bar.setObjectName("ButtonBar")
         button_layout = QHBoxLayout(button_bar)
-        button_layout.setContentsMargins(18, 12, 18, 12)
-        button_layout.setSpacing(12)
+        button_layout.setContentsMargins(AppStyles.SECTION_PADDING, AppStyles.INNER_PADDING, AppStyles.SECTION_PADDING, AppStyles.INNER_PADDING)
+        button_layout.setSpacing(AppStyles.INNER_PADDING)
         button_layout.addStretch()
 
         for index, (text, callback, is_primary) in enumerate(buttons):

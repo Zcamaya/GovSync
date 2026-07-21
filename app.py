@@ -69,6 +69,8 @@ def main():
         qt_app = QApplication.instance() or QApplication(sys.argv)
         qt_app.setWindowIcon(QIcon(asset_path("icon.ico")))
 
+        # Developer layout debug tool removed. No debug overlays installed.
+
         if not acquire_single_instance_lock():
             QMessageBox.information(
                 None,

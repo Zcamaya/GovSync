@@ -1,3 +1,4 @@
+from PySide6.QtCore import Qt
 from PySide6.QtWidgets import QHBoxLayout, QLabel, QVBoxLayout, QWidget
 
 from constants.styles import AppStyles
@@ -7,18 +8,26 @@ from widgets.glass_panel import TrueGlassPanel
 class WorkspaceWidget(QWidget):
     def __init__(self, parent=None, dashboard_service=None):
         super().__init__(parent)
+        self.setObjectName("WorkspaceWidget")
+        self.setAttribute(Qt.WA_StyledBackground, True)
         self.dashboard_service = dashboard_service
         self.account_name = "Account"
 
+        self.setStyleSheet("""
+            QWidget#WorkspaceWidget {
+                border-radius: 18px;
+            }
+        """)
+
         layout = QVBoxLayout(self)
-        layout.setContentsMargins(0, 0, 0, 0)
-        layout.setSpacing(20)
+        layout.setContentsMargins(AppStyles.SECTION_PADDING, AppStyles.SECTION_PADDING, AppStyles.SECTION_PADDING, AppStyles.SECTION_PADDING)
+        layout.setSpacing(AppStyles.PANEL_SPACING)
 
         welcome_banner = TrueGlassPanel(border_radius=20)
-        welcome_banner.setFixedHeight(125)
+        welcome_banner.setMinimumHeight(125)
         self.banner_layout = QVBoxLayout(welcome_banner)
-        self.banner_layout.setContentsMargins(18, 18, 18, 18)
-        self.banner_layout.setSpacing(6)
+        self.banner_layout.setContentsMargins(AppStyles.SECTION_PADDING, AppStyles.SECTION_PADDING, AppStyles.SECTION_PADDING, AppStyles.SECTION_PADDING)
+        self.banner_layout.setSpacing(AppStyles.INNER_PADDING)
 
         self.welcome_title = QLabel()
         self.welcome_title.setStyleSheet("color: #34d399; font: 800 24px 'Segoe UI'; border: none; background: transparent;")
@@ -30,7 +39,8 @@ class WorkspaceWidget(QWidget):
         self.banner_layout.addStretch()
 
         stats_container = QHBoxLayout()
-        stats_container.setSpacing(15)
+        stats_container.setSpacing(AppStyles.INNER_PADDING)
+        stats_container.setContentsMargins(0, 0, 0, 0)
 
         self.philhealth_box = TrueGlassPanel(border_radius=15)
         philhealth_layout = QVBoxLayout(self.philhealth_box)

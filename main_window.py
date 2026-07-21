@@ -16,6 +16,7 @@ from PySide6.QtWidgets import (
 from core.navigation_controller import NavigationController
 from core.page_factory import PageFactory
 from core.window_state_manager import WindowStateManager
+from constants.styles import AppStyles
 from widgets.glass_dialog import GlassDialog
 from shared.ui import set_exit_icon, set_maximize_icon, set_minimize_icon
 from config import APP_NAME, DEFAULT_WINDOW_HEIGHT, DEFAULT_WINDOW_WIDTH, MIN_WINDOW_HEIGHT, MIN_WINDOW_WIDTH
@@ -47,7 +48,6 @@ class MainWindow(QMainWindow):
             #MainContainer {
                 background: qradialgradient(cx:0.3, cy:0.2, radius:1.4, fx:0.3, fy:0.2,
                                             stop:0 #0a1f1a, stop:0.5 #070b12, stop:1 #020408);
-                border: 1px solid rgba(20, 184, 166, 0.16);
                 border-radius: {radius}px;
             }
             QLabel {
@@ -106,12 +106,22 @@ class MainWindow(QMainWindow):
 
     def _build_ui(self):
         main_layout = QVBoxLayout(self.container)
-        main_layout.setContentsMargins(10, 10, 10, 10)
+        main_layout.setContentsMargins(
+            AppStyles.WINDOW_MARGIN,
+            AppStyles.WINDOW_MARGIN,
+            AppStyles.WINDOW_MARGIN,
+            AppStyles.WINDOW_MARGIN,
+        )
         main_layout.setSpacing(0)
 
         header_layout = QHBoxLayout()
-        header_layout.setContentsMargins(12, 2, 12, 0)
-        header_layout.setSpacing(6)
+        header_layout.setContentsMargins(
+            AppStyles.INNER_PADDING,
+            4,
+            AppStyles.INNER_PADDING,
+            0,
+        )
+        header_layout.setSpacing(AppStyles.INNER_PADDING // 2)
         header_layout.addSpacerItem(
             QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
         )
@@ -134,7 +144,7 @@ class MainWindow(QMainWindow):
         main_layout.addWidget(self.page_stack, stretch=1)
 
         grip_layout = QHBoxLayout()
-        grip_layout.setContentsMargins(0, 0, 4, 2)
+        grip_layout.setContentsMargins(0, 0, 4, 4)
         grip_layout.addStretch()
         grip_layout.addWidget(QSizeGrip(self.container))
         main_layout.addLayout(grip_layout)

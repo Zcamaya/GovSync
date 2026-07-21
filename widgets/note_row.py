@@ -56,23 +56,23 @@ class NoteRowWidget(QFrame):
 
     def _build_ui(self):
         layout = QHBoxLayout(self)
-        layout.setContentsMargins(12, 0, 0, 0)
+        layout.setContentsMargins(10, 0, 0, 0)
         layout.setSpacing(0)
         layout.setAlignment(Qt.AlignVCenter)
 
-        self.setFixedHeight(38)
+        self.setFixedHeight(36)
         self.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed)
         self.title_label = QLabel(self.note.get("title", "Untitled"))
-        self.title_label.setStyleSheet("color: #f8fafc; font: 700 12px 'Segoe UI';")
+        self.title_label.setStyleSheet("color: #f8fafc; font: 700 11px 'Segoe UI';")
         self.title_label.setAlignment(Qt.AlignVCenter | Qt.AlignLeft)
         self.title_label.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed)
 
         delete_button = QToolButton()
         delete_button.setObjectName("NoteDeleteButton")
         delete_button.setCursor(Qt.PointingHandCursor)
-        delete_button.setFixedSize(38, 38)
+        delete_button.setFixedSize(36, 36)
         delete_button.setStyleSheet("margin: 0; padding: 0;")
-        set_exit_icon(delete_button, "#ffffff", 14)
+        set_exit_icon(delete_button, "#ffffff", 13)
         delete_button.setToolButtonStyle(Qt.ToolButtonIconOnly)
         delete_button.clicked.connect(self._on_delete_clicked)
 

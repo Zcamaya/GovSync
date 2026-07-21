@@ -14,6 +14,8 @@ from PySide6.QtWidgets import (
     QWidget,
 )
 
+from constants.styles import AppStyles
+
 
 class CustomReferenceCalendar(QFrame):
     def __init__(self):
@@ -43,10 +45,11 @@ class CustomReferenceCalendar(QFrame):
         self.current_month = self.now.month
 
         layout = QVBoxLayout(self)
-        layout.setContentsMargins(15, 15, 15, 15)
-        layout.setSpacing(10)
-        self.setFixedHeight(270)
-        self.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed)
+        layout.setContentsMargins(AppStyles.SECTION_PADDING, AppStyles.SECTION_PADDING, AppStyles.SECTION_PADDING, AppStyles.SECTION_PADDING)
+        layout.setSpacing(AppStyles.INNER_PADDING)
+        # allow the calendar to scale with available space while keeping a reasonable minimum
+        self.setMinimumHeight(220)
+        self.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Preferred)
 
         header_layout = QHBoxLayout()
         self.lbl_month_year = QLabel()
@@ -72,7 +75,7 @@ class CustomReferenceCalendar(QFrame):
 
         self.grid_container = QWidget()
         self.grid_layout = QGridLayout(self.grid_container)
-        self.grid_layout.setSpacing(5)
+        self.grid_layout.setSpacing(AppStyles.INNER_PADDING // 2)
 
         layout.addLayout(header_layout)
         layout.addWidget(self.grid_container)
