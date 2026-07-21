@@ -93,7 +93,7 @@ class RightPanelWidget(QWidget):
         self.activity_container = QWidget()
         self.activity_container.setStyleSheet("background: transparent; border: none;")
         self.activity_layout = QVBoxLayout(self.activity_container)
-        self.activity_layout.setContentsMargins(0, 0, 0, 0)
+        self.activity_layout.setContentsMargins(0, 0, 4, 0)
         self.activity_layout.setSpacing(AppStyles.INNER_PADDING - 4)
 
         for task in self._monthly_tasks(now):
@@ -106,6 +106,7 @@ class RightPanelWidget(QWidget):
         activity_scroll.setFrameShape(QFrame.NoFrame)
         activity_scroll.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
         activity_scroll.setVerticalScrollBarPolicy(Qt.ScrollBarAsNeeded)
+        activity_scroll.setViewportMargins(0, 0, 4, 0)
         activity_scroll.setWidget(self.activity_container)
         activity_scroll.setStyleSheet(self._scrollable_style())
         activity_scroll.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
@@ -137,7 +138,7 @@ class RightPanelWidget(QWidget):
         self.notes_container.setStyleSheet("background: transparent; border: none;")
         self.notes_container.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Preferred)
         self.notes_list_layout = QVBoxLayout(self.notes_container)
-        self.notes_list_layout.setContentsMargins(0, 0, 0, 0)
+        self.notes_list_layout.setContentsMargins(0, 0, 4, 0)
         self.notes_list_layout.setSpacing(self.NOTE_ROW_GAP)
         self.notes_list_layout.setAlignment(Qt.AlignTop)
         self.notes_container.setMinimumHeight(self.NOTES_VIEWPORT_HEIGHT)
@@ -147,6 +148,7 @@ class RightPanelWidget(QWidget):
         notes_scroll.setFrameShape(QFrame.NoFrame)
         notes_scroll.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
         notes_scroll.setVerticalScrollBarPolicy(Qt.ScrollBarAsNeeded)
+        notes_scroll.setViewportMargins(0, 0, 4, 0)
         notes_scroll.setWidget(self.notes_container)
         notes_scroll.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Preferred)
         notes_scroll.setStyleSheet(self._scrollable_style())
@@ -693,6 +695,10 @@ class RightPanelWidget(QWidget):
             QScrollArea {
                 background: transparent;
                 border: none;
+            }
+            QScrollArea::viewport {
+                background: transparent;
+                border-radius: 14px;
             }
             QScrollArea > QWidget > QWidget {
                 background: transparent;

@@ -149,6 +149,10 @@ class EarningsPanel(QWidget):
                 padding: 10px;
                 outline: none;
             }
+            QListWidget::viewport {
+                border-radius: 10px;
+                background: transparent;
+            }
             QListWidget::item {
                 border: none;
                 border-radius: 8px;

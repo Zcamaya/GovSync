@@ -284,6 +284,10 @@ class SSSPanel(QWidget):
                 padding: 10px;
                 outline: none;
             }
+            QListWidget::viewport {
+                border-radius: 10px;
+                background: transparent;
+            }
             QListWidget::item {
                 padding: 8px 10px;
                 margin: 2px 0;
