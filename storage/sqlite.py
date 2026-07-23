@@ -1,8 +1,14 @@
 import sqlite3
 import shutil
+import weakref
 from pathlib import Path
 
 from config import DATABASE_PATH, LEGACY_DATABASE_PATH
+
+# Track active sqlite3 connections to allow proactive cleanup in tests
+# sqlite3.Connection objects cannot be weak-referenced on some platforms,
+# so store strong references and clear them proactively after use.
+_open_connections: list[sqlite3.Connection] = []
 
 
 SCHEMA = """
@@ -70,9 +76,37 @@ def _migrate_legacy_database(target_path: Path) -> None:
 def connect(path: Path | None = None) -> sqlite3.Connection:
     db_path = Path(path or database_path())
     db_path.parent.mkdir(parents=True, exist_ok=True)
-    connection = sqlite3.connect(db_path)
-    connection.row_factory = sqlite3.Row
-    return connection
+    raw_conn = sqlite3.connect(db_path)
+    raw_conn.row_factory = sqlite3.Row
+
+    class ConnectionProxy:
+        def __init__(self, conn: sqlite3.Connection):
+            self._conn = conn
+
+        def __enter__(self):
+            return self._conn
+
+        def __exit__(self, exc_type, exc, tb):
+            try:
+                self._conn.commit()
+            finally:
+                try:
+                    self._conn.close()
+                except Exception:
+                    pass
+
+        def close(self):
+            try:
+                self._conn.close()
+            except Exception:
+                pass
+
+        def __getattr__(self, item):
+            return getattr(self._conn, item)
+
+    proxy = ConnectionProxy(raw_conn)
+    _open_connections.append(proxy)
+    return proxy
 
 
 def _ensure_account_columns(connection: sqlite3.Connection) -> None:
@@ -135,3 +169,10 @@ def initialize_database(path: Path | None = None) -> None:
         )
         _backfill_employer_links(connection)
         connection.commit()
+    # Attempt to proactively close any lingering connections created via connect()
+    for conn in list(_open_connections):
+        try:
+            conn.close()
+        except Exception:
+            pass
+    _open_connections.clear()

@@ -17,7 +17,8 @@ class EmployeeRecordsTable(SharedTable):
         self.horizontalHeader().setSectionResizeMode(1, QHeaderView.Stretch)
         self.horizontalHeader().setSectionResizeMode(2, QHeaderView.Stretch)
         self.setColumnWidth(0, 48)
-        self.setMinimumHeight(320)
+        # keep default min height modest; panel will manage sizing responsively
+        self.setMinimumHeight(140)
 
     def populate(self, employees, search_text="", page=1, page_size=100):
         self.setRowCount(0)

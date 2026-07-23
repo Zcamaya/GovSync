@@ -23,18 +23,18 @@ class OverlayScrollBar(QScrollBar):
             """
             QScrollBar {
                 background: transparent;
-                width: 8px;
-                height: 8px;
+                width: 7px;
+                height: 7px;
                 margin: 0px;
             }
             QScrollBar::handle {
-                background: rgba(148, 163, 184, 0.24);
-                border-radius: 4px;
+                background: #6BAF8D;
+                border-radius: 13px;
                 min-height: 28px;
                 min-width: 28px;
             }
             QScrollBar::handle:hover {
-                background: rgba(148, 163, 184, 0.42);
+                background: #5ea97a;
             }
             QScrollBar::add-line, QScrollBar::sub-line,
             QScrollBar::add-page, QScrollBar::sub-page {
@@ -91,7 +91,8 @@ class SharedTable(QTableWidget):
         self.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
         self.setWordWrap(True)
         self.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
-        self.setMinimumHeight(260)
+        # allow tables to shrink so footer controls (paginators) remain visible
+        self.setMinimumHeight(140)
         self.setStyleSheet(AppStyles.TABLE_CANONICAL)
         self.set_row_height(AppStyles.TABLE_ROW_HEIGHT)
         if columns:

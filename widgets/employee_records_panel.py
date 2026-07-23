@@ -1,7 +1,7 @@
 import re
 from datetime import datetime
 
-from PySide6.QtCore import Qt, QTimer, QThread, Signal
+from PySide6.QtCore import Qt, QTimer, QThread, Signal, Slot
 from PySide6.QtGui import QColor
 from PySide6.QtWidgets import (
     QComboBox,
@@ -157,8 +157,16 @@ class EmployeeRecordsPanel(QWidget):
         self.header.employer_combo.currentTextChanged.connect(self._schedule_refresh)
         self.header.client_combo.currentTextChanged.connect(self._schedule_refresh)
         self.header.applicable_month_combo.currentTextChanged.connect(self._schedule_refresh)
-        self.paginator.prev_button.clicked.connect(self._previous_page)
-        self.paginator.next_button.clicked.connect(self._next_page)
+        # connect unified pagination
+        try:
+            self.paginator.on_page_changed(self._on_paginator_changed)
+        except Exception:
+            # fallback for older paginator implementations
+            try:
+                self.paginator.prev_button.clicked.connect(self._previous_page)
+                self.paginator.next_button.clicked.connect(self._next_page)
+            except Exception:
+                pass
 
     def set_account(self, account):
         # Refresh data when account changes (shows all employees across all accounts)
@@ -269,18 +277,29 @@ class EmployeeRecordsPanel(QWidget):
         history = self.controller.get_employee_payroll_history(employer_id=employer_id, employee_id=employee_id, sss_number=sss_number)
         account = get_active_account() or {}
         dialog = EmployeeDetailsDialog(employee, history, account, self)
-        dialog.exec()
+        dialog.setModal(True)
+        dialog.open()
 
     def _on_cell_double_clicked(self, row, column):
         employee = self.table.get_current_employee(row)
         self._show_details(employee)
 
     def _update_pagination(self, total_count):
-        self.paginator.update_page(self.current_page)
-        self.paginator.set_buttons_enabled(
-            prev_enabled=self.current_page > 1,
-            next_enabled=(self.current_page * self.page_size) < total_count,
-        )
+        # compute total pages and update paginator
+        try:
+            total_pages = max(1, int((total_count + self.page_size - 1) // self.page_size))
+            self.paginator.update_total(total_pages)
+            self.paginator.update_page(self.current_page)
+        except Exception:
+            # fallback to older API
+            try:
+                self.paginator.update_page(self.current_page)
+                self.paginator.set_buttons_enabled(
+                    prev_enabled=self.current_page > 1,
+                    next_enabled=(self.current_page * self.page_size) < total_count,
+                )
+            except Exception:
+                pass
 
     def _previous_page(self):
         if self.current_page > 1:
@@ -289,6 +308,17 @@ class EmployeeRecordsPanel(QWidget):
 
     def _next_page(self):
         self.current_page += 1
+        self.refresh_data()
+
+    @Slot(int)
+    def _on_paginator_changed(self, page: int):
+        try:
+            page = int(page)
+        except Exception:
+            return
+        if page == self.current_page:
+            return
+        self.current_page = page
         self.refresh_data()
 
     def _show_loading(self, visible):

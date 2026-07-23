@@ -1,0 +1,142 @@
+# Layout Report
+
+- out_of_parent: 
+- out_of_parent: 
+- out_of_parent: 
+- out_of_parent: NoteRow
+- out_of_parent: 
+- out_of_parent: 
+- out_of_parent: 
+- out_of_parent: 
+- out_of_parent: 
+- out_of_parent: qt_scrollarea_hcontainer
+- out_of_parent: qt_scrollarea_hcontainer
+- out_of_parent: 
+- out_of_parent: 
+- out_of_parent: 
+- out_of_parent: qt_scrollarea_hcontainer
+- out_of_parent: 
+- out_of_parent: qt_scrollarea_hcontainer
+- out_of_parent: NoteRow
+- out_of_parent: 
+- out_of_parent: NoteRow
+- out_of_parent: 
+- out_of_parent: 
+- out_of_parent: 
+- out_of_parent: NoteRow
+- out_of_parent: 
+- out_of_parent: NoteRow
+- out_of_parent: qt_scrollarea_hcontainer
+- out_of_parent: 
+- out_of_parent: ActivityRow
+- out_of_parent: NoteRow
+- out_of_parent: 
+- out_of_parent: AuthCard
+- out_of_parent: qt_scrollarea_hcontainer
+- out_of_parent: ActivityRow
+- out_of_parent: 
+- out_of_parent: 
+- out_of_parent: 
+- out_of_parent: NoteRow
+- out_of_parent: NoteRow
+- out_of_parent: NoteRow
+- out_of_parent: 
+- out_of_parent: NoteRow
+- out_of_parent: 
+- out_of_parent: 
+- out_of_parent: 
+- out_of_parent: ActivityRow
+- out_of_parent: 
+- out_of_parent: 
+- out_of_parent: qt_scrollarea_hcontainer
+- out_of_parent: 
+- out_of_parent: NoteRow
+- out_of_parent: 
+- out_of_parent: qt_scrollarea_hcontainer
+- out_of_parent: 
+- out_of_parent: 
+- out_of_parent: ActivityRow
+- out_of_parent: 
+- out_of_parent: 
+- out_of_parent: 
+- out_of_parent: 
+- out_of_parent: 
+- out_of_parent: 
+- out_of_parent: 
+- out_of_parent: 
+- out_of_parent: NoteRow
+- out_of_parent: 
+- out_of_parent: 
+- out_of_parent: NoteRow
+- out_of_parent: 
+- out_of_parent: 
+- out_of_parent: 
+- out_of_parent: 
+- out_of_parent: ActivityRow
+- out_of_parent: 
+- out_of_parent: NoteRow
+- out_of_parent: NoteRow
+- out_of_parent: qt_scrollarea_hcontainer
+- out_of_parent: 
+- out_of_parent: NoteRow
+- out_of_parent: NoteRow
+- out_of_parent: 
+- out_of_parent: qt_scrollarea_vcontainer
+- out_of_parent: 
+- out_of_parent: qt_scrollarea_vcontainer
+- out_of_parent: NoteRow
+- out_of_parent: 
+- out_of_parent: 
+- out_of_parent: 
+- out_of_parent: 
+- out_of_parent: qt_scrollarea_vcontainer
+- out_of_parent: 
+- out_of_parent: qt_scrollarea_vcontainer
+- out_of_parent: qt_scrollarea_vcontainer
+- out_of_parent: 
+- out_of_parent: 
+- out_of_parent: 
+- out_of_parent: NoteRow
+- out_of_parent: 
+- out_of_parent: 
+- out_of_parent: NoteRow
+- out_of_parent: qt_scrollarea_vcontainer
+- out_of_parent: 
+- out_of_parent: 
+- out_of_parent: qt_scrollarea_hcontainer
+- out_of_parent: NoteRow
+- out_of_parent: NoteRow
+- out_of_parent: NoteRow
+- out_of_parent: 
+- out_of_parent: 
+- out_of_parent: 
+- out_of_parent: NoteRow
+- out_of_parent: NoteRow
+- out_of_parent: 
+- out_of_parent: 
+- out_of_parent: 
+- out_of_parent: 
+- out_of_parent: NoteRow
+- out_of_parent: 
+- out_of_parent: 
+- out_of_parent: 
+- out_of_parent: 
+- out_of_parent: 
+- out_of_parent: 
+- out_of_parent: 
+- out_of_parent: RightPanelWidget
+- out_of_parent: 
+- out_of_parent: 
+- out_of_parent: 
+- out_of_parent: 
+- out_of_parent: NoteRow
+- out_of_parent: FormPanel
+- out_of_parent: 
+- out_of_parent: qt_scrollarea_vcontainer
+- out_of_parent: 
+- out_of_parent: NoteRow
+- out_of_parent: 
+- out_of_parent: NoteRow
+- out_of_parent: 
+- out_of_parent: 
+- out_of_parent: NoteRow

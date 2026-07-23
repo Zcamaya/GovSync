@@ -90,10 +90,11 @@ class AppStyles:
             background: rgba(15, 23, 42, 0.82);
             color: #f8fafc;
             border: 1px solid rgba(148, 163, 184, 0.24);
-            border-radius: 10px;
-            padding: 8px 14px;
-            font: 700 11px 'Segoe UI';
-            min-height: 34px;
+            border-radius: 8px;
+            padding: 6px 10px;
+            font: 700 10px 'Segoe UI';
+            min-height: 30px;
+            min-width: 36px;
         }
         QPushButton:hover:!disabled {
             background: rgba(51, 65, 85, 0.92);
@@ -105,6 +106,59 @@ class AppStyles:
             background: rgba(15, 23, 42, 0.5);
             border-color: rgba(148, 163, 184, 0.12);
         }
+    """
+
+    PAGINATION = f"""
+        QFrame#PaginationContainer {{
+            background: rgba(15, 23, 42, 0.72);
+            border: 1px solid rgba(148, 163, 184, 0.12);
+            border-radius: 16px;
+            padding: 4px;
+        }}
+        QToolButton#PaginationButton {{
+            background: transparent;
+            color: #94a3b8;
+            border: none;
+            min-width: 28px;
+            min-height: 28px;
+            font: 700 12px 'Segoe UI';
+            border-radius: 12px;
+            padding: 4px 8px;
+        }}
+        QToolButton#PaginationButton:hover:!disabled {{
+            background: rgba(51, 65, 85, 0.88);
+            color: #f8fafc;
+        }}
+        QToolButton#PaginationButton:disabled {{
+            color: rgba(226, 232, 240, 0.32);
+        }}
+        /* active page */
+        QToolButton#PaginationButton[active="true"] {{
+            background: {METRIC_VALUE};
+            color: #062017;
+            border: 1px solid rgba(255,255,255,0.06);
+        }}
+        /* compact variant (smaller pill, circular active) */
+        QFrame#PaginationContainer[compact="true"] {{
+            border-radius: 14px;
+            padding: 2px;
+        }}
+        QToolButton#PaginationButton[compact="true"] {{
+            min-width: 26px;
+            min-height: 26px;
+            font: 700 11px 'Segoe UI';
+            padding: 2px 6px;
+            border-radius: 12px;
+        }}
+        QToolButton#PaginationButton[compact="true"][active="true"] {{
+            background: {METRIC_VALUE};
+            color: #062017;
+            border: 1px solid rgba(255,255,255,0.06);
+            min-width: 28px;
+            min-height: 28px;
+            padding: 0px;
+            border-radius: 14px; /* circular */
+        }}
     """
 
     TABLE_STAT_CARD = """
@@ -513,46 +567,36 @@ class AppStyles:
     """
 
     SCROLLBAR = """
-        QTableWidget QScrollBar:vertical {
-            background: transparent;
-            border: none;
-            width: 8px;
-            margin: 4px 2px 4px 0px;
+        QScrollBar:vertical {
+            background: #232E33;
+            width: 7px;
+            margin: 0px;
+            border-radius: 13px;
         }
-        QTableWidget QScrollBar::handle:vertical {
-            background: rgba(107, 175, 141, 0.36);
-            border-radius: 6px;
-            min-height: 24px;
+        QScrollBar::handle:vertical {
+            background: #6BAF8D;
+            min-height: 28px;
+            border-radius: 13px;
         }
-        QTableWidget QScrollBar::handle:vertical:hover {
-            background: rgba(107, 175, 141, 0.56);
-        }
-        QTableWidget QScrollBar::add-line:vertical,
-        QTableWidget QScrollBar::sub-line:vertical,
-        QTableWidget QScrollBar::add-page:vertical,
-        QTableWidget QScrollBar::sub-page:vertical {
+        QScrollBar::add-line:vertical, QScrollBar::sub-line:vertical,
+        QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
             background: transparent;
             border: none;
             height: 0;
         }
-        QTableWidget QScrollBar:horizontal {
-            background: transparent;
-            border: none;
-            height: 8px;
-            margin: 0px 4px 2px 4px;
+        QScrollBar:horizontal {
+            background: #232E33;
+            height: 7px;
+            margin: 0px;
+            border-radius: 13px;
         }
-        QTableWidget QScrollBar::handle:horizontal {
-            background: rgba(107, 175, 141, 0.36);
-            border-radius: 6px;
-            min-width: 24px;
+        QScrollBar::handle:horizontal {
+            background: #6BAF8D;
+            min-width: 28px;
+            border-radius: 13px;
         }
-        QTableWidget QScrollBar::handle:horizontal:hover {
-            background: rgba(107, 175, 141, 0.56);
-        }
-        QTableWidget QScrollBar::add-line:horizontal,
-        QTableWidget QScrollBar::sub-line:horizontal,
-        QTableWidget QScrollBar::add-page:horizontal,
-        QTableWidget QScrollBar::sub-page:horizontal {
+        QScrollBar::add-line:horizontal, QScrollBar::sub-line:horizontal,
+        QScrollBar::add-page:horizontal, QScrollBar::sub-page:horizontal {
             background: transparent;
             border: none;
             width: 0;

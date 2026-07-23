@@ -2,7 +2,7 @@ from PySide6.QtWidgets import QApplication
 
 from config import DEBUG_LAYOUT
 from core.dependency_container import build_container
-from core.layout_debug_manager import LayoutDebugManager
+from qa_tools.debug.layout_debug_manager import LayoutDebugManager
 from storage.sqlite import initialize_database
 
 

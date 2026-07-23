@@ -1,0 +1,2100 @@
+[
+  {
+    "type": "label",
+    "text": "2",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "Add, edit, view, deactivate, or delete employers.",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "Automate monthly benefits, reconcile records, and keep contribution work organized.",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "New Item",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "New Item",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "2 accounts",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "20",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "New Item",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "10",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "1567",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "0",
+    "object_name": ""
+  },
+  {
+    "type": "line_edit",
+    "object_name": "",
+    "focusable": true
+  },
+  {
+    "type": "label",
+    "text": "New Item",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "HDMF Loans",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "Complete",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "Employer Creation",
+    "object_name": "Title"
+  },
+  {
+    "type": "button",
+    "text": "Don't have an account? Sign up",
+    "object_name": "",
+    "enabled": true
+  },
+  {
+    "type": "line_edit",
+    "object_name": "",
+    "focusable": true
+  },
+  {
+    "type": "label",
+    "text": "25",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "New Employees",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "Payroll compliance workspace",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "due in 8 day(s)",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "Processing Data Records...",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "Total Clients",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "30",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "New Item",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "Source Directory",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "29",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "New Item",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "SSS Loans",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "Ready",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "SSS (Past Month Total)",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "100%",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "118",
+    "object_name": ""
+  },
+  {
+    "type": "button",
+    "text": "Login",
+    "object_name": "PrimaryButton",
+    "enabled": true
+  },
+  {
+    "type": "label",
+    "text": "",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "16",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "Newly Hired:",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "Output Base Name:",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "Output Base Name",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "New Item",
+    "object_name": ""
+  },
+  {
+    "type": "button",
+    "text": "Delete Row",
+    "object_name": "",
+    "enabled": true
+  },
+  {
+    "type": "label",
+    "text": "6",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "31",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "Save Directory",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "PhilHealth Records Viewer",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "Partial List TXT Viewer",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "New Item",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "New Item",
+    "object_name": ""
+  },
+  {
+    "type": "button",
+    "text": "",
+    "object_name": "",
+    "enabled": true
+  },
+  {
+    "type": "label",
+    "text": "27",
+    "object_name": ""
+  },
+  {
+    "type": "line_edit",
+    "object_name": "",
+    "focusable": true
+  },
+  {
+    "type": "label",
+    "text": "",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "11",
+    "object_name": ""
+  },
+  {
+    "type": "button",
+    "text": "Edit Employer",
+    "object_name": "",
+    "enabled": true
+  },
+  {
+    "type": "combo_box",
+    "object_name": "",
+    "enabled": true
+  },
+  {
+    "type": "label",
+    "text": "",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "15",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "Tu",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "New Item",
+    "object_name": ""
+  },
+  {
+    "type": "button",
+    "text": "Browse",
+    "object_name": "",
+    "enabled": true
+  },
+  {
+    "type": "label",
+    "text": "28",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "",
+    "object_name": ""
+  },
+  {
+    "type": "button",
+    "text": "Browse",
+    "object_name": "",
+    "enabled": true
+  },
+  {
+    "type": "label",
+    "text": "4",
+    "object_name": ""
+  },
+  {
+    "type": "line_edit",
+    "object_name": "",
+    "focusable": true
+  },
+  {
+    "type": "label",
+    "text": "HDMF",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "New Item",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "19",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "18",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "11",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "New Item",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "46",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "0%",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "",
+    "object_name": ""
+  },
+  {
+    "type": "line_edit",
+    "object_name": "",
+    "focusable": true
+  },
+  {
+    "type": "label",
+    "text": "",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "Su",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "New Item",
+    "object_name": ""
+  },
+  {
+    "type": "line_edit",
+    "object_name": "",
+    "focusable": true
+  },
+  {
+    "type": "label",
+    "text": "New Item",
+    "object_name": ""
+  },
+  {
+    "type": "button",
+    "text": "Start Processing",
+    "object_name": "",
+    "enabled": true
+  },
+  {
+    "type": "button",
+    "text": "Start Processing & Reconciliation",
+    "object_name": "",
+    "enabled": true
+  },
+  {
+    "type": "button",
+    "text": "Back to Login",
+    "object_name": "",
+    "enabled": true
+  },
+  {
+    "type": "label",
+    "text": "Missing:",
+    "object_name": ""
+  },
+  {
+    "type": "button",
+    "text": "<",
+    "object_name": "",
+    "enabled": true
+  },
+  {
+    "type": "button",
+    "text": "Add File",
+    "object_name": "",
+    "enabled": true
+  },
+  {
+    "type": "label",
+    "text": "",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "Bulk Source Queue",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "Fr",
+    "object_name": ""
+  },
+  {
+    "type": "button",
+    "text": "Refresh",
+    "object_name": "",
+    "enabled": true
+  },
+  {
+    "type": "label",
+    "text": "New Item",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "Philhealth",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "Welcome, MAR",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "Complete",
+    "object_name": ""
+  },
+  {
+    "type": "button",
+    "text": "Delete",
+    "object_name": "DangerButton",
+    "enabled": true
+  },
+  {
+    "type": "label",
+    "text": "New Item",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "New Item",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "29",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "Applicable Period",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "1866",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "New Item",
+    "object_name": ""
+  },
+  {
+    "type": "button",
+    "text": "Remove",
+    "object_name": "",
+    "enabled": true
+  },
+  {
+    "type": "label",
+    "text": "3 day(s) overdue",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "New Item",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "HDMF Loans",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "New Item",
+    "object_name": ""
+  },
+  {
+    "type": "line_edit",
+    "object_name": "",
+    "focusable": true
+  },
+  {
+    "type": "label",
+    "text": "23",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "New Item",
+    "object_name": ""
+  },
+  {
+    "type": "combo_box",
+    "object_name": "",
+    "enabled": true
+  },
+  {
+    "type": "label",
+    "text": "HDMF Loans",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "Philhealth (Past Month Total)",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "New Item",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "Accounts: 2",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "New Item",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "",
+    "object_name": ""
+  },
+  {
+    "type": "button",
+    "text": "Save TXT",
+    "object_name": "",
+    "enabled": true
+  },
+  {
+    "type": "label",
+    "text": "Date Created: 2026-07-15 16:50",
+    "object_name": ""
+  },
+  {
+    "type": "button",
+    "text": "Log Out",
+    "object_name": "",
+    "enabled": true
+  },
+  {
+    "type": "button",
+    "text": "Refresh",
+    "object_name": "",
+    "enabled": true
+  },
+  {
+    "type": "label",
+    "text": "",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "New Item",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "13",
+    "object_name": ""
+  },
+  {
+    "type": "button",
+    "text": "+ Add Item",
+    "object_name": "",
+    "enabled": true
+  },
+  {
+    "type": "label",
+    "text": "31",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "Save Folder",
+    "object_name": ""
+  },
+  {
+    "type": "button",
+    "text": "Import TXT",
+    "object_name": "",
+    "enabled": true
+  },
+  {
+    "type": "label",
+    "text": "July 2026",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "26",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "Correction Excel",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "New Item",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "0",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "14",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "Account List",
+    "object_name": "Title"
+  },
+  {
+    "type": "label",
+    "text": "Create a username and password for this computer.",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "New Item",
+    "object_name": ""
+  },
+  {
+    "type": "button",
+    "text": "Add Folder",
+    "object_name": "",
+    "enabled": true
+  },
+  {
+    "type": "label",
+    "text": "5",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "21",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "Total Payroll Imports",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "Earnings Automation",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "SSS Loans",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "due in 8 day(s)",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "9",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "13",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "16",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "Tu",
+    "object_name": ""
+  },
+  {
+    "type": "combo_box",
+    "object_name": "",
+    "enabled": true
+  },
+  {
+    "type": "label",
+    "text": "Notes",
+    "object_name": ""
+  },
+  {
+    "type": "combo_box",
+    "object_name": "",
+    "enabled": true
+  },
+  {
+    "type": "label",
+    "text": "24",
+    "object_name": ""
+  },
+  {
+    "type": "line_edit",
+    "object_name": "",
+    "focusable": true
+  },
+  {
+    "type": "label",
+    "text": "0%",
+    "object_name": ""
+  },
+  {
+    "type": "line_edit",
+    "object_name": "",
+    "focusable": true
+  },
+  {
+    "type": "label",
+    "text": "",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "44",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "30",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "Applicable Month",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "7",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "HDMF Loan Separator",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "SSS",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "1866",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "due in 1 day(s)",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "Your compliance workspace is ready.",
+    "object_name": ""
+  },
+  {
+    "type": "button",
+    "text": "Browse",
+    "object_name": "",
+    "enabled": true
+  },
+  {
+    "type": "label",
+    "text": "Last Imported Payroll",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "Notes",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "Create and maintain employer records with SSS, PhilHealth, and Pagibig numbers.",
+    "object_name": ""
+  },
+  {
+    "type": "button",
+    "text": "",
+    "object_name": "",
+    "enabled": true
+  },
+  {
+    "type": "label",
+    "text": "Sa",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "New Item",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "9",
+    "object_name": ""
+  },
+  {
+    "type": "button",
+    "text": "<",
+    "object_name": "",
+    "enabled": true
+  },
+  {
+    "type": "button",
+    "text": ">",
+    "object_name": "",
+    "enabled": true
+  },
+  {
+    "type": "combo_box",
+    "object_name": "",
+    "enabled": true
+  },
+  {
+    "type": "label",
+    "text": "2026-07-14T02:31:31.648078",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "May 2026",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "New Item",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "due in 1 day(s)",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "We",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "Year:",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "New Item",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "New Item",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "Loaded latest upload: May 2026",
+    "object_name": ""
+  },
+  {
+    "type": "line_edit",
+    "object_name": "",
+    "focusable": true
+  },
+  {
+    "type": "label",
+    "text": "New Item",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "May 2026",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "New Item",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "Employer SSS ID",
+    "object_name": ""
+  },
+  {
+    "type": "line_edit",
+    "object_name": "",
+    "focusable": true
+  },
+  {
+    "type": "label",
+    "text": "",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "New Item",
+    "object_name": ""
+  },
+  {
+    "type": "button",
+    "text": "+ Add Item",
+    "object_name": "",
+    "enabled": false
+  },
+  {
+    "type": "label",
+    "text": "New Item",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "New Item",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "22",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "0",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "Activity Log",
+    "object_name": ""
+  },
+  {
+    "type": "combo_box",
+    "object_name": "",
+    "enabled": true
+  },
+  {
+    "type": "line_edit",
+    "object_name": "",
+    "focusable": true
+  },
+  {
+    "type": "label",
+    "text": "",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "28",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "July 2026",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "Total Active",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "Total Employees",
+    "object_name": ""
+  },
+  {
+    "type": "button",
+    "text": "Log Out",
+    "object_name": "DangerButton",
+    "enabled": true
+  },
+  {
+    "type": "label",
+    "text": "",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "New Item",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "0 file(s) ready",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "Earnings File",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "14",
+    "object_name": ""
+  },
+  {
+    "type": "button",
+    "text": "Add Employer",
+    "object_name": "",
+    "enabled": true
+  },
+  {
+    "type": "label",
+    "text": "Employer:",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "New Item",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "7",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "Login",
+    "object_name": "Title"
+  },
+  {
+    "type": "label",
+    "text": "Mo",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "Newly Hired:",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "New Item",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "1",
+    "object_name": ""
+  },
+  {
+    "type": "button",
+    "text": "Clear Queue",
+    "object_name": "",
+    "enabled": true
+  },
+  {
+    "type": "label",
+    "text": "New Item",
+    "object_name": ""
+  },
+  {
+    "type": "button",
+    "text": "",
+    "object_name": "",
+    "enabled": true
+  },
+  {
+    "type": "button",
+    "text": "Delete Selected",
+    "object_name": "DangerButton",
+    "enabled": true
+  },
+  {
+    "type": "label",
+    "text": "GovSync",
+    "object_name": "BrandName"
+  },
+  {
+    "type": "label",
+    "text": "",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "HDMF",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "26",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "Sa",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "HDMF",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "New Item",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "15",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "New Item",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "due in 8 day(s)",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "19",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "0",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "May 2026",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "New Item",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "Monitoring File",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "New Item",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "1866",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "10",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "Employer Management",
+    "object_name": "Title"
+  },
+  {
+    "type": "combo_box",
+    "object_name": "",
+    "enabled": true
+  },
+  {
+    "type": "label",
+    "text": "",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "17",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "8 day(s) overdue",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "Missing:",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "New Item",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "Dashboard",
+    "object_name": "Title"
+  },
+  {
+    "type": "label",
+    "text": "Missing",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "New Item",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "3",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "Year:",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "8",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "",
+    "object_name": ""
+  },
+  {
+    "type": "combo_box",
+    "object_name": "",
+    "enabled": true
+  },
+  {
+    "type": "button",
+    "text": "Create Account",
+    "object_name": "PrimaryButton",
+    "enabled": true
+  },
+  {
+    "type": "label",
+    "text": "",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "Ready",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "1866",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "4",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "SSS TXT Automation",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "Monitor employer records and accounts from one place.",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "New Item",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "Manage employers and user accounts",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "Review registered accounts and remove them when needed.",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "27",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "1866",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "New Item",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "Linked SSS Number: Not connected",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "New Item",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "New Item",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "New Item",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "due in 8 day(s)",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "New Item",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "Source Directory:",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "New Item",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "due in 8 day(s)",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "24",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "Complete",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "Philhealth",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "1866",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "New Item",
+    "object_name": ""
+  },
+  {
+    "type": "button",
+    "text": "Browse",
+    "object_name": "",
+    "enabled": true
+  },
+  {
+    "type": "label",
+    "text": "",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "Admin",
+    "object_name": "Title"
+  },
+  {
+    "type": "label",
+    "text": "8",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "Create Account",
+    "object_name": "Title"
+  },
+  {
+    "type": "label",
+    "text": "due in 1 day(s)",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "Th",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "",
+    "object_name": ""
+  },
+  {
+    "type": "button",
+    "text": "",
+    "object_name": "",
+    "enabled": true
+  },
+  {
+    "type": "label",
+    "text": "New Item",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "8 day(s) overdue",
+    "object_name": ""
+  },
+  {
+    "type": "button",
+    "text": "Browse",
+    "object_name": "",
+    "enabled": true
+  },
+  {
+    "type": "label",
+    "text": "due in 8 day(s)",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "1",
+    "object_name": ""
+  },
+  {
+    "type": "button",
+    "text": "Deactivate",
+    "object_name": "",
+    "enabled": true
+  },
+  {
+    "type": "label",
+    "text": "",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "New Item",
+    "object_name": ""
+  },
+  {
+    "type": "button",
+    "text": "Generate Partial List TXT File",
+    "object_name": "",
+    "enabled": true
+  },
+  {
+    "type": "button",
+    "text": "Add Files",
+    "object_name": "",
+    "enabled": true
+  },
+  {
+    "type": "combo_box",
+    "object_name": "",
+    "enabled": true
+  },
+  {
+    "type": "label",
+    "text": "",
+    "object_name": ""
+  },
+  {
+    "type": "line_edit",
+    "object_name": "",
+    "focusable": true
+  },
+  {
+    "type": "label",
+    "text": "5",
+    "object_name": ""
+  },
+  {
+    "type": "combo_box",
+    "object_name": "",
+    "enabled": true
+  },
+  {
+    "type": "label",
+    "text": "GovSync",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "New Item",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "New Item",
+    "object_name": ""
+  },
+  {
+    "type": "line_edit",
+    "object_name": "",
+    "focusable": true
+  },
+  {
+    "type": "label",
+    "text": "Su",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "12",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "Total Employees:",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "HDMF - Contribution Portal (Coming Soon)",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "Make your work efficient.",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "3",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "Date Created: 2026-07-15 16:50",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "22",
+    "object_name": ""
+  },
+  {
+    "type": "line_edit",
+    "object_name": "",
+    "focusable": true
+  },
+  {
+    "type": "label",
+    "text": "20",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "Mo",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "New Item",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "New Item",
+    "object_name": ""
+  },
+  {
+    "type": "button",
+    "text": ">",
+    "object_name": "",
+    "enabled": true
+  },
+  {
+    "type": "label",
+    "text": "",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "SSS",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "Branch Code",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "HDMF (Past Month Total)",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "Fr",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "Applicable Month:",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "12",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "23",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "New Item",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "25",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "New Item",
+    "object_name": ""
+  },
+  {
+    "type": "button",
+    "text": "Add Folder",
+    "object_name": "",
+    "enabled": true
+  },
+  {
+    "type": "label",
+    "text": "0",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "Total Employees:",
+    "object_name": ""
+  },
+  {
+    "type": "button",
+    "text": "Browse",
+    "object_name": "",
+    "enabled": true
+  },
+  {
+    "type": "label",
+    "text": "New Item",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "6",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "Philhealth",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "SSS Loans",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "Month:",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "17",
+    "object_name": ""
+  },
+  {
+    "type": "button",
+    "text": "Separate Loans",
+    "object_name": "",
+    "enabled": true
+  },
+  {
+    "type": "label",
+    "text": "",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "New Item",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "Th",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "Save Directory:",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "21",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "Overview",
+    "object_name": ""
+  },
+  {
+    "type": "button",
+    "text": "",
+    "object_name": "",
+    "enabled": true
+  },
+  {
+    "type": "label",
+    "text": "2",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "18",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "SSS",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "New Item",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "Loading employees...",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "Applicable Period",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "We",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "0%",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "Activity Log",
+    "object_name": ""
+  },
+  {
+    "type": "label",
+    "text": "PhilHealth Automation",
+    "object_name": ""
+  }
+]

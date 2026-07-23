@@ -1,0 +1,342 @@
+[
+  {
+    "type": "line_edit",
+    "object_name": "",
+    "text": ""
+  },
+  {
+    "type": "button",
+    "text": "Don't have an account? Sign up",
+    "object_name": ""
+  },
+  {
+    "type": "line_edit",
+    "object_name": "",
+    "text": ""
+  },
+  {
+    "type": "button",
+    "text": "Login",
+    "object_name": "PrimaryButton"
+  },
+  {
+    "type": "button",
+    "text": "Delete Row",
+    "object_name": ""
+  },
+  {
+    "type": "button",
+    "text": "",
+    "object_name": ""
+  },
+  {
+    "type": "line_edit",
+    "object_name": "",
+    "text": ""
+  },
+  {
+    "type": "button",
+    "text": "Edit Employer",
+    "object_name": ""
+  },
+  {
+    "type": "combo_box",
+    "object_name": "",
+    "count": 70
+  },
+  {
+    "type": "button",
+    "text": "Browse",
+    "object_name": ""
+  },
+  {
+    "type": "button",
+    "text": "Browse",
+    "object_name": ""
+  },
+  {
+    "type": "line_edit",
+    "object_name": "",
+    "text": ""
+  },
+  {
+    "type": "line_edit",
+    "object_name": "",
+    "text": ""
+  },
+  {
+    "type": "line_edit",
+    "object_name": "",
+    "text": "PHIC ALL CLIENTS (MEGS)"
+  },
+  {
+    "type": "button",
+    "text": "Start Processing",
+    "object_name": ""
+  },
+  {
+    "type": "button",
+    "text": "Start Processing & Reconciliation",
+    "object_name": ""
+  },
+  {
+    "type": "button",
+    "text": "Back to Login",
+    "object_name": ""
+  },
+  {
+    "type": "button",
+    "text": "<",
+    "object_name": ""
+  },
+  {
+    "type": "button",
+    "text": "Add File",
+    "object_name": ""
+  },
+  {
+    "type": "button",
+    "text": "Refresh",
+    "object_name": ""
+  },
+  {
+    "type": "button",
+    "text": "Delete",
+    "object_name": "DangerButton"
+  },
+  {
+    "type": "button",
+    "text": "Remove",
+    "object_name": ""
+  },
+  {
+    "type": "line_edit",
+    "object_name": "",
+    "text": ""
+  },
+  {
+    "type": "combo_box",
+    "object_name": "",
+    "count": 8
+  },
+  {
+    "type": "button",
+    "text": "Save TXT",
+    "object_name": ""
+  },
+  {
+    "type": "button",
+    "text": "Log Out",
+    "object_name": ""
+  },
+  {
+    "type": "button",
+    "text": "Refresh",
+    "object_name": ""
+  },
+  {
+    "type": "button",
+    "text": "+ Add Item",
+    "object_name": ""
+  },
+  {
+    "type": "button",
+    "text": "Import TXT",
+    "object_name": ""
+  },
+  {
+    "type": "button",
+    "text": "Add Folder",
+    "object_name": ""
+  },
+  {
+    "type": "combo_box",
+    "object_name": "",
+    "count": 4
+  },
+  {
+    "type": "combo_box",
+    "object_name": "",
+    "count": 12
+  },
+  {
+    "type": "line_edit",
+    "object_name": "",
+    "text": "SSS CORRECTED NAMES.xlsx"
+  },
+  {
+    "type": "line_edit",
+    "object_name": "",
+    "text": "03-9114819-2"
+  },
+  {
+    "type": "button",
+    "text": "Browse",
+    "object_name": ""
+  },
+  {
+    "type": "button",
+    "text": "",
+    "object_name": ""
+  },
+  {
+    "type": "button",
+    "text": "<",
+    "object_name": ""
+  },
+  {
+    "type": "button",
+    "text": ">",
+    "object_name": ""
+  },
+  {
+    "type": "combo_box",
+    "object_name": "",
+    "count": 137
+  },
+  {
+    "type": "line_edit",
+    "object_name": "",
+    "text": ""
+  },
+  {
+    "type": "line_edit",
+    "object_name": "",
+    "text": "000"
+  },
+  {
+    "type": "button",
+    "text": "+ Add Item",
+    "object_name": ""
+  },
+  {
+    "type": "combo_box",
+    "object_name": "",
+    "count": 70
+  },
+  {
+    "type": "line_edit",
+    "object_name": "",
+    "text": ""
+  },
+  {
+    "type": "button",
+    "text": "Log Out",
+    "object_name": "DangerButton"
+  },
+  {
+    "type": "button",
+    "text": "Add Employer",
+    "object_name": ""
+  },
+  {
+    "type": "button",
+    "text": "Clear Queue",
+    "object_name": ""
+  },
+  {
+    "type": "button",
+    "text": "",
+    "object_name": ""
+  },
+  {
+    "type": "button",
+    "text": "Delete Selected",
+    "object_name": "DangerButton"
+  },
+  {
+    "type": "combo_box",
+    "object_name": "",
+    "count": 12
+  },
+  {
+    "type": "combo_box",
+    "object_name": "",
+    "count": 2
+  },
+  {
+    "type": "button",
+    "text": "Create Account",
+    "object_name": "PrimaryButton"
+  },
+  {
+    "type": "button",
+    "text": "Browse",
+    "object_name": ""
+  },
+  {
+    "type": "button",
+    "text": "",
+    "object_name": ""
+  },
+  {
+    "type": "button",
+    "text": "Browse",
+    "object_name": ""
+  },
+  {
+    "type": "button",
+    "text": "Deactivate",
+    "object_name": ""
+  },
+  {
+    "type": "button",
+    "text": "Generate Partial List TXT File",
+    "object_name": ""
+  },
+  {
+    "type": "button",
+    "text": "Add Files",
+    "object_name": ""
+  },
+  {
+    "type": "combo_box",
+    "object_name": "",
+    "count": 12
+  },
+  {
+    "type": "line_edit",
+    "object_name": "",
+    "text": ""
+  },
+  {
+    "type": "combo_box",
+    "object_name": "",
+    "count": 2
+  },
+  {
+    "type": "line_edit",
+    "object_name": "",
+    "text": ""
+  },
+  {
+    "type": "line_edit",
+    "object_name": "",
+    "text": ""
+  },
+  {
+    "type": "button",
+    "text": ">",
+    "object_name": ""
+  },
+  {
+    "type": "button",
+    "text": "Add Folder",
+    "object_name": ""
+  },
+  {
+    "type": "button",
+    "text": "Browse",
+    "object_name": ""
+  },
+  {
+    "type": "button",
+    "text": "Separate Loans",
+    "object_name": ""
+  },
+  {
+    "type": "button",
+    "text": "",
+    "object_name": ""
+  }
+]

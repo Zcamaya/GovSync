@@ -1,0 +1,553 @@
+# Fix Priority
+
+- Layout: 
+- Layout: 
+- Layout: 
+- Layout: NoteRow
+- Layout: 
+- Layout: 
+- Layout: 
+- Layout: 
+- Layout: 
+- Layout: qt_scrollarea_hcontainer
+- Layout: qt_scrollarea_hcontainer
+- Layout: 
+- Layout: 
+- Layout: 
+- Layout: qt_scrollarea_hcontainer
+- Layout: 
+- Layout: qt_scrollarea_hcontainer
+- Layout: NoteRow
+- Layout: 
+- Layout: NoteRow
+- Layout: 
+- Layout: 
+- Layout: 
+- Layout: NoteRow
+- Layout: 
+- Layout: NoteRow
+- Layout: qt_scrollarea_hcontainer
+- Layout: 
+- Layout: ActivityRow
+- Layout: NoteRow
+- Layout: 
+- Layout: AuthCard
+- Layout: qt_scrollarea_hcontainer
+- Layout: ActivityRow
+- Layout: 
+- Layout: 
+- Layout: 
+- Layout: NoteRow
+- Layout: NoteRow
+- Layout: NoteRow
+- Layout: 
+- Layout: NoteRow
+- Layout: 
+- Layout: 
+- Layout: 
+- Layout: ActivityRow
+- Layout: 
+- Layout: 
+- Layout: qt_scrollarea_hcontainer
+- Layout: 
+- Layout: NoteRow
+- Layout: 
+- Layout: qt_scrollarea_hcontainer
+- Layout: 
+- Layout: 
+- Layout: ActivityRow
+- Layout: 
+- Layout: 
+- Layout: 
+- Layout: 
+- Layout: 
+- Layout: 
+- Layout: 
+- Layout: 
+- Layout: NoteRow
+- Layout: 
+- Layout: 
+- Layout: NoteRow
+- Layout: 
+- Layout: 
+- Layout: 
+- Layout: 
+- Layout: ActivityRow
+- Layout: 
+- Layout: NoteRow
+- Layout: NoteRow
+- Layout: qt_scrollarea_hcontainer
+- Layout: 
+- Layout: NoteRow
+- Layout: NoteRow
+- Layout: 
+- Layout: qt_scrollarea_vcontainer
+- Layout: 
+- Layout: qt_scrollarea_vcontainer
+- Layout: NoteRow
+- Layout: 
+- Layout: 
+- Layout: 
+- Layout: 
+- Layout: qt_scrollarea_vcontainer
+- Layout: 
+- Layout: qt_scrollarea_vcontainer
+- Layout: qt_scrollarea_vcontainer
+- Layout: 
+- Layout: 
+- Layout: 
+- Layout: NoteRow
+- Layout: 
+- Layout: 
+- Layout: NoteRow
+- Layout: qt_scrollarea_vcontainer
+- Layout: 
+- Layout: 
+- Layout: qt_scrollarea_hcontainer
+- Layout: NoteRow
+- Layout: NoteRow
+- Layout: NoteRow
+- Layout: 
+- Layout: 
+- Layout: 
+- Layout: NoteRow
+- Layout: NoteRow
+- Layout: 
+- Layout: 
+- Layout: 
+- Layout: 
+- Layout: NoteRow
+- Layout: 
+- Layout: 
+- Layout: 
+- Layout: 
+- Layout: 
+- Layout: 
+- Layout: 
+- Layout: RightPanelWidget
+- Layout: 
+- Layout: 
+- Layout: 
+- Layout: 
+- Layout: NoteRow
+- Layout: FormPanel
+- Layout: 
+- Layout: qt_scrollarea_vcontainer
+- Layout: 
+- Layout: NoteRow
+- Layout: 
+- Layout: NoteRow
+- Layout: 
+- Layout: 
+- Layout: NoteRow
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: Title
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: PrimaryButton
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: DangerButton
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: Title
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: DangerButton
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: Title
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: DangerButton
+- Accessibility: BrandName
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: Title
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: Title
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: PrimaryButton
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: Title
+- Accessibility: 
+- Accessibility: 
+- Accessibility: Title
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 
+- Accessibility: 

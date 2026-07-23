@@ -28,6 +28,7 @@ from widgets.shared_table import RoundedTableCard, SharedTable
 from services.auth_manager import get_active_account
 from controllers.sss_controller import SSSController
 from shared.helpers.account_state import account_state_path, resolve_account_username
+from services.auth_manager import account_json_path  # compatibility alias for tests
 from shared.helpers.json_state import load_json_dict, save_json_dict
 from services.sss_service import (
     SSSService,

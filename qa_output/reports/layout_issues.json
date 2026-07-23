@@ -1,0 +1,702 @@
+[
+  {
+    "type": "out_of_parent",
+    "widget": "QLabel",
+    "object_name": ""
+  },
+  {
+    "type": "out_of_parent",
+    "widget": "QLabel",
+    "object_name": ""
+  },
+  {
+    "type": "out_of_parent",
+    "widget": "QLabel",
+    "object_name": ""
+  },
+  {
+    "type": "out_of_parent",
+    "widget": "NoteRowWidget",
+    "object_name": "NoteRow"
+  },
+  {
+    "type": "out_of_parent",
+    "widget": "QWidget",
+    "object_name": ""
+  },
+  {
+    "type": "out_of_parent",
+    "widget": "QLabel",
+    "object_name": ""
+  },
+  {
+    "type": "out_of_parent",
+    "widget": "QLabel",
+    "object_name": ""
+  },
+  {
+    "type": "out_of_parent",
+    "widget": "QLabel",
+    "object_name": ""
+  },
+  {
+    "type": "out_of_parent",
+    "widget": "SharedTable",
+    "object_name": ""
+  },
+  {
+    "type": "out_of_parent",
+    "widget": "QWidget",
+    "object_name": "qt_scrollarea_hcontainer"
+  },
+  {
+    "type": "out_of_parent",
+    "widget": "QWidget",
+    "object_name": "qt_scrollarea_hcontainer"
+  },
+  {
+    "type": "out_of_parent",
+    "widget": "QLabel",
+    "object_name": ""
+  },
+  {
+    "type": "out_of_parent",
+    "widget": "QWidget",
+    "object_name": ""
+  },
+  {
+    "type": "out_of_parent",
+    "widget": "QWidget",
+    "object_name": ""
+  },
+  {
+    "type": "out_of_parent",
+    "widget": "QWidget",
+    "object_name": "qt_scrollarea_hcontainer"
+  },
+  {
+    "type": "out_of_parent",
+    "widget": "SharedTable",
+    "object_name": ""
+  },
+  {
+    "type": "out_of_parent",
+    "widget": "QWidget",
+    "object_name": "qt_scrollarea_hcontainer"
+  },
+  {
+    "type": "out_of_parent",
+    "widget": "NoteRowWidget",
+    "object_name": "NoteRow"
+  },
+  {
+    "type": "out_of_parent",
+    "widget": "QLabel",
+    "object_name": ""
+  },
+  {
+    "type": "out_of_parent",
+    "widget": "NoteRowWidget",
+    "object_name": "NoteRow"
+  },
+  {
+    "type": "out_of_parent",
+    "widget": "QPushButton",
+    "object_name": ""
+  },
+  {
+    "type": "out_of_parent",
+    "widget": "QLabel",
+    "object_name": ""
+  },
+  {
+    "type": "out_of_parent",
+    "widget": "QPushButton",
+    "object_name": ""
+  },
+  {
+    "type": "out_of_parent",
+    "widget": "NoteRowWidget",
+    "object_name": "NoteRow"
+  },
+  {
+    "type": "out_of_parent",
+    "widget": "QFrame",
+    "object_name": ""
+  },
+  {
+    "type": "out_of_parent",
+    "widget": "NoteRowWidget",
+    "object_name": "NoteRow"
+  },
+  {
+    "type": "out_of_parent",
+    "widget": "QWidget",
+    "object_name": "qt_scrollarea_hcontainer"
+  },
+  {
+    "type": "out_of_parent",
+    "widget": "QLabel",
+    "object_name": ""
+  },
+  {
+    "type": "out_of_parent",
+    "widget": "ActivityRowWidget",
+    "object_name": "ActivityRow"
+  },
+  {
+    "type": "out_of_parent",
+    "widget": "NoteRowWidget",
+    "object_name": "NoteRow"
+  },
+  {
+    "type": "out_of_parent",
+    "widget": "QLabel",
+    "object_name": ""
+  },
+  {
+    "type": "out_of_parent",
+    "widget": "QFrame",
+    "object_name": "AuthCard"
+  },
+  {
+    "type": "out_of_parent",
+    "widget": "QWidget",
+    "object_name": "qt_scrollarea_hcontainer"
+  },
+  {
+    "type": "out_of_parent",
+    "widget": "ActivityRowWidget",
+    "object_name": "ActivityRow"
+  },
+  {
+    "type": "out_of_parent",
+    "widget": "QFrame",
+    "object_name": ""
+  },
+  {
+    "type": "out_of_parent",
+    "widget": "QLabel",
+    "object_name": ""
+  },
+  {
+    "type": "out_of_parent",
+    "widget": "QLabel",
+    "object_name": ""
+  },
+  {
+    "type": "out_of_parent",
+    "widget": "NoteRowWidget",
+    "object_name": "NoteRow"
+  },
+  {
+    "type": "out_of_parent",
+    "widget": "NoteRowWidget",
+    "object_name": "NoteRow"
+  },
+  {
+    "type": "out_of_parent",
+    "widget": "NoteRowWidget",
+    "object_name": "NoteRow"
+  },
+  {
+    "type": "out_of_parent",
+    "widget": "QLabel",
+    "object_name": ""
+  },
+  {
+    "type": "out_of_parent",
+    "widget": "NoteRowWidget",
+    "object_name": "NoteRow"
+  },
+  {
+    "type": "out_of_parent",
+    "widget": "QLabel",
+    "object_name": ""
+  },
+  {
+    "type": "out_of_parent",
+    "widget": "QLabel",
+    "object_name": ""
+  },
+  {
+    "type": "out_of_parent",
+    "widget": "QLabel",
+    "object_name": ""
+  },
+  {
+    "type": "out_of_parent",
+    "widget": "ActivityRowWidget",
+    "object_name": "ActivityRow"
+  },
+  {
+    "type": "out_of_parent",
+    "widget": "QLabel",
+    "object_name": ""
+  },
+  {
+    "type": "out_of_parent",
+    "widget": "QLabel",
+    "object_name": ""
+  },
+  {
+    "type": "out_of_parent",
+    "widget": "QWidget",
+    "object_name": "qt_scrollarea_hcontainer"
+  },
+  {
+    "type": "out_of_parent",
+    "widget": "QLabel",
+    "object_name": ""
+  },
+  {
+    "type": "out_of_parent",
+    "widget": "NoteRowWidget",
+    "object_name": "NoteRow"
+  },
+  {
+    "type": "out_of_parent",
+    "widget": "QLabel",
+    "object_name": ""
+  },
+  {
+    "type": "out_of_parent",
+    "widget": "QWidget",
+    "object_name": "qt_scrollarea_hcontainer"
+  },
+  {
+    "type": "out_of_parent",
+    "widget": "QLabel",
+    "object_name": ""
+  },
+  {
+    "type": "out_of_parent",
+    "widget": "QLabel",
+    "object_name": ""
+  },
+  {
+    "type": "out_of_parent",
+    "widget": "ActivityRowWidget",
+    "object_name": "ActivityRow"
+  },
+  {
+    "type": "out_of_parent",
+    "widget": "QLabel",
+    "object_name": ""
+  },
+  {
+    "type": "out_of_parent",
+    "widget": "QWidget",
+    "object_name": ""
+  },
+  {
+    "type": "out_of_parent",
+    "widget": "QLabel",
+    "object_name": ""
+  },
+  {
+    "type": "out_of_parent",
+    "widget": "QLabel",
+    "object_name": ""
+  },
+  {
+    "type": "out_of_parent",
+    "widget": "QLabel",
+    "object_name": ""
+  },
+  {
+    "type": "out_of_parent",
+    "widget": "QProgressBar",
+    "object_name": ""
+  },
+  {
+    "type": "out_of_parent",
+    "widget": "QLabel",
+    "object_name": ""
+  },
+  {
+    "type": "out_of_parent",
+    "widget": "QPushButton",
+    "object_name": ""
+  },
+  {
+    "type": "out_of_parent",
+    "widget": "NoteRowWidget",
+    "object_name": "NoteRow"
+  },
+  {
+    "type": "out_of_parent",
+    "widget": "QLabel",
+    "object_name": ""
+  },
+  {
+    "type": "out_of_parent",
+    "widget": "QLabel",
+    "object_name": ""
+  },
+  {
+    "type": "out_of_parent",
+    "widget": "NoteRowWidget",
+    "object_name": "NoteRow"
+  },
+  {
+    "type": "out_of_parent",
+    "widget": "QLabel",
+    "object_name": ""
+  },
+  {
+    "type": "out_of_parent",
+    "widget": "QWidget",
+    "object_name": ""
+  },
+  {
+    "type": "out_of_parent",
+    "widget": "QLabel",
+    "object_name": ""
+  },
+  {
+    "type": "out_of_parent",
+    "widget": "QLabel",
+    "object_name": ""
+  },
+  {
+    "type": "out_of_parent",
+    "widget": "ActivityRowWidget",
+    "object_name": "ActivityRow"
+  },
+  {
+    "type": "out_of_parent",
+    "widget": "QLabel",
+    "object_name": ""
+  },
+  {
+    "type": "out_of_parent",
+    "widget": "NoteRowWidget",
+    "object_name": "NoteRow"
+  },
+  {
+    "type": "out_of_parent",
+    "widget": "NoteRowWidget",
+    "object_name": "NoteRow"
+  },
+  {
+    "type": "out_of_parent",
+    "widget": "QWidget",
+    "object_name": "qt_scrollarea_hcontainer"
+  },
+  {
+    "type": "out_of_parent",
+    "widget": "QLabel",
+    "object_name": ""
+  },
+  {
+    "type": "out_of_parent",
+    "widget": "NoteRowWidget",
+    "object_name": "NoteRow"
+  },
+  {
+    "type": "out_of_parent",
+    "widget": "NoteRowWidget",
+    "object_name": "NoteRow"
+  },
+  {
+    "type": "out_of_parent",
+    "widget": "QLabel",
+    "object_name": ""
+  },
+  {
+    "type": "out_of_parent",
+    "widget": "QWidget",
+    "object_name": "qt_scrollarea_vcontainer"
+  },
+  {
+    "type": "out_of_parent",
+    "widget": "QFrame",
+    "object_name": ""
+  },
+  {
+    "type": "out_of_parent",
+    "widget": "QWidget",
+    "object_name": "qt_scrollarea_vcontainer"
+  },
+  {
+    "type": "out_of_parent",
+    "widget": "NoteRowWidget",
+    "object_name": "NoteRow"
+  },
+  {
+    "type": "out_of_parent",
+    "widget": "QLabel",
+    "object_name": ""
+  },
+  {
+    "type": "out_of_parent",
+    "widget": "QLabel",
+    "object_name": ""
+  },
+  {
+    "type": "out_of_parent",
+    "widget": "QFrame",
+    "object_name": ""
+  },
+  {
+    "type": "out_of_parent",
+    "widget": "QLabel",
+    "object_name": ""
+  },
+  {
+    "type": "out_of_parent",
+    "widget": "QWidget",
+    "object_name": "qt_scrollarea_vcontainer"
+  },
+  {
+    "type": "out_of_parent",
+    "widget": "QLabel",
+    "object_name": ""
+  },
+  {
+    "type": "out_of_parent",
+    "widget": "QWidget",
+    "object_name": "qt_scrollarea_vcontainer"
+  },
+  {
+    "type": "out_of_parent",
+    "widget": "QWidget",
+    "object_name": "qt_scrollarea_vcontainer"
+  },
+  {
+    "type": "out_of_parent",
+    "widget": "QPushButton",
+    "object_name": ""
+  },
+  {
+    "type": "out_of_parent",
+    "widget": "QLabel",
+    "object_name": ""
+  },
+  {
+    "type": "out_of_parent",
+    "widget": "QLabel",
+    "object_name": ""
+  },
+  {
+    "type": "out_of_parent",
+    "widget": "NoteRowWidget",
+    "object_name": "NoteRow"
+  },
+  {
+    "type": "out_of_parent",
+    "widget": "QLabel",
+    "object_name": ""
+  },
+  {
+    "type": "out_of_parent",
+    "widget": "QLabel",
+    "object_name": ""
+  },
+  {
+    "type": "out_of_parent",
+    "widget": "NoteRowWidget",
+    "object_name": "NoteRow"
+  },
+  {
+    "type": "out_of_parent",
+    "widget": "QWidget",
+    "object_name": "qt_scrollarea_vcontainer"
+  },
+  {
+    "type": "out_of_parent",
+    "widget": "QLabel",
+    "object_name": ""
+  },
+  {
+    "type": "out_of_parent",
+    "widget": "QLabel",
+    "object_name": ""
+  },
+  {
+    "type": "out_of_parent",
+    "widget": "QWidget",
+    "object_name": "qt_scrollarea_hcontainer"
+  },
+  {
+    "type": "out_of_parent",
+    "widget": "NoteRowWidget",
+    "object_name": "NoteRow"
+  },
+  {
+    "type": "out_of_parent",
+    "widget": "NoteRowWidget",
+    "object_name": "NoteRow"
+  },
+  {
+    "type": "out_of_parent",
+    "widget": "NoteRowWidget",
+    "object_name": "NoteRow"
+  },
+  {
+    "type": "out_of_parent",
+    "widget": "QLabel",
+    "object_name": ""
+  },
+  {
+    "type": "out_of_parent",
+    "widget": "QLabel",
+    "object_name": ""
+  },
+  {
+    "type": "out_of_parent",
+    "widget": "QLabel",
+    "object_name": ""
+  },
+  {
+    "type": "out_of_parent",
+    "widget": "NoteRowWidget",
+    "object_name": "NoteRow"
+  },
+  {
+    "type": "out_of_parent",
+    "widget": "NoteRowWidget",
+    "object_name": "NoteRow"
+  },
+  {
+    "type": "out_of_parent",
+    "widget": "QLabel",
+    "object_name": ""
+  },
+  {
+    "type": "out_of_parent",
+    "widget": "QLabel",
+    "object_name": ""
+  },
+  {
+    "type": "out_of_parent",
+    "widget": "QPushButton",
+    "object_name": ""
+  },
+  {
+    "type": "out_of_parent",
+    "widget": "QLabel",
+    "object_name": ""
+  },
+  {
+    "type": "out_of_parent",
+    "widget": "NoteRowWidget",
+    "object_name": "NoteRow"
+  },
+  {
+    "type": "out_of_parent",
+    "widget": "QFrame",
+    "object_name": ""
+  },
+  {
+    "type": "out_of_parent",
+    "widget": "QLabel",
+    "object_name": ""
+  },
+  {
+    "type": "out_of_parent",
+    "widget": "QLabel",
+    "object_name": ""
+  },
+  {
+    "type": "out_of_parent",
+    "widget": "QLabel",
+    "object_name": ""
+  },
+  {
+    "type": "out_of_parent",
+    "widget": "QLabel",
+    "object_name": ""
+  },
+  {
+    "type": "out_of_parent",
+    "widget": "QLabel",
+    "object_name": ""
+  },
+  {
+    "type": "out_of_parent",
+    "widget": "QLabel",
+    "object_name": ""
+  },
+  {
+    "type": "out_of_parent",
+    "widget": "RightPanelWidget",
+    "object_name": "RightPanelWidget"
+  },
+  {
+    "type": "out_of_parent",
+    "widget": "QLabel",
+    "object_name": ""
+  },
+  {
+    "type": "out_of_parent",
+    "widget": "QLabel",
+    "object_name": ""
+  },
+  {
+    "type": "out_of_parent",
+    "widget": "QLabel",
+    "object_name": ""
+  },
+  {
+    "type": "out_of_parent",
+    "widget": "QPushButton",
+    "object_name": ""
+  },
+  {
+    "type": "out_of_parent",
+    "widget": "NoteRowWidget",
+    "object_name": "NoteRow"
+  },
+  {
+    "type": "out_of_parent",
+    "widget": "QFrame",
+    "object_name": "FormPanel"
+  },
+  {
+    "type": "out_of_parent",
+    "widget": "QPushButton",
+    "object_name": ""
+  },
+  {
+    "type": "out_of_parent",
+    "widget": "QWidget",
+    "object_name": "qt_scrollarea_vcontainer"
+  },
+  {
+    "type": "out_of_parent",
+    "widget": "QLabel",
+    "object_name": ""
+  },
+  {
+    "type": "out_of_parent",
+    "widget": "NoteRowWidget",
+    "object_name": "NoteRow"
+  },
+  {
+    "type": "out_of_parent",
+    "widget": "QLabel",
+    "object_name": ""
+  },
+  {
+    "type": "out_of_parent",
+    "widget": "NoteRowWidget",
+    "object_name": "NoteRow"
+  },
+  {
+    "type": "out_of_parent",
+    "widget": "QLabel",
+    "object_name": ""
+  },
+  {
+    "type": "out_of_parent",
+    "widget": "QLabel",
+    "object_name": ""
+  },
+  {
+    "type": "out_of_parent",
+    "widget": "NoteRowWidget",
+    "object_name": "NoteRow"
+  }
+]

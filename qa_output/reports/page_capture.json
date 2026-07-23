@@ -1,0 +1,345 @@
+[
+  {
+    "label": "startup",
+    "path": "E:\\My Program\\GovSync\\qa_output\\screenshots\\startup.png",
+    "captured": true,
+    "widget_info": {
+      "class": "MainWindow",
+      "object_name": "",
+      "window_title": "GovSync",
+      "visible": true,
+      "enabled": true,
+      "geometry": {
+        "x": 0,
+        "y": 0,
+        "width": 1280,
+        "height": 780
+      }
+    }
+  },
+  {
+    "label": "sidebar_1_earnings",
+    "path": "E:\\My Program\\GovSync\\qa_output\\screenshots\\sidebar_1_earnings.png",
+    "captured": true,
+    "widget_info": {
+      "class": "MainWindow",
+      "object_name": "",
+      "window_title": "GovSync",
+      "visible": true,
+      "enabled": true,
+      "geometry": {
+        "x": 0,
+        "y": 0,
+        "width": 1280,
+        "height": 780
+      }
+    }
+  },
+  {
+    "label": "sidebar_2_employee_records",
+    "path": "E:\\My Program\\GovSync\\qa_output\\screenshots\\sidebar_2_employee_records.png",
+    "captured": true,
+    "widget_info": {
+      "class": "MainWindow",
+      "object_name": "",
+      "window_title": "GovSync",
+      "visible": true,
+      "enabled": true,
+      "geometry": {
+        "x": 0,
+        "y": 0,
+        "width": 1280,
+        "height": 780
+      }
+    }
+  },
+  {
+    "label": "sidebar_3_philhealth",
+    "path": "E:\\My Program\\GovSync\\qa_output\\screenshots\\sidebar_3_philhealth.png",
+    "captured": true,
+    "widget_info": {
+      "class": "MainWindow",
+      "object_name": "",
+      "window_title": "GovSync",
+      "visible": true,
+      "enabled": true,
+      "geometry": {
+        "x": 0,
+        "y": 0,
+        "width": 1280,
+        "height": 780
+      }
+    }
+  },
+  {
+    "label": "sidebar_4_hdmf",
+    "path": "E:\\My Program\\GovSync\\qa_output\\screenshots\\sidebar_4_hdmf.png",
+    "captured": true,
+    "widget_info": {
+      "class": "MainWindow",
+      "object_name": "",
+      "window_title": "GovSync",
+      "visible": true,
+      "enabled": true,
+      "geometry": {
+        "x": 0,
+        "y": 0,
+        "width": 1280,
+        "height": 780
+      }
+    }
+  },
+  {
+    "label": "sidebar_5_sss",
+    "path": "E:\\My Program\\GovSync\\qa_output\\screenshots\\sidebar_5_sss.png",
+    "captured": true,
+    "widget_info": {
+      "class": "MainWindow",
+      "object_name": "",
+      "window_title": "GovSync",
+      "visible": true,
+      "enabled": true,
+      "geometry": {
+        "x": 0,
+        "y": 0,
+        "width": 1280,
+        "height": 780
+      }
+    }
+  },
+  {
+    "label": "sidebar_6_hdmf_loan",
+    "path": "E:\\My Program\\GovSync\\qa_output\\screenshots\\sidebar_6_hdmf_loan.png",
+    "captured": true,
+    "widget_info": {
+      "class": "MainWindow",
+      "object_name": "",
+      "window_title": "GovSync",
+      "visible": true,
+      "enabled": true,
+      "geometry": {
+        "x": 0,
+        "y": 0,
+        "width": 1280,
+        "height": 780
+      }
+    }
+  },
+  {
+    "label": "admin_sidebar_0_dashboard",
+    "path": "E:\\My Program\\GovSync\\qa_output\\screenshots\\admin_sidebar_0_dashboard.png",
+    "captured": true,
+    "widget_info": {
+      "class": "MainWindow",
+      "object_name": "",
+      "window_title": "GovSync",
+      "visible": true,
+      "enabled": true,
+      "geometry": {
+        "x": 0,
+        "y": 0,
+        "width": 1280,
+        "height": 780
+      }
+    }
+  },
+  {
+    "label": "admin_sidebar_1_employer_creation",
+    "path": "E:\\My Program\\GovSync\\qa_output\\screenshots\\admin_sidebar_1_employer_creation.png",
+    "captured": true,
+    "widget_info": {
+      "class": "MainWindow",
+      "object_name": "",
+      "window_title": "GovSync",
+      "visible": true,
+      "enabled": true,
+      "geometry": {
+        "x": 0,
+        "y": 0,
+        "width": 1280,
+        "height": 780
+      }
+    }
+  },
+  {
+    "label": "admin_sidebar_2_account_list",
+    "path": "E:\\My Program\\GovSync\\qa_output\\screenshots\\admin_sidebar_2_account_list.png",
+    "captured": true,
+    "widget_info": {
+      "class": "MainWindow",
+      "object_name": "",
+      "window_title": "GovSync",
+      "visible": true,
+      "enabled": true,
+      "geometry": {
+        "x": 0,
+        "y": 0,
+        "width": 1280,
+        "height": 780
+      }
+    }
+  },
+  {
+    "label": "workspacestack_workspacewidget",
+    "path": "E:\\My Program\\GovSync\\qa_output\\screenshots\\workspacestack_workspacewidget.png",
+    "captured": true,
+    "widget_info": {
+      "class": "MainWindow",
+      "object_name": "",
+      "window_title": "GovSync",
+      "visible": true,
+      "enabled": true,
+      "geometry": {
+        "x": 0,
+        "y": 0,
+        "width": 1280,
+        "height": 780
+      }
+    }
+  },
+  {
+    "label": "workspacestack_1",
+    "path": "E:\\My Program\\GovSync\\qa_output\\screenshots\\workspacestack_1.png",
+    "captured": true,
+    "widget_info": {
+      "class": "MainWindow",
+      "object_name": "",
+      "window_title": "GovSync",
+      "visible": true,
+      "enabled": true,
+      "geometry": {
+        "x": 0,
+        "y": 0,
+        "width": 1280,
+        "height": 780
+      }
+    }
+  },
+  {
+    "label": "workspacestack_2",
+    "path": "E:\\My Program\\GovSync\\qa_output\\screenshots\\workspacestack_2.png",
+    "captured": true,
+    "widget_info": {
+      "class": "MainWindow",
+      "object_name": "",
+      "window_title": "GovSync",
+      "visible": true,
+      "enabled": true,
+      "geometry": {
+        "x": 0,
+        "y": 0,
+        "width": 1280,
+        "height": 780
+      }
+    }
+  },
+  {
+    "label": "workspacestack_3",
+    "path": "E:\\My Program\\GovSync\\qa_output\\screenshots\\workspacestack_3.png",
+    "captured": true,
+    "widget_info": {
+      "class": "MainWindow",
+      "object_name": "",
+      "window_title": "GovSync",
+      "visible": true,
+      "enabled": true,
+      "geometry": {
+        "x": 0,
+        "y": 0,
+        "width": 1280,
+        "height": 780
+      }
+    }
+  },
+  {
+    "label": "workspacestack_4",
+    "path": "E:\\My Program\\GovSync\\qa_output\\screenshots\\workspacestack_4.png",
+    "captured": true,
+    "widget_info": {
+      "class": "MainWindow",
+      "object_name": "",
+      "window_title": "GovSync",
+      "visible": true,
+      "enabled": true,
+      "geometry": {
+        "x": 0,
+        "y": 0,
+        "width": 1280,
+        "height": 780
+      }
+    }
+  },
+  {
+    "label": "workspacestack_5",
+    "path": "E:\\My Program\\GovSync\\qa_output\\screenshots\\workspacestack_5.png",
+    "captured": true,
+    "widget_info": {
+      "class": "MainWindow",
+      "object_name": "",
+      "window_title": "GovSync",
+      "visible": true,
+      "enabled": true,
+      "geometry": {
+        "x": 0,
+        "y": 0,
+        "width": 1280,
+        "height": 780
+      }
+    }
+  },
+  {
+    "label": "login_page",
+    "path": "E:\\My Program\\GovSync\\qa_output\\screenshots\\login_page.png",
+    "captured": true,
+    "widget_info": {
+      "class": "MainWindow",
+      "object_name": "",
+      "window_title": "GovSync",
+      "visible": true,
+      "enabled": true,
+      "geometry": {
+        "x": 0,
+        "y": 0,
+        "width": 1280,
+        "height": 780
+      }
+    }
+  },
+  {
+    "label": "login_register_page",
+    "path": "E:\\My Program\\GovSync\\qa_output\\screenshots\\login_register_page.png",
+    "captured": true,
+    "widget_info": {
+      "class": "MainWindow",
+      "object_name": "",
+      "window_title": "GovSync",
+      "visible": true,
+      "enabled": true,
+      "geometry": {
+        "x": 0,
+        "y": 0,
+        "width": 1280,
+        "height": 780
+      }
+    }
+  },
+  {
+    "label": "dialog_employeedetailsdialog",
+    "path": "E:\\My Program\\GovSync\\qa_output\\screenshots\\dialog_employeedetailsdialog.png",
+    "captured": true,
+    "widget_info": {
+      "class": "EmployeeDetailsDialog",
+      "object_name": "",
+      "window_title": "Employee Details",
+      "visible": true,
+      "enabled": true,
+      "geometry": {
+        "x": 230,
+        "y": 104,
+        "width": 560,
+        "height": 493
+      }
+    },
+    "capture_type": "dialog"
+  }
+]

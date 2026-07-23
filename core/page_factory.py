@@ -112,7 +112,13 @@ class PageFactory:
         """)
 
         content_layout = QHBoxLayout(app_page)
-        content_layout.setContentsMargins(AppStyles.SECTION_PADDING, AppStyles.SECTION_PADDING, AppStyles.SECTION_PADDING, AppStyles.SECTION_PADDING)
+        # Reduce bottom margin so footer controls (paginators) and borders sit closer to window edge
+        content_layout.setContentsMargins(
+            AppStyles.SECTION_PADDING,
+            AppStyles.SECTION_PADDING,
+            AppStyles.SECTION_PADDING,
+            AppStyles.INNER_PADDING,
+        )
         content_layout.setSpacing(AppStyles.PANEL_SPACING)
 
         splitter = SafeSplitter(Qt.Horizontal)

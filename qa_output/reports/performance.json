@@ -1,0 +1,6296 @@
+[
+  {
+    "class": "QScrollBar",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "NoteRowWidget",
+    "object_name": "NoteRow",
+    "visible": false,
+    "children": 4
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QScrollBar",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QAbstractButton",
+    "object_name": "qt_tableview_cornerbutton",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": true,
+    "children": 0
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": true,
+    "children": 0
+  },
+  {
+    "class": "SharedTable",
+    "object_name": "",
+    "visible": false,
+    "children": 20
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": true,
+    "children": 0
+  },
+  {
+    "class": "SafeSplitter",
+    "object_name": "",
+    "visible": true,
+    "children": 664
+  },
+  {
+    "class": "QScrollBar",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QToolButton",
+    "object_name": "NoteDeleteButton",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "NoteRowWidget",
+    "object_name": "NoteRow",
+    "visible": true,
+    "children": 4
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": true,
+    "children": 0
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QToolButton",
+    "object_name": "NoteDeleteButton",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QCheckBox",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QScrollArea",
+    "object_name": "",
+    "visible": false,
+    "children": 156
+  },
+  {
+    "class": "QWidget",
+    "object_name": "qt_scrollarea_hcontainer",
+    "visible": false,
+    "children": 1
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "NoteRowWidget",
+    "object_name": "NoteRow",
+    "visible": false,
+    "children": 4
+  },
+  {
+    "class": "QToolButton",
+    "object_name": "NoteDeleteButton",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QWidget",
+    "object_name": "",
+    "visible": false,
+    "children": 28
+  },
+  {
+    "class": "QLineEdit",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": true,
+    "children": 0
+  },
+  {
+    "class": "QWidget",
+    "object_name": "",
+    "visible": true,
+    "children": 2
+  },
+  {
+    "class": "QWidget",
+    "object_name": "qt_scrollarea_viewport",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": true,
+    "children": 0
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": true,
+    "children": 0
+  },
+  {
+    "class": "QWidget",
+    "object_name": "qt_scrollarea_viewport",
+    "visible": false,
+    "children": 151
+  },
+  {
+    "class": "QLabel",
+    "object_name": "Title",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QWidget",
+    "object_name": "",
+    "visible": true,
+    "children": 2
+  },
+  {
+    "class": "QPushButton",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QLineEdit",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "TrueGlassPanel",
+    "object_name": "",
+    "visible": true,
+    "children": 2
+  },
+  {
+    "class": "QWidget",
+    "object_name": "",
+    "visible": false,
+    "children": 2
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QScrollArea",
+    "object_name": "",
+    "visible": true,
+    "children": 176
+  },
+  {
+    "class": "OverlayScrollBar",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "NoteRowWidget",
+    "object_name": "NoteRow",
+    "visible": false,
+    "children": 4
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QScrollBar",
+    "object_name": "",
+    "visible": true,
+    "children": 0
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "TrueGlassPanel",
+    "object_name": "",
+    "visible": true,
+    "children": 179
+  },
+  {
+    "class": "QWidget",
+    "object_name": "",
+    "visible": false,
+    "children": 2
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QHeaderView",
+    "object_name": "",
+    "visible": false,
+    "children": 5
+  },
+  {
+    "class": "QWidget",
+    "object_name": "qt_scrollarea_vcontainer",
+    "visible": false,
+    "children": 1
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": true,
+    "children": 0
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QScrollBar",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "SharedTable",
+    "object_name": "",
+    "visible": false,
+    "children": 20
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": true,
+    "children": 0
+  },
+  {
+    "class": "QToolButton",
+    "object_name": "NoteDeleteButton",
+    "visible": true,
+    "children": 0
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": true,
+    "children": 0
+  },
+  {
+    "class": "QWidget",
+    "object_name": "qt_scrollarea_viewport",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QScrollBar",
+    "object_name": "",
+    "visible": true,
+    "children": 0
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": true,
+    "children": 0
+  },
+  {
+    "class": "QWidget",
+    "object_name": "qt_scrollarea_hcontainer",
+    "visible": false,
+    "children": 1
+  },
+  {
+    "class": "QWidget",
+    "object_name": "qt_scrollarea_hcontainer",
+    "visible": false,
+    "children": 1
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": true,
+    "children": 0
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QFrame",
+    "object_name": "",
+    "visible": false,
+    "children": 8
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QAbstractButton",
+    "object_name": "qt_tableview_cornerbutton",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QToolButton",
+    "object_name": "NoteDeleteButton",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QToolButton",
+    "object_name": "NoteDeleteButton",
+    "visible": true,
+    "children": 0
+  },
+  {
+    "class": "QPushButton",
+    "object_name": "PrimaryButton",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QWidget",
+    "object_name": "",
+    "visible": false,
+    "children": 20
+  },
+  {
+    "class": "QWidget",
+    "object_name": "",
+    "visible": false,
+    "children": 2
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QWidget",
+    "object_name": "",
+    "visible": true,
+    "children": 2
+  },
+  {
+    "class": "QToolButton",
+    "object_name": "NoteDeleteButton",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QWidget",
+    "object_name": "",
+    "visible": false,
+    "children": 33
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QWidget",
+    "object_name": "",
+    "visible": false,
+    "children": 27
+  },
+  {
+    "class": "QWidget",
+    "object_name": "qt_scrollarea_vcontainer",
+    "visible": false,
+    "children": 1
+  },
+  {
+    "class": "QWidget",
+    "object_name": "",
+    "visible": false,
+    "children": 2
+  },
+  {
+    "class": "QWidget",
+    "object_name": "qt_scrollarea_hcontainer",
+    "visible": false,
+    "children": 1
+  },
+  {
+    "class": "QWidget",
+    "object_name": "",
+    "visible": false,
+    "children": 5
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "ActivityRowWidget",
+    "object_name": "ActivityRow",
+    "visible": false,
+    "children": 3
+  },
+  {
+    "class": "SharedTable",
+    "object_name": "",
+    "visible": false,
+    "children": 20
+  },
+  {
+    "class": "QScrollBar",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QWidget",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QToolButton",
+    "object_name": "NoteDeleteButton",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "NoteRowWidget",
+    "object_name": "NoteRow",
+    "visible": false,
+    "children": 4
+  },
+  {
+    "class": "QWidget",
+    "object_name": "",
+    "visible": false,
+    "children": 2
+  },
+  {
+    "class": "TrueGlassPanel",
+    "object_name": "",
+    "visible": true,
+    "children": 48
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "SharedTable",
+    "object_name": "",
+    "visible": false,
+    "children": 20
+  },
+  {
+    "class": "QWidget",
+    "object_name": "qt_scrollarea_hcontainer",
+    "visible": false,
+    "children": 1
+  },
+  {
+    "class": "QWidget",
+    "object_name": "",
+    "visible": false,
+    "children": 38
+  },
+  {
+    "class": "QFrame",
+    "object_name": "TableCard",
+    "visible": false,
+    "children": 21
+  },
+  {
+    "class": "QToolButton",
+    "object_name": "NoteDeleteButton",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QSplitterHandle",
+    "object_name": "qt_splithandle_RightPanelWidget",
+    "visible": true,
+    "children": 0
+  },
+  {
+    "class": "QScrollBar",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QPushButton",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QWidget",
+    "object_name": "qt_scrollarea_vcontainer",
+    "visible": false,
+    "children": 1
+  },
+  {
+    "class": "MetricCard",
+    "object_name": "",
+    "visible": false,
+    "children": 2
+  },
+  {
+    "class": "QWidget",
+    "object_name": "",
+    "visible": true,
+    "children": 2
+  },
+  {
+    "class": "QCheckBox",
+    "object_name": "",
+    "visible": true,
+    "children": 0
+  },
+  {
+    "class": "MetricCard",
+    "object_name": "",
+    "visible": false,
+    "children": 2
+  },
+  {
+    "class": "QWidget",
+    "object_name": "",
+    "visible": true,
+    "children": 2
+  },
+  {
+    "class": "QFrame",
+    "object_name": "",
+    "visible": false,
+    "children": 2
+  },
+  {
+    "class": "QToolButton",
+    "object_name": "NoteDeleteButton",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": true,
+    "children": 0
+  },
+  {
+    "class": "NoteRowWidget",
+    "object_name": "NoteRow",
+    "visible": true,
+    "children": 4
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": true,
+    "children": 0
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QScrollBar",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QWidget",
+    "object_name": "qt_scrollarea_viewport",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QWidget",
+    "object_name": "",
+    "visible": false,
+    "children": 34
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": true,
+    "children": 0
+  },
+  {
+    "class": "QToolButton",
+    "object_name": "PagArrow",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QToolButton",
+    "object_name": "NoteDeleteButton",
+    "visible": true,
+    "children": 0
+  },
+  {
+    "class": "TrueGlassPanel",
+    "object_name": "",
+    "visible": false,
+    "children": 28
+  },
+  {
+    "class": "QWidget",
+    "object_name": "qt_scrollarea_hcontainer",
+    "visible": false,
+    "children": 1
+  },
+  {
+    "class": "QListWidget",
+    "object_name": "",
+    "visible": false,
+    "children": 5
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QCheckBox",
+    "object_name": "",
+    "visible": true,
+    "children": 0
+  },
+  {
+    "class": "QPushButton",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": true,
+    "children": 0
+  },
+  {
+    "class": "NoteRowWidget",
+    "object_name": "NoteRow",
+    "visible": false,
+    "children": 4
+  },
+  {
+    "class": "QToolButton",
+    "object_name": "NoteDeleteButton",
+    "visible": true,
+    "children": 0
+  },
+  {
+    "class": "QLineEdit",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QScrollBar",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QWidget",
+    "object_name": "qt_scrollarea_vcontainer",
+    "visible": false,
+    "children": 1
+  },
+  {
+    "class": "QWidget",
+    "object_name": "qt_scrollarea_viewport",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "NoteRowWidget",
+    "object_name": "NoteRow",
+    "visible": true,
+    "children": 4
+  },
+  {
+    "class": "QToolButton",
+    "object_name": "NoteDeleteButton",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": true,
+    "children": 0
+  },
+  {
+    "class": "NoteRowWidget",
+    "object_name": "NoteRow",
+    "visible": true,
+    "children": 4
+  },
+  {
+    "class": "QScrollBar",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QScrollBar",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QPushButton",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QTabWidget",
+    "object_name": "",
+    "visible": false,
+    "children": 80
+  },
+  {
+    "class": "QComboBox",
+    "object_name": "",
+    "visible": false,
+    "children": 9
+  },
+  {
+    "class": "QToolButton",
+    "object_name": "NoteDeleteButton",
+    "visible": true,
+    "children": 0
+  },
+  {
+    "class": "QListWidget",
+    "object_name": "",
+    "visible": false,
+    "children": 5
+  },
+  {
+    "class": "QStackedWidget",
+    "object_name": "",
+    "visible": true,
+    "children": 1031
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QToolButton",
+    "object_name": "NoteDeleteButton",
+    "visible": true,
+    "children": 0
+  },
+  {
+    "class": "QToolButton",
+    "object_name": "NoteDeleteButton",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": true,
+    "children": 0
+  },
+  {
+    "class": "QToolButton",
+    "object_name": "NoteDeleteButton",
+    "visible": true,
+    "children": 0
+  },
+  {
+    "class": "QToolButton",
+    "object_name": "PagArrow",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "NoteRowWidget",
+    "object_name": "NoteRow",
+    "visible": true,
+    "children": 4
+  },
+  {
+    "class": "QToolButton",
+    "object_name": "NoteDeleteButton",
+    "visible": true,
+    "children": 0
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": true,
+    "children": 0
+  },
+  {
+    "class": "QPushButton",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": true,
+    "children": 0
+  },
+  {
+    "class": "QFrame",
+    "object_name": "",
+    "visible": false,
+    "children": 8
+  },
+  {
+    "class": "QWidget",
+    "object_name": "",
+    "visible": false,
+    "children": 8
+  },
+  {
+    "class": "QWidget",
+    "object_name": "",
+    "visible": true,
+    "children": 2
+  },
+  {
+    "class": "QWidget",
+    "object_name": "",
+    "visible": true,
+    "children": 2
+  },
+  {
+    "class": "NoteRowWidget",
+    "object_name": "NoteRow",
+    "visible": false,
+    "children": 4
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QPushButton",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "PhicExtractorApp",
+    "object_name": "",
+    "visible": false,
+    "children": 10
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QStackedWidget",
+    "object_name": "qt_tabwidget_stackedwidget",
+    "visible": false,
+    "children": 91
+  },
+  {
+    "class": "QScrollBar",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QLineEdit",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "NoteRowWidget",
+    "object_name": "NoteRow",
+    "visible": true,
+    "children": 4
+  },
+  {
+    "class": "QWidget",
+    "object_name": "qt_scrollarea_viewport",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QToolButton",
+    "object_name": "NoteDeleteButton",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QScrollBar",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QWidget",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "NoteRowWidget",
+    "object_name": "NoteRow",
+    "visible": false,
+    "children": 4
+  },
+  {
+    "class": "QFrame",
+    "object_name": "",
+    "visible": false,
+    "children": 8
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": true,
+    "children": 0
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QWidget",
+    "object_name": "",
+    "visible": true,
+    "children": 2
+  },
+  {
+    "class": "QWidget",
+    "object_name": "qt_scrollarea_viewport",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QScrollBar",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QCheckBox",
+    "object_name": "",
+    "visible": true,
+    "children": 0
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QWidget",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": true,
+    "children": 0
+  },
+  {
+    "class": "NoteRowWidget",
+    "object_name": "NoteRow",
+    "visible": true,
+    "children": 4
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": true,
+    "children": 0
+  },
+  {
+    "class": "QWidget",
+    "object_name": "",
+    "visible": false,
+    "children": 2
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": true,
+    "children": 0
+  },
+  {
+    "class": "QWidget",
+    "object_name": "qt_scrollarea_hcontainer",
+    "visible": false,
+    "children": 1
+  },
+  {
+    "class": "QWidget",
+    "object_name": "qt_scrollarea_hcontainer",
+    "visible": false,
+    "children": 1
+  },
+  {
+    "class": "QToolButton",
+    "object_name": "NoteDeleteButton",
+    "visible": true,
+    "children": 0
+  },
+  {
+    "class": "QWidget",
+    "object_name": "qt_scrollarea_viewport",
+    "visible": true,
+    "children": 171
+  },
+  {
+    "class": "QToolButton",
+    "object_name": "NoteDeleteButton",
+    "visible": true,
+    "children": 0
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QWidget",
+    "object_name": "qt_scrollarea_viewport",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "OverlayScrollBar",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QFrame",
+    "object_name": "ContentPanel",
+    "visible": false,
+    "children": 3
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QWidget",
+    "object_name": "",
+    "visible": false,
+    "children": 20
+  },
+  {
+    "class": "QFrame",
+    "object_name": "",
+    "visible": false,
+    "children": 8
+  },
+  {
+    "class": "QStackedWidget",
+    "object_name": "WorkspaceStack",
+    "visible": true,
+    "children": 388
+  },
+  {
+    "class": "ActivityRowWidget",
+    "object_name": "ActivityRow",
+    "visible": true,
+    "children": 3
+  },
+  {
+    "class": "QWidget",
+    "object_name": "qt_scrollarea_hcontainer",
+    "visible": false,
+    "children": 1
+  },
+  {
+    "class": "QWidget",
+    "object_name": "",
+    "visible": true,
+    "children": 2
+  },
+  {
+    "class": "QCheckBox",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QLineEdit",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "NoteRowWidget",
+    "object_name": "NoteRow",
+    "visible": true,
+    "children": 4
+  },
+  {
+    "class": "QFrame",
+    "object_name": "MainContainer",
+    "visible": true,
+    "children": 1036
+  },
+  {
+    "class": "QWidget",
+    "object_name": "",
+    "visible": false,
+    "children": 2
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QFrame",
+    "object_name": "AuthCard",
+    "visible": false,
+    "children": 33
+  },
+  {
+    "class": "QScrollBar",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QScrollBar",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QCheckBox",
+    "object_name": "",
+    "visible": true,
+    "children": 0
+  },
+  {
+    "class": "QWidget",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QScrollBar",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QWidget",
+    "object_name": "qt_scrollarea_hcontainer",
+    "visible": false,
+    "children": 1
+  },
+  {
+    "class": "QWidget",
+    "object_name": "qt_scrollarea_viewport",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": true,
+    "children": 0
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": true,
+    "children": 0
+  },
+  {
+    "class": "QLineEdit",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QToolButton",
+    "object_name": "PagNum",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "ActivityRowWidget",
+    "object_name": "ActivityRow",
+    "visible": true,
+    "children": 3
+  },
+  {
+    "class": "OverlayScrollBar",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QWidget",
+    "object_name": "qt_scrollarea_viewport",
+    "visible": true,
+    "children": 0
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QFrame",
+    "object_name": "",
+    "visible": false,
+    "children": 8
+  },
+  {
+    "class": "TrueGlassPanel",
+    "object_name": "",
+    "visible": false,
+    "children": 12
+  },
+  {
+    "class": "QToolButton",
+    "object_name": "NoteDeleteButton",
+    "visible": true,
+    "children": 0
+  },
+  {
+    "class": "QPushButton",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QPushButton",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QScrollBar",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QWidget",
+    "object_name": "qt_scrollarea_viewport",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "EmployeeRecordsPanel",
+    "object_name": "",
+    "visible": false,
+    "children": 79
+  },
+  {
+    "class": "QPushButton",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "HistoryCardWidget",
+    "object_name": "HistoryCard",
+    "visible": false,
+    "children": 9
+  },
+  {
+    "class": "QWidget",
+    "object_name": "qt_scrollarea_viewport",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QWidget",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QToolButton",
+    "object_name": "NoteDeleteButton",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QFrame",
+    "object_name": "",
+    "visible": false,
+    "children": 8
+  },
+  {
+    "class": "NoteRowWidget",
+    "object_name": "NoteRow",
+    "visible": false,
+    "children": 4
+  },
+  {
+    "class": "QScrollBar",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QPushButton",
+    "object_name": "",
+    "visible": true,
+    "children": 0
+  },
+  {
+    "class": "QPushButton",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QWidget",
+    "object_name": "",
+    "visible": true,
+    "children": 2
+  },
+  {
+    "class": "QScrollBar",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QWidget",
+    "object_name": "",
+    "visible": false,
+    "children": 2
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QWidget",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QWidget",
+    "object_name": "qt_scrollarea_hcontainer",
+    "visible": false,
+    "children": 1
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QWidget",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QListView",
+    "object_name": "",
+    "visible": false,
+    "children": 5
+  },
+  {
+    "class": "QToolButton",
+    "object_name": "ScrollLeftButton",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QPushButton",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QToolButton",
+    "object_name": "NoteDeleteButton",
+    "visible": true,
+    "children": 0
+  },
+  {
+    "class": "NoteRowWidget",
+    "object_name": "NoteRow",
+    "visible": true,
+    "children": 4
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": true,
+    "children": 0
+  },
+  {
+    "class": "NoteRowWidget",
+    "object_name": "NoteRow",
+    "visible": true,
+    "children": 4
+  },
+  {
+    "class": "QScrollBar",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": true,
+    "children": 0
+  },
+  {
+    "class": "QToolButton",
+    "object_name": "NoteDeleteButton",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": true,
+    "children": 0
+  },
+  {
+    "class": "QScrollBar",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "ActivityRowWidget",
+    "object_name": "ActivityRow",
+    "visible": true,
+    "children": 3
+  },
+  {
+    "class": "QPushButton",
+    "object_name": "DangerButton",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QWidget",
+    "object_name": "qt_scrollarea_hcontainer",
+    "visible": false,
+    "children": 1
+  },
+  {
+    "class": "QScrollBar",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "RoundedTableCard",
+    "object_name": "TableCardWrapper",
+    "visible": false,
+    "children": 22
+  },
+  {
+    "class": "QWidget",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": true,
+    "children": 0
+  },
+  {
+    "class": "QWidget",
+    "object_name": "qt_scrollarea_vcontainer",
+    "visible": false,
+    "children": 1
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QToolButton",
+    "object_name": "NoteDeleteButton",
+    "visible": true,
+    "children": 0
+  },
+  {
+    "class": "QWidget",
+    "object_name": "qt_scrollarea_hcontainer",
+    "visible": false,
+    "children": 1
+  },
+  {
+    "class": "QScrollBar",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "NoteRowWidget",
+    "object_name": "NoteRow",
+    "visible": false,
+    "children": 4
+  },
+  {
+    "class": "QToolButton",
+    "object_name": "NoteDeleteButton",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "NoteRowWidget",
+    "object_name": "NoteRow",
+    "visible": true,
+    "children": 4
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QToolButton",
+    "object_name": "NoteDeleteButton",
+    "visible": true,
+    "children": 0
+  },
+  {
+    "class": "EmployeeRecordsHeader",
+    "object_name": "",
+    "visible": false,
+    "children": 45
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QWidget",
+    "object_name": "qt_scrollarea_hcontainer",
+    "visible": false,
+    "children": 1
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "NoteRowWidget",
+    "object_name": "NoteRow",
+    "visible": true,
+    "children": 4
+  },
+  {
+    "class": "QHeaderView",
+    "object_name": "",
+    "visible": false,
+    "children": 5
+  },
+  {
+    "class": "QProgressBar",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QScrollBar",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "PhilHealthPanel",
+    "object_name": "",
+    "visible": false,
+    "children": 153
+  },
+  {
+    "class": "QListWidget",
+    "object_name": "",
+    "visible": false,
+    "children": 5
+  },
+  {
+    "class": "QWidget",
+    "object_name": "",
+    "visible": true,
+    "children": 2
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QScrollBar",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QWidget",
+    "object_name": "qt_scrollarea_viewport",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QPushButton",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": true,
+    "children": 0
+  },
+  {
+    "class": "QToolButton",
+    "object_name": "NoteDeleteButton",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QWidget",
+    "object_name": "qt_scrollarea_viewport",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QScrollBar",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QScrollBar",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QWidget",
+    "object_name": "",
+    "visible": false,
+    "children": 2
+  },
+  {
+    "class": "QWidget",
+    "object_name": "",
+    "visible": true,
+    "children": 38
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QWidget",
+    "object_name": "qt_scrollarea_hcontainer",
+    "visible": false,
+    "children": 1
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": true,
+    "children": 0
+  },
+  {
+    "class": "QLineEdit",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": true,
+    "children": 0
+  },
+  {
+    "class": "QScrollBar",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QHeaderView",
+    "object_name": "",
+    "visible": false,
+    "children": 5
+  },
+  {
+    "class": "QComboBox",
+    "object_name": "",
+    "visible": false,
+    "children": 9
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": true,
+    "children": 0
+  },
+  {
+    "class": "QWidget",
+    "object_name": "qt_scrollarea_hcontainer",
+    "visible": false,
+    "children": 1
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": true,
+    "children": 0
+  },
+  {
+    "class": "OverlayScrollBar",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "ActivityRowWidget",
+    "object_name": "ActivityRow",
+    "visible": true,
+    "children": 3
+  },
+  {
+    "class": "QWidget",
+    "object_name": "qt_scrollarea_hcontainer",
+    "visible": false,
+    "children": 1
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QPushButton",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QPushButton",
+    "object_name": "",
+    "visible": true,
+    "children": 0
+  },
+  {
+    "class": "QWidget",
+    "object_name": "qt_scrollarea_viewport",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QToolButton",
+    "object_name": "NoteDeleteButton",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QPushButton",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QScrollBar",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QWidget",
+    "object_name": "qt_scrollarea_viewport",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": true,
+    "children": 0
+  },
+  {
+    "class": "NoteRowWidget",
+    "object_name": "NoteRow",
+    "visible": false,
+    "children": 4
+  },
+  {
+    "class": "QScrollBar",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": true,
+    "children": 0
+  },
+  {
+    "class": "QPushButton",
+    "object_name": "",
+    "visible": true,
+    "children": 0
+  },
+  {
+    "class": "QWidget",
+    "object_name": "qt_scrollarea_hcontainer",
+    "visible": false,
+    "children": 1
+  },
+  {
+    "class": "QFrame",
+    "object_name": "FormPanel",
+    "visible": false,
+    "children": 7
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QScrollBar",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QScrollBar",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QProgressBar",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QWidget",
+    "object_name": "qt_scrollarea_viewport",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QWidget",
+    "object_name": "qt_scrollarea_vcontainer",
+    "visible": false,
+    "children": 1
+  },
+  {
+    "class": "QWidget",
+    "object_name": "qt_scrollarea_viewport",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QPushButton",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QScrollBar",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": true,
+    "children": 0
+  },
+  {
+    "class": "QWidget",
+    "object_name": "",
+    "visible": true,
+    "children": 2
+  },
+  {
+    "class": "QWidget",
+    "object_name": "qt_scrollarea_viewport",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QToolButton",
+    "object_name": "NoteDeleteButton",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QWidget",
+    "object_name": "qt_scrollarea_vcontainer",
+    "visible": true,
+    "children": 1
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "LoginPage",
+    "object_name": "",
+    "visible": false,
+    "children": 34
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QWidget",
+    "object_name": "qt_scrollarea_vcontainer",
+    "visible": false,
+    "children": 1
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "MetricCard",
+    "object_name": "",
+    "visible": false,
+    "children": 2
+  },
+  {
+    "class": "NoteRowWidget",
+    "object_name": "NoteRow",
+    "visible": false,
+    "children": 4
+  },
+  {
+    "class": "QScrollBar",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QCheckBox",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QWidget",
+    "object_name": "qt_scrollarea_viewport",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QWidget",
+    "object_name": "",
+    "visible": true,
+    "children": 2
+  },
+  {
+    "class": "QLabel",
+    "object_name": "Title",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QHeaderView",
+    "object_name": "",
+    "visible": false,
+    "children": 5
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QPushButton",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QHeaderView",
+    "object_name": "",
+    "visible": false,
+    "children": 5
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": true,
+    "children": 0
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "NoteRowWidget",
+    "object_name": "NoteRow",
+    "visible": false,
+    "children": 4
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QWidget",
+    "object_name": "",
+    "visible": false,
+    "children": 2
+  },
+  {
+    "class": "QWidget",
+    "object_name": "",
+    "visible": false,
+    "children": 2
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "NoteRowWidget",
+    "object_name": "NoteRow",
+    "visible": false,
+    "children": 4
+  },
+  {
+    "class": "QListView",
+    "object_name": "",
+    "visible": false,
+    "children": 5
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": true,
+    "children": 0
+  },
+  {
+    "class": "NoteRowWidget",
+    "object_name": "NoteRow",
+    "visible": true,
+    "children": 4
+  },
+  {
+    "class": "QWidget",
+    "object_name": "",
+    "visible": true,
+    "children": 2
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QScrollBar",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "NoteRowWidget",
+    "object_name": "NoteRow",
+    "visible": false,
+    "children": 4
+  },
+  {
+    "class": "QWidget",
+    "object_name": "qt_scrollarea_hcontainer",
+    "visible": false,
+    "children": 1
+  },
+  {
+    "class": "QFrame",
+    "object_name": "GovCard",
+    "visible": false,
+    "children": 31
+  },
+  {
+    "class": "QHeaderView",
+    "object_name": "",
+    "visible": false,
+    "children": 5
+  },
+  {
+    "class": "QAbstractButton",
+    "object_name": "qt_tableview_cornerbutton",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QWidget",
+    "object_name": "",
+    "visible": true,
+    "children": 2
+  },
+  {
+    "class": "QHeaderView",
+    "object_name": "",
+    "visible": false,
+    "children": 5
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QScrollBar",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "ActivityRowWidget",
+    "object_name": "ActivityRow",
+    "visible": true,
+    "children": 3
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": true,
+    "children": 0
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QTabBar",
+    "object_name": "qt_tabwidget_tabbar",
+    "visible": false,
+    "children": 2
+  },
+  {
+    "class": "QWidget",
+    "object_name": "qt_scrollarea_vcontainer",
+    "visible": false,
+    "children": 1
+  },
+  {
+    "class": "QToolButton",
+    "object_name": "NoteDeleteButton",
+    "visible": true,
+    "children": 0
+  },
+  {
+    "class": "QToolButton",
+    "object_name": "NoteDeleteButton",
+    "visible": true,
+    "children": 0
+  },
+  {
+    "class": "QWidget",
+    "object_name": "",
+    "visible": false,
+    "children": 97
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QWidget",
+    "object_name": "qt_scrollarea_viewport",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QWidget",
+    "object_name": "qt_scrollarea_hcontainer",
+    "visible": false,
+    "children": 1
+  },
+  {
+    "class": "QCheckBox",
+    "object_name": "",
+    "visible": true,
+    "children": 0
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QComboBox",
+    "object_name": "",
+    "visible": false,
+    "children": 9
+  },
+  {
+    "class": "QTabBar",
+    "object_name": "qt_tabwidget_tabbar",
+    "visible": false,
+    "children": 2
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": true,
+    "children": 0
+  },
+  {
+    "class": "QComboBox",
+    "object_name": "",
+    "visible": false,
+    "children": 9
+  },
+  {
+    "class": "QScrollBar",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QLineEdit",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QToolButton",
+    "object_name": "PagNum",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QWidget",
+    "object_name": "qt_scrollarea_hcontainer",
+    "visible": false,
+    "children": 1
+  },
+  {
+    "class": "QFrame",
+    "object_name": "",
+    "visible": false,
+    "children": 2
+  },
+  {
+    "class": "ActivityRowWidget",
+    "object_name": "ActivityRow",
+    "visible": true,
+    "children": 3
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QLineEdit",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QProgressBar",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "NoteRowWidget",
+    "object_name": "NoteRow",
+    "visible": false,
+    "children": 4
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": true,
+    "children": 0
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QWidget",
+    "object_name": "qt_scrollarea_vcontainer",
+    "visible": false,
+    "children": 1
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QFrame",
+    "object_name": "TableCard",
+    "visible": false,
+    "children": 21
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": true,
+    "children": 0
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": true,
+    "children": 0
+  },
+  {
+    "class": "QWidget",
+    "object_name": "qt_scrollarea_vcontainer",
+    "visible": false,
+    "children": 1
+  },
+  {
+    "class": "QWidget",
+    "object_name": "qt_scrollarea_vcontainer",
+    "visible": false,
+    "children": 1
+  },
+  {
+    "class": "QWidget",
+    "object_name": "qt_scrollarea_vcontainer",
+    "visible": true,
+    "children": 1
+  },
+  {
+    "class": "QPushButton",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QStackedWidget",
+    "object_name": "",
+    "visible": false,
+    "children": 75
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "NoteRowWidget",
+    "object_name": "NoteRow",
+    "visible": true,
+    "children": 4
+  },
+  {
+    "class": "QWidget",
+    "object_name": "qt_scrollarea_vcontainer",
+    "visible": false,
+    "children": 1
+  },
+  {
+    "class": "QScrollArea",
+    "object_name": "",
+    "visible": false,
+    "children": 26
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "NoteRowWidget",
+    "object_name": "NoteRow",
+    "visible": false,
+    "children": 4
+  },
+  {
+    "class": "QWidget",
+    "object_name": "",
+    "visible": false,
+    "children": 2
+  },
+  {
+    "class": "QWidget",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QScrollBar",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "NoteRowWidget",
+    "object_name": "NoteRow",
+    "visible": true,
+    "children": 4
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QAbstractButton",
+    "object_name": "qt_tableview_cornerbutton",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QPushButton",
+    "object_name": "",
+    "visible": true,
+    "children": 0
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QFrame",
+    "object_name": "Overlay",
+    "visible": false,
+    "children": 2
+  },
+  {
+    "class": "QSplitterHandle",
+    "object_name": "qt_splithandle_WorkspaceStack",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QWidget",
+    "object_name": "",
+    "visible": false,
+    "children": 34
+  },
+  {
+    "class": "NoteRowWidget",
+    "object_name": "NoteRow",
+    "visible": false,
+    "children": 4
+  },
+  {
+    "class": "QWidget",
+    "object_name": "",
+    "visible": false,
+    "children": 2
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QToolButton",
+    "object_name": "ScrollRightButton",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": true,
+    "children": 0
+  },
+  {
+    "class": "QStackedWidget",
+    "object_name": "",
+    "visible": false,
+    "children": 27
+  },
+  {
+    "class": "QWidget",
+    "object_name": "",
+    "visible": false,
+    "children": 2
+  },
+  {
+    "class": "OverlayScrollBar",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QWidget",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QWidget",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QScrollBar",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QToolButton",
+    "object_name": "NoteDeleteButton",
+    "visible": true,
+    "children": 0
+  },
+  {
+    "class": "QTabBar",
+    "object_name": "qt_tabwidget_tabbar",
+    "visible": false,
+    "children": 2
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QScrollBar",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QWidget",
+    "object_name": "qt_scrollarea_vcontainer",
+    "visible": false,
+    "children": 1
+  },
+  {
+    "class": "ActivityRowWidget",
+    "object_name": "ActivityRow",
+    "visible": true,
+    "children": 3
+  },
+  {
+    "class": "QToolButton",
+    "object_name": "ScrollRightButton",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QPushButton",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QPushButton",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QComboBox",
+    "object_name": "",
+    "visible": false,
+    "children": 9
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": true,
+    "children": 0
+  },
+  {
+    "class": "QListView",
+    "object_name": "",
+    "visible": false,
+    "children": 5
+  },
+  {
+    "class": "QWidget",
+    "object_name": "",
+    "visible": false,
+    "children": 8
+  },
+  {
+    "class": "QScrollBar",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": true,
+    "children": 0
+  },
+  {
+    "class": "NoteRowWidget",
+    "object_name": "NoteRow",
+    "visible": true,
+    "children": 4
+  },
+  {
+    "class": "EmployeeRecordsTable",
+    "object_name": "",
+    "visible": false,
+    "children": 20
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QWidget",
+    "object_name": "qt_scrollarea_viewport",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QWidget",
+    "object_name": "qt_scrollarea_viewport",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QWidget",
+    "object_name": "",
+    "visible": false,
+    "children": 2
+  },
+  {
+    "class": "NoteRowWidget",
+    "object_name": "NoteRow",
+    "visible": true,
+    "children": 4
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QWidget",
+    "object_name": "qt_scrollarea_viewport",
+    "visible": true,
+    "children": 41
+  },
+  {
+    "class": "QTabWidget",
+    "object_name": "RecordsTabs",
+    "visible": false,
+    "children": 95
+  },
+  {
+    "class": "QWidget",
+    "object_name": "qt_scrollarea_hcontainer",
+    "visible": false,
+    "children": 1
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QWidget",
+    "object_name": "qt_scrollarea_hcontainer",
+    "visible": false,
+    "children": 1
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "SSSPanel",
+    "object_name": "",
+    "visible": false,
+    "children": 86
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "NoteRowWidget",
+    "object_name": "NoteRow",
+    "visible": true,
+    "children": 4
+  },
+  {
+    "class": "QWidget",
+    "object_name": "",
+    "visible": true,
+    "children": 2
+  },
+  {
+    "class": "QScrollBar",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "TrueGlassPanel",
+    "object_name": "",
+    "visible": false,
+    "children": 159
+  },
+  {
+    "class": "TrueGlassPanel",
+    "object_name": "",
+    "visible": true,
+    "children": 2
+  },
+  {
+    "class": "QLineEdit",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "NoteRowWidget",
+    "object_name": "NoteRow",
+    "visible": true,
+    "children": 4
+  },
+  {
+    "class": "NoteRowWidget",
+    "object_name": "NoteRow",
+    "visible": true,
+    "children": 4
+  },
+  {
+    "class": "QWidget",
+    "object_name": "",
+    "visible": false,
+    "children": 2
+  },
+  {
+    "class": "OverlayScrollBar",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": true,
+    "children": 0
+  },
+  {
+    "class": "QScrollArea",
+    "object_name": "",
+    "visible": false,
+    "children": 26
+  },
+  {
+    "class": "QWidget",
+    "object_name": "qt_scrollarea_vcontainer",
+    "visible": false,
+    "children": 1
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QScrollBar",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": true,
+    "children": 0
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QFrame",
+    "object_name": "",
+    "visible": false,
+    "children": 2
+  },
+  {
+    "class": "QToolButton",
+    "object_name": "NoteDeleteButton",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QWidget",
+    "object_name": "qt_scrollarea_hcontainer",
+    "visible": false,
+    "children": 1
+  },
+  {
+    "class": "QWidget",
+    "object_name": "qt_scrollarea_hcontainer",
+    "visible": false,
+    "children": 1
+  },
+  {
+    "class": "QToolButton",
+    "object_name": "NoteDeleteButton",
+    "visible": true,
+    "children": 0
+  },
+  {
+    "class": "QScrollBar",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QLineEdit",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QWidget",
+    "object_name": "qt_scrollarea_viewport",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "OverlayScrollBar",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QWidget",
+    "object_name": "qt_scrollarea_vcontainer",
+    "visible": false,
+    "children": 1
+  },
+  {
+    "class": "QWidget",
+    "object_name": "",
+    "visible": true,
+    "children": 2
+  },
+  {
+    "class": "QWidget",
+    "object_name": "",
+    "visible": true,
+    "children": 2
+  },
+  {
+    "class": "QPushButton",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QFrame",
+    "object_name": "",
+    "visible": false,
+    "children": 8
+  },
+  {
+    "class": "QListView",
+    "object_name": "",
+    "visible": false,
+    "children": 5
+  },
+  {
+    "class": "QListWidget",
+    "object_name": "",
+    "visible": true,
+    "children": 5
+  },
+  {
+    "class": "QScrollBar",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QWidget",
+    "object_name": "",
+    "visible": false,
+    "children": 2
+  },
+  {
+    "class": "QToolButton",
+    "object_name": "NoteDeleteButton",
+    "visible": true,
+    "children": 0
+  },
+  {
+    "class": "QScrollBar",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QCheckBox",
+    "object_name": "",
+    "visible": true,
+    "children": 0
+  },
+  {
+    "class": "QWidget",
+    "object_name": "qt_scrollarea_vcontainer",
+    "visible": false,
+    "children": 1
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QToolButton",
+    "object_name": "NoteDeleteButton",
+    "visible": true,
+    "children": 0
+  },
+  {
+    "class": "QToolButton",
+    "object_name": "NoteDeleteButton",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "NoteRowWidget",
+    "object_name": "NoteRow",
+    "visible": false,
+    "children": 4
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": true,
+    "children": 0
+  },
+  {
+    "class": "QWidget",
+    "object_name": "",
+    "visible": false,
+    "children": 2
+  },
+  {
+    "class": "QListView",
+    "object_name": "",
+    "visible": false,
+    "children": 5
+  },
+  {
+    "class": "WorkspaceWidget",
+    "object_name": "WorkspaceWidget",
+    "visible": true,
+    "children": 12
+  },
+  {
+    "class": "QWidget",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": true,
+    "children": 0
+  },
+  {
+    "class": "QToolButton",
+    "object_name": "NoteDeleteButton",
+    "visible": true,
+    "children": 0
+  },
+  {
+    "class": "QScrollBar",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "OverlayScrollBar",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QWidget",
+    "object_name": "qt_scrollarea_viewport",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QScrollBar",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QScrollBar",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QWidget",
+    "object_name": "",
+    "visible": true,
+    "children": 2
+  },
+  {
+    "class": "OverlayScrollBar",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QWidget",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QAbstractButton",
+    "object_name": "qt_tableview_cornerbutton",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QComboBox",
+    "object_name": "",
+    "visible": false,
+    "children": 9
+  },
+  {
+    "class": "QLineEdit",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QWidget",
+    "object_name": "qt_scrollarea_vcontainer",
+    "visible": false,
+    "children": 1
+  },
+  {
+    "class": "QWidget",
+    "object_name": "qt_scrollarea_vcontainer",
+    "visible": false,
+    "children": 1
+  },
+  {
+    "class": "QHeaderView",
+    "object_name": "",
+    "visible": false,
+    "children": 5
+  },
+  {
+    "class": "NoteRowWidget",
+    "object_name": "NoteRow",
+    "visible": true,
+    "children": 4
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "RoundedTableCard",
+    "object_name": "TableCardWrapper",
+    "visible": false,
+    "children": 22
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "NoteRowWidget",
+    "object_name": "NoteRow",
+    "visible": false,
+    "children": 4
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QWidget",
+    "object_name": "",
+    "visible": true,
+    "children": 2
+  },
+  {
+    "class": "QToolButton",
+    "object_name": "PagNum",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "Pagination",
+    "object_name": "PaginationContainer",
+    "visible": false,
+    "children": 9
+  },
+  {
+    "class": "QFrame",
+    "object_name": "",
+    "visible": false,
+    "children": 8
+  },
+  {
+    "class": "CustomReferenceCalendar",
+    "object_name": "CustomReferenceCalendar",
+    "visible": true,
+    "children": 42
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QWidget",
+    "object_name": "",
+    "visible": false,
+    "children": 48
+  },
+  {
+    "class": "QWidget",
+    "object_name": "",
+    "visible": true,
+    "children": 2
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QWidget",
+    "object_name": "qt_scrollarea_viewport",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QWidget",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QPushButton",
+    "object_name": "DangerButton",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QWidget",
+    "object_name": "",
+    "visible": false,
+    "children": 2
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QHeaderView",
+    "object_name": "",
+    "visible": false,
+    "children": 5
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": true,
+    "children": 0
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QHeaderView",
+    "object_name": "",
+    "visible": false,
+    "children": 5
+  },
+  {
+    "class": "ActivityRowWidget",
+    "object_name": "ActivityRow",
+    "visible": false,
+    "children": 3
+  },
+  {
+    "class": "QCheckBox",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QAbstractButton",
+    "object_name": "qt_tableview_cornerbutton",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QWidget",
+    "object_name": "qt_scrollarea_viewport",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "OverlayScrollBar",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QWidget",
+    "object_name": "",
+    "visible": true,
+    "children": 2
+  },
+  {
+    "class": "QWidget",
+    "object_name": "qt_scrollarea_vcontainer",
+    "visible": false,
+    "children": 1
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": true,
+    "children": 0
+  },
+  {
+    "class": "QListView",
+    "object_name": "",
+    "visible": false,
+    "children": 5
+  },
+  {
+    "class": "QWidget",
+    "object_name": "",
+    "visible": false,
+    "children": 2
+  },
+  {
+    "class": "QPushButton",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QWidget",
+    "object_name": "qt_scrollarea_vcontainer",
+    "visible": false,
+    "children": 1
+  },
+  {
+    "class": "QScrollBar",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": true,
+    "children": 0
+  },
+  {
+    "class": "QWidget",
+    "object_name": "qt_scrollarea_hcontainer",
+    "visible": false,
+    "children": 1
+  },
+  {
+    "class": "QToolButton",
+    "object_name": "NoteDeleteButton",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QScrollBar",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QLabel",
+    "object_name": "Title",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QWidget",
+    "object_name": "qt_scrollarea_vcontainer",
+    "visible": false,
+    "children": 1
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "OverlayScrollBar",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": true,
+    "children": 0
+  },
+  {
+    "class": "QPushButton",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QCheckBox",
+    "object_name": "",
+    "visible": true,
+    "children": 0
+  },
+  {
+    "class": "QWidget",
+    "object_name": "",
+    "visible": false,
+    "children": 150
+  },
+  {
+    "class": "NoteRowWidget",
+    "object_name": "NoteRow",
+    "visible": false,
+    "children": 4
+  },
+  {
+    "class": "QWidget",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QScrollBar",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QScrollBar",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QWidget",
+    "object_name": "",
+    "visible": true,
+    "children": 2
+  },
+  {
+    "class": "RightPanelWidget",
+    "object_name": "RightPanelWidget",
+    "visible": true,
+    "children": 272
+  },
+  {
+    "class": "QPushButton",
+    "object_name": "",
+    "visible": true,
+    "children": 0
+  },
+  {
+    "class": "QWidget",
+    "object_name": "",
+    "visible": false,
+    "children": 2
+  },
+  {
+    "class": "QPushButton",
+    "object_name": "DangerButton",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QTabWidget",
+    "object_name": "",
+    "visible": false,
+    "children": 151
+  },
+  {
+    "class": "QWidget",
+    "object_name": "qt_scrollarea_hcontainer",
+    "visible": false,
+    "children": 1
+  },
+  {
+    "class": "QLabel",
+    "object_name": "BrandName",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QToolButton",
+    "object_name": "NoteDeleteButton",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QWidget",
+    "object_name": "",
+    "visible": false,
+    "children": 2
+  },
+  {
+    "class": "NoteRowWidget",
+    "object_name": "NoteRow",
+    "visible": false,
+    "children": 4
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QScrollBar",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "TrueGlassPanel",
+    "object_name": "",
+    "visible": true,
+    "children": 2
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QWidget",
+    "object_name": "qt_scrollarea_vcontainer",
+    "visible": false,
+    "children": 1
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": true,
+    "children": 0
+  },
+  {
+    "class": "QWidget",
+    "object_name": "qt_scrollarea_viewport",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": true,
+    "children": 0
+  },
+  {
+    "class": "QListView",
+    "object_name": "",
+    "visible": false,
+    "children": 5
+  },
+  {
+    "class": "QScrollBar",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "OverlayScrollBar",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": true,
+    "children": 0
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": true,
+    "children": 0
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": true,
+    "children": 0
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": true,
+    "children": 0
+  },
+  {
+    "class": "QWidget",
+    "object_name": "qt_scrollarea_vcontainer",
+    "visible": false,
+    "children": 1
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": true,
+    "children": 0
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": true,
+    "children": 0
+  },
+  {
+    "class": "QScrollBar",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QScrollBar",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "NoteRowWidget",
+    "object_name": "NoteRow",
+    "visible": false,
+    "children": 4
+  },
+  {
+    "class": "QWidget",
+    "object_name": "",
+    "visible": false,
+    "children": 2
+  },
+  {
+    "class": "QWidget",
+    "object_name": "",
+    "visible": true,
+    "children": 2
+  },
+  {
+    "class": "NoteRowWidget",
+    "object_name": "NoteRow",
+    "visible": true,
+    "children": 4
+  },
+  {
+    "class": "OverlayScrollBar",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "ActivityRowWidget",
+    "object_name": "ActivityRow",
+    "visible": false,
+    "children": 3
+  },
+  {
+    "class": "QToolButton",
+    "object_name": "NoteDeleteButton",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": true,
+    "children": 0
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QWidget",
+    "object_name": "qt_scrollarea_hcontainer",
+    "visible": false,
+    "children": 1
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": true,
+    "children": 0
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QHeaderView",
+    "object_name": "",
+    "visible": false,
+    "children": 5
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QScrollBar",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QCheckBox",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QToolButton",
+    "object_name": "NoteDeleteButton",
+    "visible": true,
+    "children": 0
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": true,
+    "children": 0
+  },
+  {
+    "class": "QWidget",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QWidget",
+    "object_name": "",
+    "visible": false,
+    "children": 46
+  },
+  {
+    "class": "QLabel",
+    "object_name": "Title",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QComboBox",
+    "object_name": "",
+    "visible": false,
+    "children": 9
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QScrollBar",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QToolButton",
+    "object_name": "NoteDeleteButton",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QScrollBar",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QStackedWidget",
+    "object_name": "qt_tabwidget_stackedwidget",
+    "visible": false,
+    "children": 147
+  },
+  {
+    "class": "QWidget",
+    "object_name": "",
+    "visible": false,
+    "children": 20
+  },
+  {
+    "class": "GenericPlaceholderPage",
+    "object_name": "",
+    "visible": false,
+    "children": 1
+  },
+  {
+    "class": "QWidget",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "SharedTable",
+    "object_name": "",
+    "visible": false,
+    "children": 20
+  },
+  {
+    "class": "QWidget",
+    "object_name": "qt_scrollarea_viewport",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": true,
+    "children": 0
+  },
+  {
+    "class": "QWidget",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QWidget",
+    "object_name": "qt_scrollarea_hcontainer",
+    "visible": false,
+    "children": 1
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": true,
+    "children": 0
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QFrame",
+    "object_name": "",
+    "visible": false,
+    "children": 2
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QScrollBar",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QWidget",
+    "object_name": "qt_scrollarea_viewport",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QLabel",
+    "object_name": "Title",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QWidget",
+    "object_name": "qt_scrollarea_vcontainer",
+    "visible": false,
+    "children": 1
+  },
+  {
+    "class": "QToolButton",
+    "object_name": "NoteDeleteButton",
+    "visible": true,
+    "children": 0
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "NoteRowWidget",
+    "object_name": "NoteRow",
+    "visible": true,
+    "children": 4
+  },
+  {
+    "class": "QToolButton",
+    "object_name": "NoteDeleteButton",
+    "visible": true,
+    "children": 0
+  },
+  {
+    "class": "QToolButton",
+    "object_name": "NoteDeleteButton",
+    "visible": true,
+    "children": 0
+  },
+  {
+    "class": "QWidget",
+    "object_name": "qt_scrollarea_hcontainer",
+    "visible": false,
+    "children": 1
+  },
+  {
+    "class": "QWidget",
+    "object_name": "",
+    "visible": true,
+    "children": 40
+  },
+  {
+    "class": "QWidget",
+    "object_name": "qt_scrollarea_vcontainer",
+    "visible": false,
+    "children": 1
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": true,
+    "children": 0
+  },
+  {
+    "class": "QWidget",
+    "object_name": "qt_scrollarea_vcontainer",
+    "visible": false,
+    "children": 1
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "NoteRowWidget",
+    "object_name": "NoteRow",
+    "visible": false,
+    "children": 4
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QToolButton",
+    "object_name": "ScrollRightButton",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QToolButton",
+    "object_name": "NoteDeleteButton",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QWidget",
+    "object_name": "",
+    "visible": true,
+    "children": 2
+  },
+  {
+    "class": "QListView",
+    "object_name": "",
+    "visible": false,
+    "children": 5
+  },
+  {
+    "class": "QComboBox",
+    "object_name": "",
+    "visible": false,
+    "children": 9
+  },
+  {
+    "class": "QWidget",
+    "object_name": "",
+    "visible": false,
+    "children": 2
+  },
+  {
+    "class": "QToolButton",
+    "object_name": "NoteDeleteButton",
+    "visible": true,
+    "children": 0
+  },
+  {
+    "class": "NoteRowWidget",
+    "object_name": "NoteRow",
+    "visible": false,
+    "children": 4
+  },
+  {
+    "class": "QScrollBar",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "EmployerAdminPanel",
+    "object_name": "",
+    "visible": false,
+    "children": 30
+  },
+  {
+    "class": "QPushButton",
+    "object_name": "PrimaryButton",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QHeaderView",
+    "object_name": "",
+    "visible": false,
+    "children": 5
+  },
+  {
+    "class": "QWidget",
+    "object_name": "",
+    "visible": true,
+    "children": 2
+  },
+  {
+    "class": "QWidget",
+    "object_name": "qt_scrollarea_hcontainer",
+    "visible": false,
+    "children": 1
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QScrollBar",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QWidget",
+    "object_name": "qt_scrollarea_vcontainer",
+    "visible": false,
+    "children": 1
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "ActivityRowWidget",
+    "object_name": "ActivityRow",
+    "visible": true,
+    "children": 3
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": true,
+    "children": 0
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QScrollBar",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": true,
+    "children": 0
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "MetricCard",
+    "object_name": "",
+    "visible": false,
+    "children": 2
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QWidget",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QWidget",
+    "object_name": "qt_scrollarea_viewport",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QWidget",
+    "object_name": "qt_scrollarea_vcontainer",
+    "visible": false,
+    "children": 1
+  },
+  {
+    "class": "QWidget",
+    "object_name": "",
+    "visible": false,
+    "children": 2
+  },
+  {
+    "class": "QWidget",
+    "object_name": "",
+    "visible": false,
+    "children": 20
+  },
+  {
+    "class": "QWidget",
+    "object_name": "qt_scrollarea_hcontainer",
+    "visible": false,
+    "children": 1
+  },
+  {
+    "class": "QListWidget",
+    "object_name": "",
+    "visible": false,
+    "children": 5
+  },
+  {
+    "class": "NoteRowWidget",
+    "object_name": "NoteRow",
+    "visible": true,
+    "children": 4
+  },
+  {
+    "class": "QWidget",
+    "object_name": "qt_scrollarea_vcontainer",
+    "visible": false,
+    "children": 1
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QWidget",
+    "object_name": "",
+    "visible": true,
+    "children": 2
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "NoteRowWidget",
+    "object_name": "NoteRow",
+    "visible": false,
+    "children": 4
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "NoteRowWidget",
+    "object_name": "NoteRow",
+    "visible": false,
+    "children": 4
+  },
+  {
+    "class": "QWidget",
+    "object_name": "qt_scrollarea_vcontainer",
+    "visible": false,
+    "children": 1
+  },
+  {
+    "class": "QWidget",
+    "object_name": "",
+    "visible": false,
+    "children": 2
+  },
+  {
+    "class": "QHeaderView",
+    "object_name": "",
+    "visible": false,
+    "children": 5
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": true,
+    "children": 0
+  },
+  {
+    "class": "QAbstractButton",
+    "object_name": "qt_tableview_cornerbutton",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "SharedTable",
+    "object_name": "",
+    "visible": false,
+    "children": 20
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": true,
+    "children": 0
+  },
+  {
+    "class": "RoundedTableCard",
+    "object_name": "TableCardWrapper",
+    "visible": false,
+    "children": 22
+  },
+  {
+    "class": "QToolButton",
+    "object_name": "NoteDeleteButton",
+    "visible": true,
+    "children": 0
+  },
+  {
+    "class": "QToolButton",
+    "object_name": "NoteDeleteButton",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": true,
+    "children": 0
+  },
+  {
+    "class": "NoteRowWidget",
+    "object_name": "NoteRow",
+    "visible": true,
+    "children": 4
+  },
+  {
+    "class": "QWidget",
+    "object_name": "",
+    "visible": false,
+    "children": 2
+  },
+  {
+    "class": "QWidget",
+    "object_name": "",
+    "visible": false,
+    "children": 2
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": true,
+    "children": 0
+  },
+  {
+    "class": "QToolButton",
+    "object_name": "NoteDeleteButton",
+    "visible": true,
+    "children": 0
+  },
+  {
+    "class": "QScrollBar",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": true,
+    "children": 0
+  },
+  {
+    "class": "QWidget",
+    "object_name": "qt_scrollarea_hcontainer",
+    "visible": false,
+    "children": 1
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": true,
+    "children": 0
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": true,
+    "children": 0
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": true,
+    "children": 0
+  },
+  {
+    "class": "NoteRowWidget",
+    "object_name": "NoteRow",
+    "visible": true,
+    "children": 4
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": true,
+    "children": 0
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QHeaderView",
+    "object_name": "",
+    "visible": false,
+    "children": 5
+  },
+  {
+    "class": "QScrollBar",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QWidget",
+    "object_name": "qt_scrollarea_vcontainer",
+    "visible": false,
+    "children": 1
+  },
+  {
+    "class": "QWidget",
+    "object_name": "AppPage",
+    "visible": true,
+    "children": 675
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QWidget",
+    "object_name": "qt_scrollarea_vcontainer",
+    "visible": false,
+    "children": 1
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QWidget",
+    "object_name": "qt_scrollarea_viewport",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": true,
+    "children": 0
+  },
+  {
+    "class": "QPushButton",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QScrollBar",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QWidget",
+    "object_name": "",
+    "visible": true,
+    "children": 170
+  },
+  {
+    "class": "NoteRowWidget",
+    "object_name": "NoteRow",
+    "visible": true,
+    "children": 4
+  },
+  {
+    "class": "QProgressBar",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QWidget",
+    "object_name": "",
+    "visible": true,
+    "children": 2
+  },
+  {
+    "class": "ActivityRowWidget",
+    "object_name": "ActivityRow",
+    "visible": true,
+    "children": 3
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QLabel",
+    "object_name": "Title",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QWidget",
+    "object_name": "qt_scrollarea_hcontainer",
+    "visible": false,
+    "children": 1
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": true,
+    "children": 0
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "SuperAdminPage",
+    "object_name": "",
+    "visible": false,
+    "children": 319
+  },
+  {
+    "class": "QWidget",
+    "object_name": "qt_scrollarea_viewport",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QLabel",
+    "object_name": "Title",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "NoteRowWidget",
+    "object_name": "NoteRow",
+    "visible": true,
+    "children": 4
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "NoteRowWidget",
+    "object_name": "NoteRow",
+    "visible": true,
+    "children": 4
+  },
+  {
+    "class": "ActivityRowWidget",
+    "object_name": "ActivityRow",
+    "visible": false,
+    "children": 3
+  },
+  {
+    "class": "HistoryCardWidget",
+    "object_name": "HistoryCard",
+    "visible": false,
+    "children": 9
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": true,
+    "children": 0
+  },
+  {
+    "class": "QWidget",
+    "object_name": "qt_scrollarea_vcontainer",
+    "visible": false,
+    "children": 1
+  },
+  {
+    "class": "QScrollBar",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QPushButton",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QPushButton",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QWidget",
+    "object_name": "",
+    "visible": false,
+    "children": 2
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": true,
+    "children": 0
+  },
+  {
+    "class": "QWidget",
+    "object_name": "qt_scrollarea_vcontainer",
+    "visible": false,
+    "children": 1
+  },
+  {
+    "class": "EarningsPanel",
+    "object_name": "",
+    "visible": false,
+    "children": 36
+  },
+  {
+    "class": "QWidget",
+    "object_name": "qt_scrollarea_hcontainer",
+    "visible": false,
+    "children": 1
+  },
+  {
+    "class": "ActivityRowWidget",
+    "object_name": "ActivityRow",
+    "visible": true,
+    "children": 3
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QPushButton",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QWidget",
+    "object_name": "",
+    "visible": false,
+    "children": 2
+  },
+  {
+    "class": "QScrollBar",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QWidget",
+    "object_name": "",
+    "visible": false,
+    "children": 2
+  },
+  {
+    "class": "QListView",
+    "object_name": "",
+    "visible": false,
+    "children": 5
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": true,
+    "children": 0
+  },
+  {
+    "class": "MainWindow",
+    "object_name": "",
+    "visible": true,
+    "children": 1037
+  },
+  {
+    "class": "QPushButton",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QFrame",
+    "object_name": "",
+    "visible": false,
+    "children": 8
+  },
+  {
+    "class": "QToolButton",
+    "object_name": "NoteDeleteButton",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QPushButton",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QToolButton",
+    "object_name": "NoteDeleteButton",
+    "visible": true,
+    "children": 0
+  },
+  {
+    "class": "QComboBox",
+    "object_name": "",
+    "visible": false,
+    "children": 9
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "NoteRowWidget",
+    "object_name": "NoteRow",
+    "visible": true,
+    "children": 4
+  },
+  {
+    "class": "QLineEdit",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QFrame",
+    "object_name": "",
+    "visible": false,
+    "children": 8
+  },
+  {
+    "class": "QScrollBar",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QWidget",
+    "object_name": "",
+    "visible": true,
+    "children": 2
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": true,
+    "children": 0
+  },
+  {
+    "class": "QToolButton",
+    "object_name": "NoteDeleteButton",
+    "visible": true,
+    "children": 0
+  },
+  {
+    "class": "QWidget",
+    "object_name": "",
+    "visible": false,
+    "children": 2
+  },
+  {
+    "class": "QComboBox",
+    "object_name": "",
+    "visible": false,
+    "children": 9
+  },
+  {
+    "class": "QToolButton",
+    "object_name": "NoteDeleteButton",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": true,
+    "children": 0
+  },
+  {
+    "class": "QScrollBar",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QScrollBar",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QScrollBar",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QFrame",
+    "object_name": "ContentPanel",
+    "visible": false,
+    "children": 9
+  },
+  {
+    "class": "QWidget",
+    "object_name": "qt_scrollarea_hcontainer",
+    "visible": false,
+    "children": 1
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QScrollBar",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QScrollArea",
+    "object_name": "",
+    "visible": true,
+    "children": 46
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QLineEdit",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "TrueGlassPanel",
+    "object_name": "",
+    "visible": true,
+    "children": 2
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QProgressBar",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": true,
+    "children": 0
+  },
+  {
+    "class": "QWidget",
+    "object_name": "qt_scrollarea_vcontainer",
+    "visible": false,
+    "children": 1
+  },
+  {
+    "class": "SidebarWidget",
+    "object_name": "SidebarWidget",
+    "visible": true,
+    "children": 9
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QScrollBar",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QWidget",
+    "object_name": "",
+    "visible": true,
+    "children": 2
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QListView",
+    "object_name": "",
+    "visible": false,
+    "children": 5
+  },
+  {
+    "class": "QLineEdit",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "NoteRowWidget",
+    "object_name": "NoteRow",
+    "visible": false,
+    "children": 4
+  },
+  {
+    "class": "QToolButton",
+    "object_name": "NoteDeleteButton",
+    "visible": true,
+    "children": 0
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": true,
+    "children": 0
+  },
+  {
+    "class": "QToolButton",
+    "object_name": "ScrollLeftButton",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QToolButton",
+    "object_name": "NoteDeleteButton",
+    "visible": true,
+    "children": 0
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": true,
+    "children": 0
+  },
+  {
+    "class": "QFrame",
+    "object_name": "AuthArtPanel",
+    "visible": false,
+    "children": 4
+  },
+  {
+    "class": "QWidget",
+    "object_name": "qt_scrollarea_viewport",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QToolButton",
+    "object_name": "NoteDeleteButton",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QScrollBar",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "CustomReferenceCalendar",
+    "object_name": "CustomReferenceCalendar",
+    "visible": false,
+    "children": 42
+  },
+  {
+    "class": "RightPanelWidget",
+    "object_name": "RightPanelWidget",
+    "visible": false,
+    "children": 232
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": true,
+    "children": 0
+  },
+  {
+    "class": "QPushButton",
+    "object_name": "",
+    "visible": true,
+    "children": 0
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": true,
+    "children": 0
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QWidget",
+    "object_name": "qt_scrollarea_hcontainer",
+    "visible": false,
+    "children": 1
+  },
+  {
+    "class": "QWidget",
+    "object_name": "qt_scrollarea_viewport",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": true,
+    "children": 0
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": true,
+    "children": 0
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QWidget",
+    "object_name": "",
+    "visible": true,
+    "children": 2
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QWidget",
+    "object_name": "qt_scrollarea_viewport",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "NoteRowWidget",
+    "object_name": "NoteRow",
+    "visible": false,
+    "children": 4
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": true,
+    "children": 0
+  },
+  {
+    "class": "QWidget",
+    "object_name": "",
+    "visible": false,
+    "children": 5
+  },
+  {
+    "class": "QCheckBox",
+    "object_name": "",
+    "visible": true,
+    "children": 0
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": true,
+    "children": 0
+  },
+  {
+    "class": "EmployeeRecordsPaginator",
+    "object_name": "",
+    "visible": false,
+    "children": 10
+  },
+  {
+    "class": "QScrollBar",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "HDMFLoanPanel",
+    "object_name": "",
+    "visible": false,
+    "children": 14
+  },
+  {
+    "class": "QScrollBar",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": true,
+    "children": 0
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QPushButton",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "NoteRowWidget",
+    "object_name": "NoteRow",
+    "visible": true,
+    "children": 4
+  },
+  {
+    "class": "QToolButton",
+    "object_name": "PagNum",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "TrueGlassPanel",
+    "object_name": "",
+    "visible": false,
+    "children": 31
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QFrame",
+    "object_name": "FormPanel",
+    "visible": false,
+    "children": 18
+  },
+  {
+    "class": "QWidget",
+    "object_name": "",
+    "visible": false,
+    "children": 2
+  },
+  {
+    "class": "QToolButton",
+    "object_name": "NoteDeleteButton",
+    "visible": true,
+    "children": 0
+  },
+  {
+    "class": "QScrollBar",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QWidget",
+    "object_name": "qt_scrollarea_viewport",
+    "visible": false,
+    "children": 21
+  },
+  {
+    "class": "QWidget",
+    "object_name": "qt_scrollarea_hcontainer",
+    "visible": false,
+    "children": 1
+  },
+  {
+    "class": "QWidget",
+    "object_name": "qt_scrollarea_vcontainer",
+    "visible": false,
+    "children": 1
+  },
+  {
+    "class": "QCheckBox",
+    "object_name": "",
+    "visible": true,
+    "children": 0
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QPushButton",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QWidget",
+    "object_name": "qt_scrollarea_hcontainer",
+    "visible": false,
+    "children": 1
+  },
+  {
+    "class": "QWidget",
+    "object_name": "qt_scrollarea_vcontainer",
+    "visible": false,
+    "children": 1
+  },
+  {
+    "class": "OverlayScrollBar",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QWidget",
+    "object_name": "qt_scrollarea_viewport",
+    "visible": false,
+    "children": 21
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QWidget",
+    "object_name": "qt_scrollarea_hcontainer",
+    "visible": false,
+    "children": 1
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": true,
+    "children": 0
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QPushButton",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QToolButton",
+    "object_name": "NoteDeleteButton",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QScrollBar",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QCheckBox",
+    "object_name": "",
+    "visible": true,
+    "children": 0
+  },
+  {
+    "class": "QWidget",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QWidget",
+    "object_name": "",
+    "visible": false,
+    "children": 6
+  },
+  {
+    "class": "QWidget",
+    "object_name": "qt_scrollarea_hcontainer",
+    "visible": false,
+    "children": 1
+  },
+  {
+    "class": "QToolButton",
+    "object_name": "PagNum",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "NoteRowWidget",
+    "object_name": "NoteRow",
+    "visible": true,
+    "children": 4
+  },
+  {
+    "class": "QWidget",
+    "object_name": "",
+    "visible": true,
+    "children": 2
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QPushButton",
+    "object_name": "",
+    "visible": true,
+    "children": 0
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": true,
+    "children": 0
+  },
+  {
+    "class": "NoteRowWidget",
+    "object_name": "NoteRow",
+    "visible": false,
+    "children": 4
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": true,
+    "children": 0
+  },
+  {
+    "class": "QWidget",
+    "object_name": "",
+    "visible": true,
+    "children": 2
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "NoteRowWidget",
+    "object_name": "NoteRow",
+    "visible": false,
+    "children": 4
+  },
+  {
+    "class": "QFrame",
+    "object_name": "TableCard",
+    "visible": false,
+    "children": 21
+  },
+  {
+    "class": "QWidget",
+    "object_name": "",
+    "visible": false,
+    "children": 2
+  },
+  {
+    "class": "ActivityRowWidget",
+    "object_name": "ActivityRow",
+    "visible": false,
+    "children": 3
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": true,
+    "children": 0
+  },
+  {
+    "class": "QWidget",
+    "object_name": "qt_scrollarea_viewport",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": true,
+    "children": 0
+  },
+  {
+    "class": "QStackedWidget",
+    "object_name": "qt_tabwidget_stackedwidget",
+    "visible": false,
+    "children": 76
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QWidget",
+    "object_name": "qt_scrollarea_vcontainer",
+    "visible": false,
+    "children": 1
+  },
+  {
+    "class": "NoteRowWidget",
+    "object_name": "NoteRow",
+    "visible": true,
+    "children": 4
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QWidget",
+    "object_name": "",
+    "visible": false,
+    "children": 2
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": true,
+    "children": 0
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QToolButton",
+    "object_name": "NoteDeleteButton",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "NoteRowWidget",
+    "object_name": "NoteRow",
+    "visible": true,
+    "children": 4
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QWidget",
+    "object_name": "qt_scrollarea_vcontainer",
+    "visible": false,
+    "children": 1
+  },
+  {
+    "class": "QToolButton",
+    "object_name": "NoteDeleteButton",
+    "visible": true,
+    "children": 0
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": true,
+    "children": 0
+  },
+  {
+    "class": "QLabel",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QToolButton",
+    "object_name": "ScrollLeftButton",
+    "visible": false,
+    "children": 0
+  },
+  {
+    "class": "QWidget",
+    "object_name": "",
+    "visible": true,
+    "children": 2
+  },
+  {
+    "class": "QSizeGrip",
+    "object_name": "",
+    "visible": true,
+    "children": 0
+  },
+  {
+    "class": "QWidget",
+    "object_name": "",
+    "visible": false,
+    "children": 0
+  }
+]

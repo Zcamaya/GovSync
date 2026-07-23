@@ -1,0 +1,288 @@
+[
+  {
+    "type": "button",
+    "text": "Don't have an account? Sign up",
+    "object_name": ""
+  },
+  {
+    "type": "button",
+    "text": "Login",
+    "object_name": "PrimaryButton"
+  },
+  {
+    "type": "button",
+    "text": "Delete Row",
+    "object_name": ""
+  },
+  {
+    "type": "list_widget",
+    "object_name": "",
+    "rows": 0,
+    "current_row": -1
+  },
+  {
+    "type": "button",
+    "text": "Edit Employer",
+    "object_name": ""
+  },
+  {
+    "type": "tab_widget",
+    "object_name": "",
+    "tabs": [
+      "Generate TXT",
+      "TXT Viewer"
+    ]
+  },
+  {
+    "type": "list_widget",
+    "object_name": "",
+    "rows": 3,
+    "current_row": 0
+  },
+  {
+    "type": "stacked_widget",
+    "object_name": "",
+    "current_index": 2,
+    "count": 3
+  },
+  {
+    "type": "button",
+    "text": "Browse",
+    "object_name": ""
+  },
+  {
+    "type": "button",
+    "text": "Browse",
+    "object_name": ""
+  },
+  {
+    "type": "stacked_widget",
+    "object_name": "qt_tabwidget_stackedwidget",
+    "current_index": 0,
+    "count": 2
+  },
+  {
+    "type": "stacked_widget",
+    "object_name": "WorkspaceStack",
+    "current_index": 0,
+    "count": 7
+  },
+  {
+    "type": "button",
+    "text": "Start Processing",
+    "object_name": ""
+  },
+  {
+    "type": "button",
+    "text": "Start Processing & Reconciliation",
+    "object_name": ""
+  },
+  {
+    "type": "button",
+    "text": "Back to Login",
+    "object_name": ""
+  },
+  {
+    "type": "button",
+    "text": "<",
+    "object_name": ""
+  },
+  {
+    "type": "button",
+    "text": "Add File",
+    "object_name": ""
+  },
+  {
+    "type": "button",
+    "text": "Refresh",
+    "object_name": ""
+  },
+  {
+    "type": "button",
+    "text": "Delete",
+    "object_name": "DangerButton"
+  },
+  {
+    "type": "list_widget",
+    "object_name": "",
+    "rows": 0,
+    "current_row": -1
+  },
+  {
+    "type": "button",
+    "text": "Remove",
+    "object_name": ""
+  },
+  {
+    "type": "button",
+    "text": "Save TXT",
+    "object_name": ""
+  },
+  {
+    "type": "button",
+    "text": "Log Out",
+    "object_name": ""
+  },
+  {
+    "type": "button",
+    "text": "Refresh",
+    "object_name": ""
+  },
+  {
+    "type": "button",
+    "text": "+ Add Item",
+    "object_name": ""
+  },
+  {
+    "type": "button",
+    "text": "Import TXT",
+    "object_name": ""
+  },
+  {
+    "type": "button",
+    "text": "Add Folder",
+    "object_name": ""
+  },
+  {
+    "type": "button",
+    "text": "Browse",
+    "object_name": ""
+  },
+  {
+    "type": "stacked_widget",
+    "object_name": "",
+    "current_index": 0,
+    "count": 3
+  },
+  {
+    "type": "stacked_widget",
+    "object_name": "",
+    "current_index": 0,
+    "count": 2
+  },
+  {
+    "type": "button",
+    "text": "<",
+    "object_name": ""
+  },
+  {
+    "type": "button",
+    "text": ">",
+    "object_name": ""
+  },
+  {
+    "type": "tab_widget",
+    "object_name": "RecordsTabs",
+    "tabs": [
+      "Total Summary Metrics",
+      "History"
+    ]
+  },
+  {
+    "type": "button",
+    "text": "+ Add Item",
+    "object_name": ""
+  },
+  {
+    "type": "list_widget",
+    "object_name": "",
+    "rows": 7,
+    "current_row": 0
+  },
+  {
+    "type": "button",
+    "text": "Log Out",
+    "object_name": "DangerButton"
+  },
+  {
+    "type": "button",
+    "text": "Add Employer",
+    "object_name": ""
+  },
+  {
+    "type": "button",
+    "text": "Clear Queue",
+    "object_name": ""
+  },
+  {
+    "type": "button",
+    "text": "Delete Selected",
+    "object_name": "DangerButton"
+  },
+  {
+    "type": "tab_widget",
+    "object_name": "",
+    "tabs": [
+      "Process",
+      "Records Viewer"
+    ]
+  },
+  {
+    "type": "stacked_widget",
+    "object_name": "qt_tabwidget_stackedwidget",
+    "current_index": 0,
+    "count": 2
+  },
+  {
+    "type": "button",
+    "text": "Create Account",
+    "object_name": "PrimaryButton"
+  },
+  {
+    "type": "list_widget",
+    "object_name": "",
+    "rows": 2,
+    "current_row": -1
+  },
+  {
+    "type": "button",
+    "text": "Browse",
+    "object_name": ""
+  },
+  {
+    "type": "button",
+    "text": "Browse",
+    "object_name": ""
+  },
+  {
+    "type": "button",
+    "text": "Deactivate",
+    "object_name": ""
+  },
+  {
+    "type": "button",
+    "text": "Generate Partial List TXT File",
+    "object_name": ""
+  },
+  {
+    "type": "button",
+    "text": "Add Files",
+    "object_name": ""
+  },
+  {
+    "type": "button",
+    "text": ">",
+    "object_name": ""
+  },
+  {
+    "type": "button",
+    "text": "Add Folder",
+    "object_name": ""
+  },
+  {
+    "type": "button",
+    "text": "Browse",
+    "object_name": ""
+  },
+  {
+    "type": "button",
+    "text": "Separate Loans",
+    "object_name": ""
+  },
+  {
+    "type": "stacked_widget",
+    "object_name": "qt_tabwidget_stackedwidget",
+    "current_index": 0,
+    "count": 2
+  }
+]

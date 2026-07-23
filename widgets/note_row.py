@@ -7,6 +7,7 @@ from PySide6.QtWidgets import (
     QSizePolicy,
     QToolButton,
     QVBoxLayout,
+    QWidget,
 )
 
 from shared.ui import set_exit_icon
@@ -60,12 +61,28 @@ class NoteRowWidget(QFrame):
         layout.setSpacing(0)
         layout.setAlignment(Qt.AlignVCenter)
 
-        self.setFixedHeight(36)
+        self.setMinimumHeight(36)
         self.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed)
+
+        content_container = QWidget()
+        content_layout = QVBoxLayout(content_container)
+        content_layout.setContentsMargins(0, 0, 0, 0)
+        content_layout.setSpacing(0)
+
         self.title_label = QLabel(self.note.get("title", "Untitled"))
         self.title_label.setStyleSheet("color: #f8fafc; font: 700 11px 'Segoe UI';")
         self.title_label.setAlignment(Qt.AlignVCenter | Qt.AlignLeft)
         self.title_label.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed)
+
+        self.preview_label = QLabel("")
+        self.preview_label.setStyleSheet("color: rgba(248, 250, 252, 0.72); font: 600 10px 'Segoe UI';")
+        self.preview_label.setAlignment(Qt.AlignVCenter | Qt.AlignLeft)
+        self.preview_label.setVisible(False)
+        self.preview_label.setWordWrap(True)
+
+        content_layout.addWidget(self.title_label)
+        content_layout.addWidget(self.preview_label)
+        content_layout.addStretch()
 
         delete_button = QToolButton()
         delete_button.setObjectName("NoteDeleteButton")
@@ -76,7 +93,7 @@ class NoteRowWidget(QFrame):
         delete_button.setToolButtonStyle(Qt.ToolButtonIconOnly)
         delete_button.clicked.connect(self._on_delete_clicked)
 
-        layout.addWidget(self.title_label)
+        layout.addWidget(content_container)
         layout.addWidget(delete_button, alignment=Qt.AlignRight | Qt.AlignVCenter)
 
     def mousePressEvent(self, event):

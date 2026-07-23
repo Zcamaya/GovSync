@@ -1,0 +1,345 @@
+[
+  {
+    "label": "startup_debug",
+    "path": "E:\\My Program\\GovSync\\qa_output\\screenshots\\startup_debug.png",
+    "captured": true,
+    "widget_info": {
+      "class": "MainWindow",
+      "object_name": "",
+      "window_title": "GovSync",
+      "visible": true,
+      "enabled": true,
+      "geometry": {
+        "x": 0,
+        "y": 0,
+        "width": 1280,
+        "height": 780
+      }
+    }
+  },
+  {
+    "label": "sidebar_0_dashboard_debug",
+    "path": "E:\\My Program\\GovSync\\qa_output\\screenshots\\sidebar_0_dashboard_debug.png",
+    "captured": true,
+    "widget_info": {
+      "class": "MainWindow",
+      "object_name": "",
+      "window_title": "GovSync",
+      "visible": true,
+      "enabled": true,
+      "geometry": {
+        "x": 0,
+        "y": 0,
+        "width": 1280,
+        "height": 780
+      }
+    }
+  },
+  {
+    "label": "sidebar_1_earnings_debug",
+    "path": "E:\\My Program\\GovSync\\qa_output\\screenshots\\sidebar_1_earnings_debug.png",
+    "captured": true,
+    "widget_info": {
+      "class": "MainWindow",
+      "object_name": "",
+      "window_title": "GovSync",
+      "visible": true,
+      "enabled": true,
+      "geometry": {
+        "x": 0,
+        "y": 0,
+        "width": 1280,
+        "height": 780
+      }
+    }
+  },
+  {
+    "label": "sidebar_2_employee_records_debug",
+    "path": "E:\\My Program\\GovSync\\qa_output\\screenshots\\sidebar_2_employee_records_debug.png",
+    "captured": true,
+    "widget_info": {
+      "class": "MainWindow",
+      "object_name": "",
+      "window_title": "GovSync",
+      "visible": true,
+      "enabled": true,
+      "geometry": {
+        "x": 0,
+        "y": 0,
+        "width": 1280,
+        "height": 780
+      }
+    }
+  },
+  {
+    "label": "sidebar_3_philhealth_debug",
+    "path": "E:\\My Program\\GovSync\\qa_output\\screenshots\\sidebar_3_philhealth_debug.png",
+    "captured": true,
+    "widget_info": {
+      "class": "MainWindow",
+      "object_name": "",
+      "window_title": "GovSync",
+      "visible": true,
+      "enabled": true,
+      "geometry": {
+        "x": 0,
+        "y": 0,
+        "width": 1280,
+        "height": 780
+      }
+    }
+  },
+  {
+    "label": "sidebar_4_hdmf_debug",
+    "path": "E:\\My Program\\GovSync\\qa_output\\screenshots\\sidebar_4_hdmf_debug.png",
+    "captured": true,
+    "widget_info": {
+      "class": "MainWindow",
+      "object_name": "",
+      "window_title": "GovSync",
+      "visible": true,
+      "enabled": true,
+      "geometry": {
+        "x": 0,
+        "y": 0,
+        "width": 1280,
+        "height": 780
+      }
+    }
+  },
+  {
+    "label": "sidebar_5_sss_debug",
+    "path": "E:\\My Program\\GovSync\\qa_output\\screenshots\\sidebar_5_sss_debug.png",
+    "captured": true,
+    "widget_info": {
+      "class": "MainWindow",
+      "object_name": "",
+      "window_title": "GovSync",
+      "visible": true,
+      "enabled": true,
+      "geometry": {
+        "x": 0,
+        "y": 0,
+        "width": 1280,
+        "height": 780
+      }
+    }
+  },
+  {
+    "label": "sidebar_6_hdmf_loan_debug",
+    "path": "E:\\My Program\\GovSync\\qa_output\\screenshots\\sidebar_6_hdmf_loan_debug.png",
+    "captured": true,
+    "widget_info": {
+      "class": "MainWindow",
+      "object_name": "",
+      "window_title": "GovSync",
+      "visible": true,
+      "enabled": true,
+      "geometry": {
+        "x": 0,
+        "y": 0,
+        "width": 1280,
+        "height": 780
+      }
+    }
+  },
+  {
+    "label": "admin_sidebar_0_dashboard_debug",
+    "path": "E:\\My Program\\GovSync\\qa_output\\screenshots\\admin_sidebar_0_dashboard_debug.png",
+    "captured": true,
+    "widget_info": {
+      "class": "MainWindow",
+      "object_name": "",
+      "window_title": "GovSync",
+      "visible": true,
+      "enabled": true,
+      "geometry": {
+        "x": 0,
+        "y": 0,
+        "width": 1280,
+        "height": 780
+      }
+    }
+  },
+  {
+    "label": "admin_sidebar_1_employer_creation_debug",
+    "path": "E:\\My Program\\GovSync\\qa_output\\screenshots\\admin_sidebar_1_employer_creation_debug.png",
+    "captured": true,
+    "widget_info": {
+      "class": "MainWindow",
+      "object_name": "",
+      "window_title": "GovSync",
+      "visible": true,
+      "enabled": true,
+      "geometry": {
+        "x": 0,
+        "y": 0,
+        "width": 1280,
+        "height": 780
+      }
+    }
+  },
+  {
+    "label": "admin_sidebar_2_account_list_debug",
+    "path": "E:\\My Program\\GovSync\\qa_output\\screenshots\\admin_sidebar_2_account_list_debug.png",
+    "captured": true,
+    "widget_info": {
+      "class": "MainWindow",
+      "object_name": "",
+      "window_title": "GovSync",
+      "visible": true,
+      "enabled": true,
+      "geometry": {
+        "x": 0,
+        "y": 0,
+        "width": 1280,
+        "height": 780
+      }
+    }
+  },
+  {
+    "label": "workspacestack_workspacewidget_debug",
+    "path": "E:\\My Program\\GovSync\\qa_output\\screenshots\\workspacestack_workspacewidget_debug.png",
+    "captured": true,
+    "widget_info": {
+      "class": "MainWindow",
+      "object_name": "",
+      "window_title": "GovSync",
+      "visible": true,
+      "enabled": true,
+      "geometry": {
+        "x": 0,
+        "y": 0,
+        "width": 1280,
+        "height": 780
+      }
+    }
+  },
+  {
+    "label": "workspacestack_1_debug",
+    "path": "E:\\My Program\\GovSync\\qa_output\\screenshots\\workspacestack_1_debug.png",
+    "captured": true,
+    "widget_info": {
+      "class": "MainWindow",
+      "object_name": "",
+      "window_title": "GovSync",
+      "visible": true,
+      "enabled": true,
+      "geometry": {
+        "x": 0,
+        "y": 0,
+        "width": 1280,
+        "height": 780
+      }
+    }
+  },
+  {
+    "label": "workspacestack_2_debug",
+    "path": "E:\\My Program\\GovSync\\qa_output\\screenshots\\workspacestack_2_debug.png",
+    "captured": true,
+    "widget_info": {
+      "class": "MainWindow",
+      "object_name": "",
+      "window_title": "GovSync",
+      "visible": true,
+      "enabled": true,
+      "geometry": {
+        "x": 0,
+        "y": 0,
+        "width": 1280,
+        "height": 780
+      }
+    }
+  },
+  {
+    "label": "workspacestack_3_debug",
+    "path": "E:\\My Program\\GovSync\\qa_output\\screenshots\\workspacestack_3_debug.png",
+    "captured": true,
+    "widget_info": {
+      "class": "MainWindow",
+      "object_name": "",
+      "window_title": "GovSync",
+      "visible": true,
+      "enabled": true,
+      "geometry": {
+        "x": 0,
+        "y": 0,
+        "width": 1280,
+        "height": 780
+      }
+    }
+  },
+  {
+    "label": "workspacestack_4_debug",
+    "path": "E:\\My Program\\GovSync\\qa_output\\screenshots\\workspacestack_4_debug.png",
+    "captured": true,
+    "widget_info": {
+      "class": "MainWindow",
+      "object_name": "",
+      "window_title": "GovSync",
+      "visible": true,
+      "enabled": true,
+      "geometry": {
+        "x": 0,
+        "y": 0,
+        "width": 1280,
+        "height": 780
+      }
+    }
+  },
+  {
+    "label": "workspacestack_5_debug",
+    "path": "E:\\My Program\\GovSync\\qa_output\\screenshots\\workspacestack_5_debug.png",
+    "captured": true,
+    "widget_info": {
+      "class": "MainWindow",
+      "object_name": "",
+      "window_title": "GovSync",
+      "visible": true,
+      "enabled": true,
+      "geometry": {
+        "x": 0,
+        "y": 0,
+        "width": 1280,
+        "height": 780
+      }
+    }
+  },
+  {
+    "label": "login_register_page_debug",
+    "path": "E:\\My Program\\GovSync\\qa_output\\screenshots\\login_register_page_debug.png",
+    "captured": true,
+    "widget_info": {
+      "class": "MainWindow",
+      "object_name": "",
+      "window_title": "GovSync",
+      "visible": true,
+      "enabled": true,
+      "geometry": {
+        "x": 0,
+        "y": 0,
+        "width": 1280,
+        "height": 780
+      }
+    }
+  },
+  {
+    "label": "dialog_employeedetailsdialog_debug",
+    "path": "E:\\My Program\\GovSync\\qa_output\\screenshots\\dialog_employeedetailsdialog_debug.png",
+    "captured": true,
+    "widget_info": {
+      "class": "EmployeeDetailsDialog",
+      "object_name": "",
+      "window_title": "Employee Details",
+      "visible": true,
+      "enabled": true,
+      "geometry": {
+        "x": 230,
+        "y": 104,
+        "width": 560,
+        "height": 493
+      }
+    },
+    "capture_type": "dialog"
+  }
+]

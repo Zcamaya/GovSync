@@ -1,0 +1,44 @@
+[
+  {
+    "type": "QLineEdit",
+    "object_name": "",
+    "issue": "missing text or empty text",
+    "text": ""
+  },
+  {
+    "type": "QLabel",
+    "object_name": "",
+    "issue": "missing text or empty text",
+    "text": ""
+  },
+  {
+    "type": "QPushButton",
+    "object_name": "",
+    "issue": "missing text or empty text",
+    "text": ""
+  },
+  {
+    "type": "QPushButton",
+    "object_name": "",
+    "issue": "missing text or empty text",
+    "text": ""
+  },
+  {
+    "type": "QLabel",
+    "object_name": "",
+    "issue": "missing text or empty text",
+    "text": ""
+  },
+  {
+    "type": "QLineEdit",
+    "object_name": "",
+    "issue": "missing text or empty text",
+    "text": ""
+  },
+  {
+    "type": "QPushButton",
+    "object_name": "",
+    "issue": "missing text or empty text",
+    "text": ""
+  }
+]
