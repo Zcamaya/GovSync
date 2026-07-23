@@ -11,10 +11,14 @@ GovSync is a desktop payroll compliance workspace for Philippine government cont
 
 ## Documentation
 
-- [AI_CONTEXT.md](AI_CONTEXT.md) for architecture and handoff notes.
-- [PROJECT_RULES.md](PROJECT_RULES.md) for development and architecture guidelines.
-- [SYSTEM_ARCHITECTURE.md](SYSTEM_ARCHITECTURE.md) for the current design overview.
+- [docs/README.md](docs/README.md) for the canonical documentation index.
+- [docs/00_PROJECT_OVERVIEW.md](docs/00_PROJECT_OVERVIEW.md) for the project overview.
+- [docs/01_ARCHITECTURE.md](docs/01_ARCHITECTURE.md) for the current architecture.
+- [docs/02_DEVELOPMENT_RULES.md](docs/02_DEVELOPMENT_RULES.md) for development guidance.
+- [docs/06_DEVELOPMENT_GUIDE.md](docs/06_DEVELOPMENT_GUIDE.md) for setup, testing, and QA guidance.
 - [CHANGELOG.md](CHANGELOG.md) for feature and maintenance history.
+
+Historical and task-specific documents are preserved in [docs/archive/README.md](docs/archive/README.md).
 
 ## Repository Hygiene
 
